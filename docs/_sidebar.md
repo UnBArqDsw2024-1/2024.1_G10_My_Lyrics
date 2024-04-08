@@ -8,8 +8,6 @@
     - [1.1. Módulo Projeto Não Orientado a Abordagens Específicas](/Base/1.1.AbordagemNaoEspecifica.md)
       - [1.1.1 Glossário](/Base/1.1.1.Glossario.md)
       - [1.1.2 Ishkawa](/Base/1.1.2.DiagramaIshkawa.md)
-
-      
     - [1.2. Módulo Processos/Metodologias/Abordagens](/Base/1.2.ProcessosMetodologiasAbordagens.md)
     - [1.3. Participações - Base](/Base/1.3.ParticipacoesBase.md)
 
