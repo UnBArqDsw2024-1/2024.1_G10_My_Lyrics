@@ -10,7 +10,7 @@
 | 211030783  |  Gustavo Henrique Rodrigues de Sousa | <a href="https://github.com/GustavoHenriqueRS"> <img src="https://github.com/GustavoHenriqueRS.png" width=40></a> |
 | 211029343  |  Gustavo Kenzo Araki Takechi | <a href="https://github.com/gustavokenzo1"> <img src="https://github.com/gustavokenzo1.png" width=40></a> |
 | 190125829  |  Ian da Costa Gama | <a href="https://github.com/ian-dcg"> <img src="https://github.com/ian-dcg.png" width=40></a> |
-| 211030809  |  Júlio Cesar Almeida Dourado | <a href="https://github.com/typejulio"> <img src="https://github.com/typejulio.png" width=40></a> |
+| 211030809  |  Júlio Cesar Almeida Dourado | <a href="https://github.com/julio-dourado"> <img src="https://github.com/julio-dourado.png" width=40></a> |
 | 211031762  |  Leonardo Lago Moreno | <a href="https://github.com/lelamo2002"> <img src="https://github.com/lelamo2002.png" width=40></a> |
 | 180145509  |  Lucas Ramon Alves de Oliveira | <a href="https://github.com/lramon2001"> <img src="https://github.com/lramon2001.png" width=40></a> |
 | 211041240  |  Manoel Felipe Teixeira Neto | <a href="https://github.com/Manoel835"> <img src="https://github.com/Manoel835.png" width=40></a> |
