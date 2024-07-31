@@ -13,6 +13,12 @@ app.use(express.json());
 
 app.use("/user", usersRoutes);
 
+app.get("/health-checks", (_req, res) => {
+  return res.json({
+    message: "Server is healthy and running",
+  });
+});
+
 app.use((error: Error, _: Request, response: Response, __: NextFunction) => {
   if (error instanceof ZodError) {
     return response.status(400).send({
