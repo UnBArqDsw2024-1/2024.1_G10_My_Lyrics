@@ -1,6 +1,6 @@
 import type { Prisma, PrismaClient, User } from "@prisma/client";
-import type { IUserRepository } from "../../../repositories/IUserRepository";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
+import type { IUserRepository } from "../../../repositories/IUserRepository";
 
 export class UserRepository implements IUserRepository {
   private prismaClient: PrismaClient;

@@ -11,7 +11,74 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(uuid()) @db.Uuid
-  email String  @unique
-  name  String?
+  id             String  @id @default(uuid()) @db.Uuid
+  name           String
+  email          String
+  password       String
+  censoredMusics Boolean @default(false)
+
+  playlists      Playlist[]
+  likedPlaylists Playlist[] @relation("UsersLikedPlaylists")
+  likedMusics    Music[]    @relation("UsersLikedMusics")
+}
+
+model Playlist {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  title  String
+
+  onwer  User    @relation(fields: [userId], references: [id])
+  musics Music[] @relation("PlaylistMusics")
+  likes  User[]  @relation("UsersLikedPlaylists")
+}
+
+model Artist {
+  id        String @id @default(uuid()) @db.Uuid
+  name      String
+  biography String
+
+  albums Album[] @relation("AlbumArtists")
+}
+
+model Album {
+  id    String @id @default(uuid()) @db.Uuid
+  title String
+
+  artists Artist[] @relation("AlbumArtists")
+  musics  Music[]
+}
+
+model Music {
+  id         String @id @default(uuid()) @db.Uuid
+  albumId    String @db.Uuid
+  title      String
+  youtubeUrl String
+  iconUrl    String
+
+  album       Album         @relation(fields: [albumId], references: [id])
+  verses      Verse[]
+  playlists   Playlist[]    @relation("PlaylistMusics")
+  likes       User[]        @relation("UsersLikedMusics")
+  MusicAccess MusicAccess[]
+}
+
+model Verse {
+  id             String  @id @default(uuid()) @db.Uuid
+  startTime      Int
+  endTime        Int
+  text           String
+  translatedText String?
+
+  music   Music  @relation(fields: [musicId], references: [id])
+  musicId String @db.Uuid
+}
+
+model MusicAccess {
+  ip      String
+  musicId String   @db.Uuid
+  date    DateTime
+
+  music Music @relation(fields: [musicId], references: [id])
+
+  @@id([ip, date, musicId])
 }

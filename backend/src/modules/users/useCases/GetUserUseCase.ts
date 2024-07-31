@@ -1,6 +1,6 @@
 import type { User } from "@prisma/client";
-import type { IUserRepository } from "../repositories/IUserRepository";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import type { IUserRepository } from "../repositories/IUserRepository";
 
 interface IRequest {
   name: string;

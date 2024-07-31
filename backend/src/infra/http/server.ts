@@ -1,7 +1,7 @@
 import "express-async-errors";
+import { env } from "../../config/env";
 import { DatabaseConnection } from "../database/GetConnection";
 import { app } from "./app";
-import { env } from "../../config/env";
 
 (async () => {
   const connection = DatabaseConnection.getInstance();
