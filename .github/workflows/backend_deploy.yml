@@ -1,0 +1,47 @@
+name: backend-deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v1
+
+      - name: Deploy to EC2 instance
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_HOST_TEST }}
+          username: ${{ secrets.SERVER_USERNAME_TEST }}
+          key: ${{ secrets.SERVER_SSH_KEY_TEST }}
+          source: "./backend,!./backend/node_modules"
+          target: "~/.config/backend"
+
+      - name: Install dependencies in EC2 instance
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_HOST_TEST }}
+          username: ${{ secrets.SERVER_USERNAME_TEST }}
+          key: ${{ secrets.SERVER_SSH_KEY_TEST }}
+          script: |
+            cd ~/.config/backend && \
+            pnpm install && \
+            pnpm prisma generate && \
+            pnpm prisma migrate deploy
+
+      - name: Restart application in EC2 instance
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_HOST_TEST }}
+          username: ${{ secrets.SERVER_USERNAME_TEST }}
+          key: ${{ secrets.SERVER_SSH_KEY_TEST }}
+          script: |
+            cd ~/.config/backend && pm2 restart backend
