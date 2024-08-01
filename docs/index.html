@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
@@ -8,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
 </head>
+
 <body>
   <div id="app"></div>
   <script>
@@ -27,11 +29,19 @@
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+
+  <link rel="stylesheet" media="(prefers-color-scheme: dark)"
+    href="//cdn.jsdelivr.net/npm/prism-themes@1/themes/prism-one-dark.min.css" />
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
+
   <style>
     :root {
       --docsifytabs-border-color: #ededed;
       --docsifytabs-tab-highlight-color: purple;
     }
+
     .tab-badge {
       position: absolute;
       top: 0;
@@ -45,6 +55,48 @@
       font-size: 11px;
       font-weight: bold;
     }
+
+    /** My Code Theme **/
+    pre:has(code),
+    code {
+      background-color: #13111B !important;
+      color: #fff !important
+    }
+
+    .token.operator, .token.punctuation {
+      color: white
+    }
+
+    .token.keyword {
+      color: #FD78C4;
+    }
+
+    .token.atrule,
+    .token.attr-name,
+    .token.boolean,
+    .token.class-name,
+    .token.constant,
+    .token.number {
+      color: #988BC7
+    }
+
+    .token.attr-value,
+    .token.attr-value>.token.punctuation,
+    .token.builtin,
+    .token.char,
+    .token.inserted,
+    .token.regex,
+    .token.selector,
+    .token.string {
+      color: #988BC7
+    }
+
+    .token.function,
+    .token.variable {
+      color: #67E480
+    }
+    /** End Of My Code Theme**/
   </style>
 </body>
+
 </html>
