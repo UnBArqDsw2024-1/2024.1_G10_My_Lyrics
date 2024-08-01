@@ -13,7 +13,7 @@ export class GetUserUseCase implements ICommand<IRequest, IResponse> {
   constructor(private userRepository: IUserRepository) {}
 
   public async execute({ name }: IRequest): Promise<IResponse> {
-    const user = await this.userRepository.findOneByName(name);
+    const user = await this.userRepository.findOneById(name);
 
     if (!user) {
       throw new NotFoundError("User was not found!");

@@ -27,7 +27,7 @@ model Playlist {
   userId String @db.Uuid
   title  String
 
-  onwer  User    @relation(fields: [userId], references: [id])
+  onwer  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   musics Music[] @relation("PlaylistMusics")
   likes  User[]  @relation("UsersLikedPlaylists")
 }

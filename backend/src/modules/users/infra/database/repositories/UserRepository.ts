@@ -8,6 +8,13 @@ export class UserRepository implements IUserRepository {
   private constructor() {
     this.prismaClient = DatabaseConnection.getInstance();
   }
+  async delete(id: string): Promise<void> {
+    await this.prismaClient.user.delete({
+      where: {
+        id,
+      },
+    });
+  }
 
   private static INSTANCE: UserRepository | null;
   static getInstance(): UserRepository {
@@ -26,10 +33,10 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  async findOneByName(name: string): Promise<User | null> {
-    const user = await this.prismaClient.user.findFirst({
+  async findOneById(id: string): Promise<User | null> {
+    const user = await this.prismaClient.user.findUnique({
       where: {
-        name,
+        id,
       },
     });
 
