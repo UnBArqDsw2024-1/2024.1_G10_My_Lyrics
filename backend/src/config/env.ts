@@ -4,9 +4,9 @@ import "dotenv/config";
 type Colors = "red" | "green" | "yellow";
 function ColoredText(text: string, color: Colors) {
   const colorCode = {
-    red: "\x1b[41m",
-    green: "\x1b[42m",
-    yellow: "\x1b[43m",
+    red: "\x1b[31m",
+    green: "\x1b[32m",
+    yellow: "\x1b[33m",
   } as const;
 
   return `${colorCode[color]}${text}\x1b[0m`;
@@ -23,19 +23,21 @@ if (_env.success === false) {
   console.log(ColoredText("Error when trying to validate .env", "red"));
   console.log(
     ColoredText(
-      "Please, create and validate .env file in the root of project\n",
+      "Please, create and validate .env file in the root of the backend folder\n",
       "yellow",
     ),
   );
-  for (const [error, message] of Object.entries(_env.error.format())) {
+
+  for (const [error, message] of Object.entries(
+    _env.error.flatten().fieldErrors,
+  )) {
     if (error === "_errors") {
       continue;
     }
 
-    const formattedMessage = (message as { _errors: string[] })._errors.join(
-      ", ",
-    );
+    const formattedMessage = message.join(", ");
 
+    console.log("ERRORS:");
     console.log(
       `${ColoredText(error, "green")} - ${ColoredText(formattedMessage, "red")}`,
     );
