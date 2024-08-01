@@ -5,9 +5,9 @@ import express, {
 } from "express";
 import { ZodError } from "zod";
 import { env } from "../../config/env";
+import { playlistRoutes } from "../../modules/playlists/infra/http/routes";
 import { usersRoutes } from "../../modules/users/infra/http/routes";
 import { AppError } from "../../shared/errors/interface/AppError";
-import { playlistRoutes } from "../../modules/playlists/infra/http/routes";
 
 export const app = express();
 app.use(express.json());

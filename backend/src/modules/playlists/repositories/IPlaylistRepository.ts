@@ -1,5 +1,4 @@
-import { Playlist, Prisma } from "@prisma/client";
-
+import type { Playlist, Prisma } from "@prisma/client";
 
 export interface IPlaylistRepository {
   create(playlist: Prisma.PlaylistCreateInput): Promise<Playlist>;

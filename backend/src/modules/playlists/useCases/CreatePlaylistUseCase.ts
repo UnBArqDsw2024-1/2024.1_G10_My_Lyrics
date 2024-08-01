@@ -1,13 +1,10 @@
-import { Playlist } from "@prisma/client";
-import { IPlaylistRepository } from "../repositories/IPlaylistRepository";
-
-
+import type { Playlist } from "@prisma/client";
+import type { IPlaylistRepository } from "../repositories/IPlaylistRepository";
 
 interface ICreatePlaylistDTO {
   title: string;
   user_id: string;
 }
-
 
 export class CreatePlaylistUseCase {
   constructor(private playlistRepository: IPlaylistRepository) {}

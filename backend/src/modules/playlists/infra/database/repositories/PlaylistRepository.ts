@@ -1,7 +1,5 @@
-import { Playlist, Prisma, PrismaClient } from "@prisma/client";
-import { IPlaylistRepository } from "../../../repositories/IPlaylistRepository";
-
-
+import { type Playlist, type Prisma, PrismaClient } from "@prisma/client";
+import type { IPlaylistRepository } from "../../../repositories/IPlaylistRepository";
 
 export class PlaylistRepository implements IPlaylistRepository {
   private prisma = new PrismaClient();
