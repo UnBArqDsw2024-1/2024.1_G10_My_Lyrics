@@ -4,10 +4,11 @@ import type { IControllerFactory } from "../../../shared/patterns/Factories/ICon
 import { UserRepository } from "../infra/database/repositories/UserRepository";
 import { CreateUserController } from "../infra/http/controllers/CreateUserController";
 import { CreateUserUseCase } from "../useCases/CreateUserUseCase";
+import { BcryptHashFactory } from "../../../shared/patterns/HashAdapter/BcryptHashAdapter";
 
 export class CreateUserUseCaseFactory implements ICommandFactory {
   createCommand() {
-    return new CreateUserUseCase(UserRepository.getInstance());
+    return new CreateUserUseCase(UserRepository.getInstance(), new BcryptHashFactory().createHash());
   }
 }
 
