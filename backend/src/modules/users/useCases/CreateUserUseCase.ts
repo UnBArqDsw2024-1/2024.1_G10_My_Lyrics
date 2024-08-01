@@ -1,5 +1,6 @@
 import type { User } from "@prisma/client";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";
+import type { ICommand } from "../../../shared/patterns/Command/ICommand";
 import type { IUserRepository } from "../repositories/IUserRepository";
 
 interface IRequest {
@@ -11,7 +12,7 @@ interface IRequest {
 
 type IResponse = User;
 
-export class CreateUserUseCase {
+export class CreateUserUseCase implements ICommand<IRequest, IResponse> {
   constructor(private userRepository: IUserRepository) {}
 
   public async execute({

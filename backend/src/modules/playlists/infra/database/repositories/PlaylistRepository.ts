@@ -1,15 +1,29 @@
-import { type Playlist, type Prisma, PrismaClient } from "@prisma/client";
+import type { Playlist, Prisma, PrismaClient } from "@prisma/client";
+import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IPlaylistRepository } from "../../../repositories/IPlaylistRepository";
 
 export class PlaylistRepository implements IPlaylistRepository {
-  private prisma = new PrismaClient();
+  private prismaClient: PrismaClient;
+
+  private constructor() {
+    this.prismaClient = DatabaseConnection.getInstance();
+  }
+
+  private static INSTANCE: PlaylistRepository | null;
+  public static getInstance() {
+    if (!PlaylistRepository.INSTANCE) {
+      PlaylistRepository.INSTANCE = new PlaylistRepository();
+    }
+
+    return PlaylistRepository.INSTANCE;
+  }
 
   async create(playlist: Prisma.PlaylistCreateInput): Promise<Playlist> {
-    return this.prisma.playlist.create({ data: playlist });
+    return this.prismaClient.playlist.create({ data: playlist });
   }
 
   async searchByTitle(name: string): Promise<Playlist[]> {
-    return this.prisma.playlist.findMany({
+    return this.prismaClient.playlist.findMany({
       where: {
         title: {
           contains: name,

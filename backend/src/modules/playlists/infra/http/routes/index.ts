@@ -1,9 +1,11 @@
 import { Router } from "express";
-
-import { CreatePlaylistController } from "../controllers/CreatePlaylistController";
+import { CreatePlaylistControllerFactory } from "../../../factories/CreatePlaylistFactory";
 
 export const playlistRoutes = Router();
 
-const createPlaylistController = new CreatePlaylistController();
+const createPlaylistController =
+  new CreatePlaylistControllerFactory().createController();
 
-playlistRoutes.post("/", createPlaylistController.handler);
+playlistRoutes.post("/", (req, res) =>
+  createPlaylistController.handler(req, res),
+);
