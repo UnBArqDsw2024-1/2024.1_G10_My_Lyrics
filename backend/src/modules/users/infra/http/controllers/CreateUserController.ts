@@ -10,7 +10,6 @@ export class CreateUserController {
       name: z.string().max(200),
       email: z.string().email(),
       password: z.string().min(6),
-      confirmedPassword: z.string().min(6),
     });
     const body = createUserSchema.parse(request.body);
 
