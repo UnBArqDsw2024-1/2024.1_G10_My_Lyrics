@@ -5,8 +5,17 @@ import type { IUserRepository } from "../../../repositories/IUserRepository";
 export class UserRepository implements IUserRepository {
   private prismaClient: PrismaClient;
 
-  constructor() {
+  private constructor() {
     this.prismaClient = DatabaseConnection.getInstance();
+  }
+
+  private static INSTANCE: UserRepository | null;
+  static getInstance(): UserRepository {
+    if (!UserRepository.INSTANCE) {
+      UserRepository.INSTANCE = new UserRepository();
+    }
+
+    return UserRepository.INSTANCE;
   }
 
   async create(userDTO: Prisma.UserCreateInput): Promise<User> {

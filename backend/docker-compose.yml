@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: PostgreSQL
+    environment:
+      POSTGRES_PASSWORD: my-lyrics-no-topo
+      POSTGRES_USER: postgres
+      POSTGRES_DB: dev
+    volumes:
+      - .postgreSQL:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always

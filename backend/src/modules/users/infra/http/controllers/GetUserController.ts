@@ -1,11 +1,13 @@
 import type { Request, Response } from "express";
-import { GetUserControllerFactory } from "./factories/CreateUserControllerFactory copy";
+import type { GetUserUseCase } from "../../../useCases/GetUserUseCase";
 
 export class GetUserController {
+  constructor(private getUserUseCase: GetUserUseCase) {}
+
   async handler(request: Request, response: Response): Promise<Response> {
     const { name } = request.params;
 
-    const user = await GetUserControllerFactory().execute({
+    const user = await this.getUserUseCase.execute({
       name,
     });
 

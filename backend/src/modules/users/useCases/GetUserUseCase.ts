@@ -1,5 +1,6 @@
 import type { User } from "@prisma/client";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import type { ICommand } from "../../../shared/patterns/Command/ICommand";
 import type { IUserRepository } from "../repositories/IUserRepository";
 
 interface IRequest {
@@ -8,7 +9,7 @@ interface IRequest {
 
 type IResponse = User;
 
-export class GetUserUseCase {
+export class GetUserUseCase implements ICommand<IRequest, IResponse> {
   constructor(private userRepository: IUserRepository) {}
 
   public async execute({ name }: IRequest): Promise<IResponse> {

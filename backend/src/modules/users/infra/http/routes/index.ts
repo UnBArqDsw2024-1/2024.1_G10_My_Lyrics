@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { CreateUserController } from "../controllers/CreateUserController";
-import { GetUserController } from "../controllers/GetUserController";
+import { CreateUserControllerFactory } from "../../../factories/CreateUserFactory";
+import { GetUserControllerFactory } from "../../../factories/GetUserFactory";
 
-const createUserController = new CreateUserController();
-const getUserController = new GetUserController();
+const createUserController =
+  new CreateUserControllerFactory().createController();
+const getUserController = new GetUserControllerFactory().createController();
 
 export const usersRoutes = Router();
 
-usersRoutes.post("/", createUserController.handler);
-usersRoutes.get("/:name", getUserController.handler);
+usersRoutes.post("/", (req, res) => createUserController.handler(req, res));
+usersRoutes.get("/:name", (req, res) => getUserController.handler(req, res));
