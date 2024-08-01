@@ -7,11 +7,13 @@ import { ZodError } from "zod";
 import { env } from "../../config/env";
 import { usersRoutes } from "../../modules/users/infra/http/routes";
 import { AppError } from "../../shared/errors/interface/AppError";
+import { playlistRoutes } from "../../modules/playlists/infra/http/routes";
 
 export const app = express();
 app.use(express.json());
 
 app.use("/user", usersRoutes);
+app.use("/playlist", playlistRoutes);
 
 app.get("/health-checks", (_req, res) => {
   return res.json({
