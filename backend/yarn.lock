@@ -16,20 +16,15 @@
     "@biomejs/cli-win32-arm64" "1.8.3"
     "@biomejs/cli-win32-x64" "1.8.3"
 
-"@biomejs/cli-linux-x64-musl@1.8.3":
+"@biomejs/cli-win32-x64@1.8.3":
   version "1.8.3"
-  resolved "https://registry.npmjs.org/@biomejs/cli-linux-x64-musl/-/cli-linux-x64-musl-1.8.3.tgz"
-  integrity sha512-UHrGJX7PrKMKzPGoEsooKC9jXJMa28TUSMjcIlbDnIO4EAavCoVmNQaIuUSH0Ls2mpGMwUIf+aZJv657zfWWjA==
+  resolved "https://registry.npmjs.org/@biomejs/cli-win32-x64/-/cli-win32-x64-1.8.3.tgz"
+  integrity sha512-/PJ59vA1pnQeKahemaQf4Nyj7IKUvGQSc3Ze1uIGi+Wvr1xF7rGobSrAAG01T/gUDG21vkDsZYM03NAmPiVkqg==
 
-"@biomejs/cli-linux-x64@1.8.3":
-  version "1.8.3"
-  resolved "https://registry.npmjs.org/@biomejs/cli-linux-x64/-/cli-linux-x64-1.8.3.tgz"
-  integrity sha512-I8G2QmuE1teISyT8ie1HXsjFRz9L1m5n83U1O6m30Kw+kPMPSKjag6QGUn+sXT8V+XWIZxFFBoTDEDZW2KPDDw==
-
-"@esbuild/linux-x64@0.21.5":
+"@esbuild/win32-x64@0.21.5":
   version "0.21.5"
-  resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.21.5.tgz"
-  integrity sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==
+  resolved "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.21.5.tgz"
+  integrity sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw==
 
 "@prisma/client@5.17.0":
   version "5.17.0"
