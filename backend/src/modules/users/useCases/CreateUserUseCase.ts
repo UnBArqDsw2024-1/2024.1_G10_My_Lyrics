@@ -13,17 +13,19 @@ interface IRequest {
 type IResponse = User;
 
 export class CreateUserUseCase implements ICommand<IRequest, IResponse> {
-  constructor(private userRepository: IUserRepository, private hash: IHash) {}
+  constructor(
+    private userRepository: IUserRepository,
+    private hash: IHash,
+  ) {}
 
   public async execute({
     name,
     email,
     password,
   }: IRequest): Promise<IResponse> {
-
     const userAlreadyExists = await this.userRepository.findByEmail(email);
 
-    if(userAlreadyExists) {
+    if (userAlreadyExists) {
       throw new BadRequestError("User already exists!!!!!!!!!");
     }
 

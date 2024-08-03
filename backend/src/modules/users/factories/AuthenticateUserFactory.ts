@@ -1,15 +1,19 @@
+import { AuthFactory } from "../../../shared/patterns/AuthAdapter/JwtAuthAdapter";
 import type { IController } from "../../../shared/patterns/Controller/IController";
 import type { ICommandFactory } from "../../../shared/patterns/Factories/ICommandFactory";
 import type { IControllerFactory } from "../../../shared/patterns/Factories/IControllerFactory";
-import { UserRepository } from "../infra/database/repositories/UserRepository";
 import { BcryptHashFactory } from "../../../shared/patterns/HashAdapter/BcryptHashAdapter";
-import { AuthenticateUserUseCase } from "../useCases/AuthenticateUserUseCase";
-import { JwtFactory } from "../../../shared/patterns/JwtAdapter/JwtAdapter";
+import { UserRepository } from "../infra/database/repositories/UserRepository";
 import { AuthenticateUserController } from "../infra/http/controllers/AuthenticateUserController";
+import { AuthenticateUserUseCase } from "../useCases/AuthenticateUserUseCase";
 
 export class AuthenticateUserFactory implements ICommandFactory {
   createCommand() {
-    return new AuthenticateUserUseCase(UserRepository.getInstance(), new BcryptHashFactory().createHash(), new JwtFactory().createJwt());
+    return new AuthenticateUserUseCase(
+      UserRepository.getInstance(),
+      new BcryptHashFactory().createHash(),
+      new AuthFactory().createAuth(),
+    );
   }
 }
 

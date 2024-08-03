@@ -1,9 +1,9 @@
 import type { User } from "@prisma/client";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";
+import type { IAuth } from "../../../shared/patterns/AuthAdapter/IAuth";
 import type { ICommand } from "../../../shared/patterns/Command/ICommand";
 import type { IHash } from "../../../shared/patterns/HashAdapter/IHash";
 import type { IUserRepository } from "../repositories/IUserRepository";
-import { IJwt } from "../../../shared/patterns/JwtAdapter/IJwt";
 
 interface IRequest {
   email: string;
@@ -12,16 +12,17 @@ interface IRequest {
 
 type IResponse = {
   user: User;
-  jwt: string;
-}
+  auth: string;
+};
 
 export class AuthenticateUserUseCase implements ICommand<IRequest, IResponse> {
-  constructor(private userRepository: IUserRepository, private hash: IHash, private jwt: IJwt) { }
+  constructor(
+    private userRepository: IUserRepository,
+    private hash: IHash,
+    private auth: IAuth,
+  ) {}
 
-  public async execute({
-    email,
-    password,
-  }: IRequest): Promise<IResponse> {
+  public async execute({ email, password }: IRequest): Promise<IResponse> {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
@@ -34,11 +35,11 @@ export class AuthenticateUserUseCase implements ICommand<IRequest, IResponse> {
       throw new BadRequestError("Email or password is incorrect");
     }
 
-    const jwt = this.jwt.sign({ userId: user.id }, "30d");
+    const auth = this.auth.sign({ userId: user.id }, "30d");
 
     // @ts-ignore
     user.password = undefined;
 
-    return { user, jwt };
+    return { user, auth };
   }
 }

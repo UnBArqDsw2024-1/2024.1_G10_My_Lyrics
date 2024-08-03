@@ -1,6 +1,5 @@
-import type { IHash } from "../HashAdapter/IHash";
-import { IJwt } from "../JwtAdapter/IJwt";
+import type { IAuth } from "../AuthAdapter/IAuth";
 
-export interface IJwtFactory {
-  createJwt(): IJwt;
+export interface IAuthFactory {
+  createAuth(): IAuth;
 }
