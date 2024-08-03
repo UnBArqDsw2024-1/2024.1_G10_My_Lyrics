@@ -1,14 +1,14 @@
-import { Playlist } from '@prisma/client';
-import { IPlaylistRepository } from '../repositories/IPlaylistRepository';
+import type { Playlist } from "@prisma/client";
+import type { IPlaylistRepository } from "../repositories/IPlaylistRepository";
 
 interface ISearchPlaylistDTO {
-	title: string;
+  title: string;
 }
 
 export class SearchPlaylistUseCase {
-	constructor(private playlistRepository: IPlaylistRepository) {}
+  constructor(private playlistRepository: IPlaylistRepository) {}
 
-	async execute({ title }: ISearchPlaylistDTO): Promise<Playlist[]> {
-		return this.playlistRepository.searchByTitle(title);
-	}
+  async execute({ title }: ISearchPlaylistDTO): Promise<Playlist[]> {
+    return this.playlistRepository.searchByTitle(title);
+  }
 }

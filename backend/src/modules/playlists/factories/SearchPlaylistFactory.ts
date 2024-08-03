@@ -1,8 +1,8 @@
 import type { ICommandFactory } from "../../../shared/patterns/Factories/ICommandFactory";
 import type { IControllerFactory } from "../../../shared/patterns/Factories/IControllerFactory";
 import { PlaylistRepository } from "../infra/database/repositories/PlaylistRepository";
-import { SearchPlaylistUseCase } from "../useCases/SearchPlaylistUseCase";
 import { SearchPlaylistController } from "../infra/http/controllers/SearchPlaylistController";
+import { SearchPlaylistUseCase } from "../useCases/SearchPlaylistUseCase";
 
 export class SearchPlaylistUseCaseFactory implements ICommandFactory {
   createCommand() {

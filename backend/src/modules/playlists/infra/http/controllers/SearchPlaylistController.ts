@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { z } from "zod";
-import { SearchPlaylistUseCase } from "../../../useCases/SearchPlaylistUseCase";
+import type { SearchPlaylistUseCase } from "../../../useCases/SearchPlaylistUseCase";
 
 export class SearchPlaylistController {
   constructor(private searchPlaylistUseCase: SearchPlaylistUseCase) {}
@@ -21,7 +21,9 @@ export class SearchPlaylistController {
       return response.status(200).json(playlists);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return response.status(400).json({ message: "Invalid query parameters", errors: error.errors });
+        return response
+          .status(400)
+          .json({ message: "Invalid query parameters", errors: error.errors });
       }
       return response.status(500).json({ message: "Internal server error" });
     }

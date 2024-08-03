@@ -5,6 +5,7 @@ import express, {
 } from "express";
 import { ZodError } from "zod";
 import { env } from "../../config/env";
+import { musicsRoutes } from "../../modules/musics/infra/http/routes";
 import { playlistRoutes } from "../../modules/playlists/infra/http/routes";
 import { usersRoutes } from "../../modules/users/infra/http/routes";
 import { AppError } from "../../shared/errors/interface/AppError";
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use("/user", usersRoutes);
 app.use("/playlist", playlistRoutes);
+app.use("/music", musicsRoutes);
 
 app.get("/health-checks", (_req, res) => {
   return res.json({
