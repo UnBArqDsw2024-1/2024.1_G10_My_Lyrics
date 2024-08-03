@@ -1,8 +1,9 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
+import type { IController } from "../../../../../shared/patterns/Controller/IController";
 import type { SearchPlaylistUseCase } from "../../../useCases/SearchPlaylistUseCase";
 
-export class SearchPlaylistController {
+export class SearchPlaylistController implements IController {
   constructor(private searchPlaylistUseCase: SearchPlaylistUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {

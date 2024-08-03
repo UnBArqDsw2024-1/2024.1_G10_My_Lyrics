@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
+import type { IController } from "../../../../../shared/patterns/Controller/IController";
 import type { GetUserUseCase } from "../../../useCases/GetUserUseCase";
 
-export class GetUserController {
+export class GetUserController implements IController {
   constructor(private getUserUseCase: GetUserUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {

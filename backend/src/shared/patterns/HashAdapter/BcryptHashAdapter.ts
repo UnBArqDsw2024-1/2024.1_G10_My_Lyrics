@@ -1,22 +1,21 @@
-import { IHash } from "./IHash";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
+import type { IHash } from "./IHash";
 
 export class BcryptHashAdapter implements IHash {
+  private bcryptClient = bcrypt;
+  private saltRounds = 12;
 
-    private bcryptClient = bcrypt;
-    private saltRounds = 12;
+  async hash(value: string): Promise<string> {
+    return this.bcryptClient.hash(value, this.saltRounds);
+  }
 
-    async hash(value: string): Promise<string> {
-        return this.bcryptClient.hash(value, this.saltRounds);
-    }
-    
-    async compare(value: string, hashed: string): Promise<boolean> {
-        return this.bcryptClient.compare(value, hashed);
-    }
+  async compare(value: string, hashed: string): Promise<boolean> {
+    return this.bcryptClient.compare(value, hashed);
+  }
 }
 
 export class BcryptHashFactory {
-    createHash(): IHash {
-        return new BcryptHashAdapter();
-    }
+  createHash(): IHash {
+    return new BcryptHashAdapter();
+  }
 }
