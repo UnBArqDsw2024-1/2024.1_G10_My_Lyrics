@@ -26,7 +26,7 @@ export class CreateUserUseCase implements ICommand<IRequest, IResponse> {
     const userAlreadyExists = await this.userRepository.findByEmail(email);
 
     if (userAlreadyExists) {
-      throw new BadRequestError("User already exists!!!!!!!!!");
+      throw new BadRequestError("User already exists");
     }
 
     const user = await this.userRepository.create({

@@ -1,8 +1,9 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
+import type { IController } from "../../../../../shared/patterns/Controller/IController";
 import type { DeleteUserUseCase } from "../../../useCases/DeleteUserUseCase";
 
-export class DeleteUserController {
+export class DeleteUserController implements IController {
   constructor(private deleteUserUseCase: DeleteUserUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
