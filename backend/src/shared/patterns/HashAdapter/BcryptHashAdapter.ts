@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import type { IHashFactory } from "../Factories/IHashFactory";
 import type { IHash } from "./IHash";
 
 export class BcryptHashAdapter implements IHash {
@@ -14,7 +15,7 @@ export class BcryptHashAdapter implements IHash {
   }
 }
 
-export class BcryptHashFactory {
+export class BcryptHashFactory implements IHashFactory {
   createHash(): IHash {
     return new BcryptHashAdapter();
   }
