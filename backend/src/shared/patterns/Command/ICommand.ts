@@ -1,3 +1,3 @@
-export interface ICommand<TRequest, TResponse> {
-  execute(params: TRequest): Promise<TResponse>;
+export interface ICommand<RequestType, ResponseType> {
+  execute(request: RequestType, response: ResponseType): Promise<ResponseType>;
 }
