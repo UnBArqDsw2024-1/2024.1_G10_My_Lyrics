@@ -52,4 +52,15 @@ export class UserRepository implements IUserRepository {
 
     return user;
   }
+
+  async update(user: User): Promise<User> {
+    const updatedUser = await this.prismaClient.user.update({
+      where: {
+        id: user.id,
+      },
+      data: user,
+    });
+
+    return updatedUser;
+  }
 }

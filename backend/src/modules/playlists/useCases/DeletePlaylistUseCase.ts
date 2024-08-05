@@ -1,16 +1,14 @@
-import { IPlaylistRepository } from "../repositories/IPlaylistRepository";
-import { ICommand } from "../../../shared/patterns/Command/ICommand";
+import type { ICommand } from "../../../shared/patterns/Command/ICommand";
+import type { IPlaylistRepository } from "../repositories/IPlaylistRepository";
 
 interface IRequest {
-    id: string;
+  id: string;
 }
 
 export class DeletePlaylistUseCase implements ICommand<IRequest, void> {
-    constructor(
-        private playlistRepository: IPlaylistRepository,
-    ) {}
+  constructor(private playlistRepository: IPlaylistRepository) {}
 
-    async execute({ id }: IRequest): Promise<void> {
-        await this.playlistRepository.deleteById(id);
-    }
+  async execute({ id }: IRequest): Promise<void> {
+    await this.playlistRepository.deleteById(id);
+  }
 }
