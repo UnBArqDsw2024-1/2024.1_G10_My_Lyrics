@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";
 import type { ICommand } from "../../../shared/patterns/Command/ICommand";
 import type { IUserRepository } from "../repositories/IUserRepository";
@@ -12,7 +12,7 @@ interface IRequest {
 type IResponse = User;
 
 export class UpdateUserUseCase implements ICommand<IRequest, IResponse> {
-  constructor(private userRepository: IUserRepository) { }
+  constructor(private userRepository: IUserRepository) {}
 
   public async execute({ id, name, email }: IRequest): Promise<IResponse> {
     const user = await this.userRepository.findOneById(id);

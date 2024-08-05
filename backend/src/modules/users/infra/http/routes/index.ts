@@ -29,6 +29,4 @@ usersRoutes.delete("/:id", (req, res) =>
 usersRoutes.post("/login", (req, res) =>
   authenticateUserController.handler(req, res),
 );
-usersRoutes.patch("/:id", (req, res) =>
-  updateUserController.handler(req, res),
-);
+usersRoutes.patch("/:id", (req, res) => updateUserController.handler(req, res));

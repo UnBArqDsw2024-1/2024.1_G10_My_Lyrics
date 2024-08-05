@@ -12,6 +12,8 @@ export class UpdateUserUseCaseFactory implements ICommandFactory {
 
 export class UpdateUserControllerFactory implements IControllerFactory {
   createController() {
-    return new UpdateUserController(new UpdateUserUseCaseFactory().createCommand());
+    return new UpdateUserController(
+      new UpdateUserUseCaseFactory().createCommand(),
+    );
   }
 }

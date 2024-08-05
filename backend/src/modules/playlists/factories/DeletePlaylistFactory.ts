@@ -4,19 +4,19 @@ import { DeletePlaylistController } from "../infra/http/controllers/DeletePlayli
 import { DeletePlaylistUseCase } from "../useCases/DeletePlaylistUseCase";
 
 export class DeletePlaylistUseCaseFactory implements ICommandFactory {
-    createCommand(): DeletePlaylistUseCase {
-        return new DeletePlaylistUseCase(PlaylistRepository.getInstance());
-    }
+  createCommand(): DeletePlaylistUseCase {
+    return new DeletePlaylistUseCase(PlaylistRepository.getInstance());
+  }
 }
 
 export class DeletePlaylistControllerFactory implements ICommandFactory {
-    createCommand(): DeletePlaylistController {
-        return new DeletePlaylistController(
-            new DeletePlaylistUseCaseFactory().createCommand(),
-        );
-    }
+  createCommand(): DeletePlaylistController {
+    return new DeletePlaylistController(
+      new DeletePlaylistUseCaseFactory().createCommand(),
+    );
+  }
 
-    createController(): DeletePlaylistController {
-        return this.createCommand();
-    }
+  createController(): DeletePlaylistController {
+    return this.createCommand();
+  }
 }
