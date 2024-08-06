@@ -21,4 +21,15 @@ export class MusicRepository implements IMusicRepository {
   create(music: Prisma.MusicCreateInput): Promise<Music> {
     return this.prismaClient.music.create({ data: music });
   }
+
+  async searchByTitle(name: string): Promise<Music[]> {
+    return this.prismaClient.music.findMany({
+      where: {
+        title: {
+          contains: name,
+          mode: "insensitive",
+        },
+      },
+    });
+  }
 }
