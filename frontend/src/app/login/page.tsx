@@ -20,14 +20,14 @@ export default function Login() {
   }
 
   return (
-    <div className="bg-gradient-to-b from-black to-[#0B0129] flex items-center justify-center w-screen h-screen">
-      <div className="bg-[#362f4a] bg-opacity-50 p-16 rounded-lg shadow-md 2xl:w-3/12 xl:w-4/12 lg:w-5/12 md:w-6/12 w-3/4">
+    <div className="bg-gradient-to-b from-black to-[#231b39] flex items-center justify-center w-screen h-screen">
+      <div className="bg-[#32284d] bg-opacity-50 p-16 rounded-lg shadow-md 2xl:w-3/12 xl:w-4/12 lg:w-5/12 md:w-6/12 w-3/4">
         <h2 className="text-3xl font-bold text-center text-white mb-16">
           Entrar no My Lyrics
         </h2>
         <form action={handleLogin}>
           <div className="mb-4 pb-3">
-            <label className="block text-white text-lg font-bold mb-1">
+            <label className="block text-white text-lg font-medium mb-1">
               Email
             </label>
             <input
@@ -38,7 +38,7 @@ export default function Login() {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-white text-lg font-bold mb-1">
+            <label className="block text-white text-lg font-medium mb-1">
               Senha
             </label>
             <input
@@ -50,7 +50,7 @@ export default function Login() {
           </div>
           <div className="mb-4 pt-4 flex items-center justify-center">
             <button
-              className="w-3/4 py-3 text-xl font-bold bg-black text-white rounded-2xl"
+              className="w-3/4 py-3 text-xl font-bold bg-black text-white rounded-2xl transition-all duration-300 hover:bg-white hover:text-black"
               type="submit"
             >
               Entrar
