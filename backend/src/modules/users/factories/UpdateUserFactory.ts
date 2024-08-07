@@ -1,4 +1,3 @@
-import { AuthFactory } from "../../../shared/patterns/AuthAdapter/JwtAuthAdapter";
 import type { ICommandFactory } from "../../../shared/patterns/Factories/ICommandFactory";
 import type { IControllerFactory } from "../../../shared/patterns/Factories/IControllerFactory";
 import { UserRepository } from "../infra/database/repositories/UserRepository";

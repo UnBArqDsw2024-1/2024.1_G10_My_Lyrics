@@ -10,7 +10,7 @@ interface IRequest {
 type IResponse = User;
 
 export class GetUserUseCase implements ICommand<IRequest, IResponse> {
-  constructor(private userRepository: IUserRepository) { }
+  constructor(private userRepository: IUserRepository) {}
 
   public async execute({ id }: IRequest): Promise<IResponse> {
     const user = await this.userRepository.findOneById(id);

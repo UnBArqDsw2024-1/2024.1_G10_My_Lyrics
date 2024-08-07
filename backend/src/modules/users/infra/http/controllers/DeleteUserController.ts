@@ -3,7 +3,7 @@ import type { IController } from "../../../../../shared/patterns/Controller/ICon
 import type { DeleteUserUseCase } from "../../../useCases/DeleteUserUseCase";
 
 export class DeleteUserController implements IController {
-  constructor(private deleteUserUseCase: DeleteUserUseCase) { }
+  constructor(private deleteUserUseCase: DeleteUserUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
     const id = request.user;

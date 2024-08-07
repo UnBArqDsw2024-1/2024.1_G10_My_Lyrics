@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { AuthFactory } from "../patterns/AuthAdapter/JwtAuthAdapter";
+import type { NextFunction, Request, Response } from "express";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
-import { IAuth } from "../patterns/AuthAdapter/IAuth";
+import type { IAuth } from "../patterns/AuthAdapter/IAuth";
+import { AuthFactory } from "../patterns/AuthAdapter/JwtAuthAdapter";
 
 interface IDecoded {
   userId: string;
@@ -14,7 +14,7 @@ export class VerifyJwt {
     this.auth = new AuthFactory().createAuth();
   }
 
-  verify(request: Request, response: Response, next: NextFunction) {
+  verify(request: Request, _: Response, next: NextFunction) {
     const { authorization } = request.headers;
 
     if (!authorization) {
@@ -34,9 +34,11 @@ export class VerifyJwt {
         throw new UnauthorizedError("Unauthorized");
       }
 
+      // @ts-ignore
       request.user = decoded.userId;
+
       next();
-    } catch (err) {
+    } catch {
       throw new UnauthorizedError("Unauthorized");
     }
   }

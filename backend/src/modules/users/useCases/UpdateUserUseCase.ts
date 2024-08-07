@@ -13,10 +13,14 @@ interface IRequest {
 type IResponse = User;
 
 export class UpdateUserUseCase implements ICommand<IRequest, IResponse> {
-  constructor(private userRepository: IUserRepository
-  ) { }
+  constructor(private userRepository: IUserRepository) {}
 
-  public async execute({ id, name, email, censoredMusics }: IRequest): Promise<IResponse> {
+  public async execute({
+    id,
+    name,
+    email,
+    censoredMusics,
+  }: IRequest): Promise<IResponse> {
     const user = await this.userRepository.findOneById(id);
 
     if (!user) {

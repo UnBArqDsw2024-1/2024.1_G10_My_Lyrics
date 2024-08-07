@@ -5,7 +5,7 @@ import type { IController } from "../../../../../shared/patterns/Controller/ICon
 import type { UpdateUserUseCase } from "../../../useCases/UpdateUserUseCase";
 
 export class UpdateUserController implements IController {
-  constructor(private updateUserUseCase: UpdateUserUseCase) { }
+  constructor(private updateUserUseCase: UpdateUserUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
     const UpdateUserBodySchema = z.object({
@@ -16,7 +16,11 @@ export class UpdateUserController implements IController {
 
     const body = UpdateUserBodySchema.parse(request.body);
 
-    if (body.name === undefined && body.email === undefined && body.censoredMusics === undefined) {
+    if (
+      body.name === undefined &&
+      body.email === undefined &&
+      body.censoredMusics === undefined
+    ) {
       throw new BadRequestError(
         "You must provide either name, email or censoredMusics to update",
       );

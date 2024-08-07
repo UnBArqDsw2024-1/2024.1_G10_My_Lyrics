@@ -3,7 +3,7 @@ import type { IController } from "../../../../../shared/patterns/Controller/ICon
 import type { GetUserUseCase } from "../../../useCases/GetUserUseCase";
 
 export class GetUserController implements IController {
-  constructor(private getUserUseCase: GetUserUseCase) { }
+  constructor(private getUserUseCase: GetUserUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
     const id = request.user;
