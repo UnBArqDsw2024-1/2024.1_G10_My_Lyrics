@@ -1,4 +1,4 @@
-import type { Playlist, Prisma, PrismaClient } from "@prisma/client";
+import type { Playlist, Prisma, PrismaClient, Music } from "@prisma/client";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IPlaylistRepository } from "../../../repositories/IPlaylistRepository";
 
@@ -39,5 +39,18 @@ export class PlaylistRepository implements IPlaylistRepository {
         id,
       },
     });
+  }
+  // with musics
+  async getById(id: string): Promise<( Playlist & { musics: Music[] }) | null> {
+    const playlist = await this.prismaClient.playlist.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        musics: true,
+      },
+    });
+    
+    return playlist;
   }
 }

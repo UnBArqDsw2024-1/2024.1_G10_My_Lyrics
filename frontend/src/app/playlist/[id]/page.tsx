@@ -26,7 +26,7 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
         <p className="text-lg">{playlist?.description}</p>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        {/* {playlist?.musics.map((music) => (
+        {playlist?.musics.map((music) => (
           <div
             key={music.id}
             className="flex flex-col items-center justify-center gap-4"
@@ -34,7 +34,7 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
             <img src={music.iconUrl} alt={music.title} className="w-32 h-32" />
             <p className="text-xl">{music.title}</p>
           </div>
-        ))} */}
+        ))}
       </div>
     </div>
   );

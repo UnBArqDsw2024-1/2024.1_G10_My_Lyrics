@@ -1,20 +1,21 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import type { ICommand } from "../../../../../shared/patterns/Command/ICommand";
-import type { DeletePlaylistUseCase } from "../../../useCases/DeletePlaylistUseCase";
+import type { GetPlaylistUseCase } from "../../../useCases/GetPlaylistUseCase";
 
-export class DeletePlaylistController implements ICommand<Request, Response> {
-  constructor(private deletePlaylistUseCase: DeletePlaylistUseCase) {}
+
+export class GetPlaylistController implements ICommand<Request, Response> {
+  constructor(private GetPlaylistUseCase: GetPlaylistUseCase) {}
 
   async execute(request: Request, response: Response): Promise<Response> {
-    const deletePlaylistSchema = z.object({
+    const getPlaylistSchema = z.object({
       id: z.string().uuid(),
     });
 
     try {
-      const params = deletePlaylistSchema.parse(request.params);
-      await this.deletePlaylistUseCase.execute(params);
-      return response.status(204).send();
+      const params = getPlaylistSchema.parse(request.params);
+      const playlist = await this.GetPlaylistUseCase.execute(params);
+      return response.status(200).json(playlist);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return response.status(400).json({ error: error.errors });
