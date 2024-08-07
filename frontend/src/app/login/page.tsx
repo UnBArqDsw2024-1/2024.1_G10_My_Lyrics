@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
 import { api } from '../api';
+import Logo from '../../assets/LOGO.svg';
+import Image from 'next/image';
 
 export default function Login() {
   async function handleLogin(formData: FormData) {
@@ -22,9 +24,9 @@ export default function Login() {
   return (
     <div className="bg-gradient-to-b from-black to-[#231b39] flex items-center justify-center w-screen h-screen">
       <div className="bg-[#32284d] bg-opacity-50 p-16 rounded-lg shadow-md 2xl:w-3/12 xl:w-4/12 lg:w-5/12 md:w-6/12 w-3/4">
-        <h2 className="text-3xl font-bold text-center text-white mb-16">
-          Entrar no My Lyrics
-        </h2>
+        <div className="flex flex-col items-center justify-center">
+          <Image src={Logo} alt="Logo" className="mb-16 w-3/4" />
+        </div>
         <form action={handleLogin}>
           <div className="mb-4 pb-3">
             <label className="block text-white text-lg font-medium mb-1">
