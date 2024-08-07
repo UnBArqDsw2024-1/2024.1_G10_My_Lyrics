@@ -1,14 +1,13 @@
 import { Router } from "express";
 import { CreateMusicControllerFactory } from "../../../factories/CreateMusicFactory";
 import { GetMusicControllerFactory } from "../../../factories/GetMusicFactory";
-import { SearchMusicControllerFactory } from "../../../factories/SearchMusicFactory";
 import { ListTopMusicsControllerFactory } from "../../../factories/ListTopMusicsFactory";
+import { SearchMusicControllerFactory } from "../../../factories/SearchMusicFactory";
 
 const createMusicController =
   new CreateMusicControllerFactory().createController();
-const getMusicController =
-  new GetMusicControllerFactory().createController();
-const SearchMusicController = 
+const getMusicController = new GetMusicControllerFactory().createController();
+const SearchMusicController =
   new SearchMusicControllerFactory().createController();
 const listTopMusicsController =
   new ListTopMusicsControllerFactory().createController();
