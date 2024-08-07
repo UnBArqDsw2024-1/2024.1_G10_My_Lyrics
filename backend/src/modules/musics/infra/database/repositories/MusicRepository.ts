@@ -35,4 +35,28 @@ export class MusicRepository implements IMusicRepository {
 
     return music;
   }
+  async searchByTitle(name: string): Promise<Music[]> {
+    return this.prismaClient.music.findMany({
+      where: {
+        title: {
+          contains: name,
+          mode: "insensitive",
+        },
+      },
+    });
+  }
+
+  public async countTopMusic(
+    number: number,
+    dataInit: Date,
+    dataFinished: Date,
+  ): Promise<(Music & {count: BigInt})[]> {
+    return this.prismaClient.$queryRaw`
+      SELECT COUNT(*), M.* FROM "MusicAccess" MA 
+      INNER JOIN "Music" M ON M.id = MA."musicId"
+      WHERE MA."date" BETWEEN ${dataInit} AND ${dataFinished}
+      GROUP BY M.id
+      ORDER BY COUNT(*) DESC
+      LIMIT ${number}`;
+  }
 }
