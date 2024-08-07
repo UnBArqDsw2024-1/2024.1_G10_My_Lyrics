@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, {
   type NextFunction,
   type Request,
@@ -12,6 +13,7 @@ import { AppError } from "../../shared/errors/interface/AppError";
 import cors from "cors";
 
 export const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(cors());
 
