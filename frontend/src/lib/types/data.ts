@@ -29,7 +29,10 @@ export interface Album {
 
 export interface Verse {
   id: string
-  title: string
+  startTime: number
+  endTime: number
+  text: string
+  translatedText: string
   music: Music
 }
 
