@@ -40,7 +40,7 @@ export class PlaylistRepository implements IPlaylistRepository {
       },
     });
   }
-  // with musics
+  
   async getById(id: string): Promise<( Playlist & { musics: Music[] }) | null> {
     const playlist = await this.prismaClient.playlist.findUnique({
       where: {
