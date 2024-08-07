@@ -21,4 +21,18 @@ export class MusicRepository implements IMusicRepository {
   create(music: Prisma.MusicCreateInput): Promise<Music> {
     return this.prismaClient.music.create({ data: music });
   }
+
+  countTopMusic(
+    number: number,
+    dataInit: Date,
+    dataFinished: Date,
+  ): Promise<Music[]> {
+    return this.prismaClient.$queryRaw`
+      SELECT COUNT(*), M.* FROM "MusicAccess" MA 
+      INNER JOIN "Music" M ON M.id = MA."musicId"
+      WHERE MA."date" BETWEEN ${dataInit} AND ${dataFinished}
+      GROUP BY M.id
+      ORDER BY COUNT(*) DESC
+      LIMIT ${number}`;
+  }
 }
