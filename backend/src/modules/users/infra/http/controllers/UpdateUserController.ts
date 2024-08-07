@@ -11,26 +11,28 @@ export class UpdateUserController implements IController {
     const UpdateUserBodySchema = z.object({
       name: z.string().max(200).optional(),
       email: z.string().email().optional(),
+      censoredMusics: z.boolean().optional(),
     });
-    const UpdateUserParamsSchema = z.object({
-      id: z.string(),
-    });
-    const body = UpdateUserBodySchema.parse(request.body);
-    const params = UpdateUserParamsSchema.parse(request.params);
 
-    if (body.name === undefined && body.email === undefined) {
+    const body = UpdateUserBodySchema.parse(request.body);
+
+    if (
+      body.name === undefined &&
+      body.email === undefined &&
+      body.censoredMusics === undefined
+    ) {
       throw new BadRequestError(
-        "You must provide either name or email to update",
+        "You must provide either name, email or censoredMusics to update",
       );
     }
 
-    const { id } = params;
-    const { name, email } = body;
+    const { name, email, censoredMusics } = body;
 
     const user = await this.updateUserUseCase.execute({
-      id,
+      id: request.user,
       name,
       email,
+      censoredMusics,
     });
 
     return response.json(user);

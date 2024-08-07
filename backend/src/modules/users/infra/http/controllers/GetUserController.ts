@@ -6,10 +6,10 @@ export class GetUserController implements IController {
   constructor(private getUserUseCase: GetUserUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
-    const { name } = request.params;
+    const id = request.user;
 
     const user = await this.getUserUseCase.execute({
-      name,
+      id,
     });
 
     return response.json(user);

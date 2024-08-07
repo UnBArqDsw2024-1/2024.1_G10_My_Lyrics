@@ -1,9 +1,13 @@
 import { Router } from "express";
 import { CreateMusicControllerFactory } from "../../../factories/CreateMusicFactory";
+import { SearchMusicControllerFactory } from "../../../factories/SearchMusicFactory";
 import { ListTopMusicsControllerFactory } from "../../../factories/ListTopMusicsFactory";
 
 const createMusicController =
   new CreateMusicControllerFactory().createController();
+
+const SearchMusicController = 
+  new SearchMusicControllerFactory().createController();
 
 export const musicsRoutes = Router();
 

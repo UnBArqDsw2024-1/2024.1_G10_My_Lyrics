@@ -3,10 +3,6 @@ import { z } from "zod";
 import type { ICommand } from "../../../../../shared/patterns/Command/ICommand";
 import type { DeletePlaylistUseCase } from "../../../useCases/DeletePlaylistUseCase";
 
-interface IRequest {
-  id: string;
-}
-
 export class DeletePlaylistController implements ICommand<Request, Response> {
   constructor(private deletePlaylistUseCase: DeletePlaylistUseCase) {}
 
