@@ -7,14 +7,16 @@ interface IRequest {
   id: string;
   name: string | undefined;
   email: string | undefined;
+  censoredMusics: boolean | undefined;
 }
 
 type IResponse = User;
 
 export class UpdateUserUseCase implements ICommand<IRequest, IResponse> {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(private userRepository: IUserRepository
+  ) { }
 
-  public async execute({ id, name, email }: IRequest): Promise<IResponse> {
+  public async execute({ id, name, email, censoredMusics }: IRequest): Promise<IResponse> {
     const user = await this.userRepository.findOneById(id);
 
     if (!user) {
@@ -27,6 +29,10 @@ export class UpdateUserUseCase implements ICommand<IRequest, IResponse> {
 
     if (email !== undefined) {
       user.email = email;
+    }
+
+    if (censoredMusics !== undefined) {
+      user.censoredMusics = censoredMusics;
     }
 
     await this.userRepository.update(user);
