@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { CreatePlaylistControllerFactory } from "../../../factories/CreatePlaylistFactory";
 import { DeletePlaylistControllerFactory } from "../../../factories/DeletePlaylistFactory";
-import { SearchPlaylistControllerFactory } from "../../../factories/SearchPlaylistFactory";
 import { GetPlaylistControllerFactory } from "../../../factories/GetPlaylistFactory";
+import { SearchPlaylistControllerFactory } from "../../../factories/SearchPlaylistFactory";
 
 export const playlistRoutes = Router();
 

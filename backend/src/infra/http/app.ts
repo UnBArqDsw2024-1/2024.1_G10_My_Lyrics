@@ -1,10 +1,10 @@
+import cors from "cors";
 import express, {
   type NextFunction,
   type Request,
   type Response,
 } from "express";
 import { ZodError } from "zod";
-import cors from 'cors';
 import { env } from "../../config/env";
 import { musicsRoutes } from "../../modules/musics/infra/http/routes";
 import { playlistRoutes } from "../../modules/playlists/infra/http/routes";

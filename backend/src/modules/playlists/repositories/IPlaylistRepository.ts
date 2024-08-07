@@ -4,5 +4,5 @@ export interface IPlaylistRepository {
   create(playlist: Prisma.PlaylistCreateInput): Promise<Playlist>;
   searchByTitle(title: string): Promise<Playlist[]>;
   deleteById(id: string): Promise<void>;
-  getById(id: string): Promise<( Playlist & { musics: Music[] }) | null>;
+  getById(id: string): Promise<(Playlist & { musics: Music[] }) | null>;
 }

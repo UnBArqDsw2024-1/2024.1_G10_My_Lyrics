@@ -1,30 +1,19 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import type { ICommand } from "../../../../../shared/patterns/Command/ICommand";
+import type { IController } from "../../../../../shared/patterns/Controller/IController";
 import type { GetPlaylistUseCase } from "../../../useCases/GetPlaylistUseCase";
 
+export class GetPlaylistController implements IController {
+  constructor(private getPlaylistUseCase: GetPlaylistUseCase) {}
 
-export class GetPlaylistController implements ICommand<Request, Response> {
-  constructor(private GetPlaylistUseCase: GetPlaylistUseCase) {}
-
-  async execute(request: Request, response: Response): Promise<Response> {
+  async handler(request: Request, response: Response): Promise<Response> {
     const getPlaylistSchema = z.object({
       id: z.string().uuid(),
     });
+    const params = getPlaylistSchema.parse(request.params);
 
-    try {
-      const params = getPlaylistSchema.parse(request.params);
-      const playlist = await this.GetPlaylistUseCase.execute(params);
-      return response.status(200).json(playlist);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return response.status(400).json({ error: error.errors });
-      }
-      return response.status(500).json({ error: "Internal Server Error" });
-    }
-  }
+    const playlist = await this.getPlaylistUseCase.execute(params);
 
-  async handler(request: Request, response: Response): Promise<Response> {
-    return this.execute(request, response);
+    return response.status(200).json(playlist);
   }
 }
