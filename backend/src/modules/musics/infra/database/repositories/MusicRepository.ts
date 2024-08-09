@@ -1,4 +1,4 @@
-import type { Music, Prisma, PrismaClient, User, Verse } from "@prisma/client";
+import type { Music, Prisma, PrismaClient, Verse } from "@prisma/client";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IMusicRepository } from "../../../repositories/IMusicRepository";
 
@@ -18,26 +18,37 @@ export class MusicRepository implements IMusicRepository {
     return MusicRepository.INSTANCE;
   }
 
-  create(music: Prisma.MusicCreateInput): Promise<Music> {
+  public async create(music: Prisma.MusicCreateInput): Promise<Music> {
     return this.prismaClient.music.create({ data: music });
   }
 
-  async getById(
+  public async getById(
     id: string,
-  ): Promise<(Music & { verses: Verse[]; likes: User[] }) | null> {
+  ): Promise<(Music & { verses: Verse[]; likes: number }) | null> {
     const music = await this.prismaClient.music.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
       include: {
         verses: true,
-        likes: true,
+        _count: {
+          select: { likes: true },
+        },
       },
     });
+    if (!music) {
+      return null;
+    }
 
-    return music;
+    const {
+      _count: { likes },
+      ...remaining
+    } = music;
+    return {
+      ...remaining,
+      likes,
+    };
   }
-  async searchByTitle(name: string): Promise<Music[]> {
+
+  public async searchByTitle(name: string): Promise<Music[]> {
     return this.prismaClient.music.findMany({
       where: {
         title: {
@@ -52,7 +63,7 @@ export class MusicRepository implements IMusicRepository {
     number: number,
     dataInit: Date,
     dataFinished: Date,
-  ): Promise<(Music & { count: BigInt })[]> {
+  ): Promise<(Music & { count: bigint })[]> {
     return this.prismaClient.$queryRaw`
       SELECT COUNT(*), M.* FROM "MusicAccess" MA 
       INNER JOIN "Music" M ON M.id = MA."musicId"

@@ -1,14 +1,14 @@
-import type { Music, Prisma, User, Verse } from "@prisma/client";
+import type { Music, Prisma, Verse } from "@prisma/client";
 
 export interface IMusicRepository {
   create(music: Prisma.MusicCreateInput): Promise<Music>;
   getById(
     id: string,
-  ): Promise<(Music & { verses: Verse[]; likes: User[] }) | null>;
+  ): Promise<(Music & { verses: Verse[]; likes: number }) | null>;
   searchByTitle(title: string): Promise<Music[]>;
   countTopMusic(
     number: number,
     dataInit: Date,
     dataFinished: Date,
-  ): Promise<(Music & { count: BigInt })[]>;
+  ): Promise<(Music & { count: bigint })[]>;
 }

@@ -16,17 +16,10 @@ export class GetMusicUseCase implements ICommand<IRequest, IResponse> {
     id,
   }: IRequest): Promise<(Music & { verses: Verse[]; likes: number }) | null> {
     const music = await this.musicRepository.getById(id);
-
     if (!music) {
       throw new NotFoundError("Music not found");
     }
 
-    const likes = music.likes.length;
-
-    return {
-      ...music,
-      verses: music.verses,
-      likes,
-    };
+    return music;
   }
 }
