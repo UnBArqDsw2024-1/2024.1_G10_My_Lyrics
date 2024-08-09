@@ -1,21 +1,20 @@
 import { Router } from "express";
 import { CreateMusicControllerFactory } from "../../../factories/CreateMusicFactory";
-import { SearchMusicControllerFactory } from "../../../factories/SearchMusicFactory";
+import { GetMusicControllerFactory } from "../../../factories/GetMusicFactory";
 import { ListTopMusicsControllerFactory } from "../../../factories/ListTopMusicsFactory";
 
 const createMusicController =
   new CreateMusicControllerFactory().createController();
-
-const SearchMusicController = 
-  new SearchMusicControllerFactory().createController();
+const getMusicController = new GetMusicControllerFactory().createController();
+const listTopMusicsController =
+  new ListTopMusicsControllerFactory().createController();
 
 export const musicsRoutes = Router();
 
 musicsRoutes.post("/", (req, res) => createMusicController.handler(req, res));
 
-const listTopMusicsController =
-  new ListTopMusicsControllerFactory().createController();
-
 musicsRoutes.get("/hotspot", (req, res) =>
   listTopMusicsController.handler(req, res),
 );
+
+musicsRoutes.get("/:id", (req, res) => getMusicController.handler(req, res));

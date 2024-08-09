@@ -1,11 +1,14 @@
 "use client";
 
+import MusicItem from "@/components/MusicItem";
 import { api } from "@/lib/api";
-import { Playlist } from "@/lib/types/Playlist";
+import { Music, Playlist } from "@/lib/types/data";
 import { useEffect, useState } from "react";
 
 export default function PlaylistPage({ params }: { params: { id: string } }) {
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
+
+  const [selectedMusic, setSelectedMusic] = useState<Music | null>(null);
 
   useEffect(() => {
     api
@@ -13,28 +16,76 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
       .then((res) => {
         console.log(res.data);
         setPlaylist(res.data);
+        handleSelectMusic(res.data.musics[0]);
       })
       .catch((err) => {
         console.error(err);
       });
   }, [params.id]);
 
+  async function handleSelectMusic(music: Music) {
+    const musicId = music.id;
+
+    try {
+      const res = await api.get(`/music/${musicId}`);
+      console.log(res.data);
+      setSelectedMusic(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-4xl font-bold">{playlist?.title}</h1>
-        <p className="text-lg">{playlist?.description}</p>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-3 items-center justify-items-center p-8 gap-16 sm:p-20">
+      <div className="flex flex-col gap-4 items-start ">
+        <div className="flex flex-row gap-4 items-center">
+          <p>icon</p>
+          <h1 className="text-3xl font-bold">{playlist?.title}</h1>
+        </div>
+        <p>{playlist?.description}</p>
+
         {playlist?.musics.map((music) => (
-          <div
-            key={music.id}
-            className="flex flex-col items-center justify-center gap-4"
-          >
-            <img src={music.iconUrl} alt={music.title} className="w-32 h-32" />
-            <p className="text-xl">{music.title}</p>
-          </div>
+          <MusicItem key={music.id} music={music} />
         ))}
+      </div>
+
+      <div className="flex flex-col gap-4 items-start">
+        <h2 className="text-2xl font-bold">{selectedMusic?.title}</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4 items-start">
+            {selectedMusic?.verses.map((verse) => (
+              <div key={verse.id}>
+                <p>{verse.text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-4 items-start">
+            {selectedMusic?.verses.map((verse) => (
+              <div key={verse.id}>
+                <p>{verse.translatedText}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-4 items-start">
+        <h2 className="text-2xl font-bold">{selectedMusic?.title}</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4 items-start">
+            {selectedMusic?.verses.map((verse) => (
+              <div key={verse.id}>
+                <p>{verse.text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-4 items-start">
+            {selectedMusic?.verses.map((verse) => (
+              <div key={verse.id}>
+                <p>{verse.translatedText}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
