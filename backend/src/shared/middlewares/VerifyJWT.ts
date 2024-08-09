@@ -15,8 +15,7 @@ export class VerifyJwt {
   }
 
   verify(request: Request, _: Response, next: NextFunction) {
-    const { authorization } = request.headers;
-
+    const authorization  = request.headers.authorization ?? `Bearer ${request.cookies["CU-QUE-FODAO"]}`;
     if (!authorization) {
       throw new UnauthorizedError("Unauthorized");
     }

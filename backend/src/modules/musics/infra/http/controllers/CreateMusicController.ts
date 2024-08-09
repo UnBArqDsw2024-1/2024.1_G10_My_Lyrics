@@ -21,7 +21,6 @@ export class CreateMusicController implements IController {
         }),
       ),
     });
-
     const body = createMusicSchema.parse(request.body);
 
     const music = await this.createMusicUseCase.execute(body);

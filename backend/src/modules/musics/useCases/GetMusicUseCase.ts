@@ -7,14 +7,12 @@ interface IRequest {
   id: string;
 }
 
-type IResponse = (Music & { verses: Verse[]; likes: number }) | null;
+type IResponse = Music & { verses: Verse[]; likes: number };
 
 export class GetMusicUseCase implements ICommand<IRequest, IResponse> {
   constructor(private musicRepository: IMusicRepository) {}
 
-  public async execute({
-    id,
-  }: IRequest): Promise<(Music & { verses: Verse[]; likes: number }) | null> {
+  public async execute({ id }: IRequest): Promise<IResponse> {
     const music = await this.musicRepository.getById(id);
     if (!music) {
       throw new NotFoundError("Music not found");

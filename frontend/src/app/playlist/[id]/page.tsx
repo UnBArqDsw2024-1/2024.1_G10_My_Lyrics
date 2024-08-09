@@ -6,15 +6,14 @@ import { Music, Playlist } from "@/lib/types/data";
 import { useEffect, useState } from "react";
 
 export default function PlaylistPage({ params }: { params: { id: string } }) {
-  const [playlist, setPlaylist] = useState<Playlist | null>(null);
+  const [playlist, setPlaylist] = useState<Playlist | undefined>(undefined);
 
-  const [selectedMusic, setSelectedMusic] = useState<Music | null>(null);
+  const [selectedMusic, setSelectedMusic] = useState<Music | undefined>(undefined);
 
   useEffect(() => {
     api
       .get(`/playlist/${params.id}`)
       .then((res) => {
-        console.log(res.data);
         setPlaylist(res.data);
         handleSelectMusic(res.data.musics[0]);
       })
@@ -23,9 +22,12 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
       });
   }, [params.id]);
 
-  async function handleSelectMusic(music: Music) {
-    const musicId = music.id;
+  async function handleSelectMusic(music: Music | undefined) {
+    if(!music) {
+      return
+    }
 
+    const musicId = music.id;
     try {
       const res = await api.get(`/music/${musicId}`);
       console.log(res.data);
@@ -44,7 +46,7 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
         </div>
         <p>{playlist?.description}</p>
 
-        {playlist?.musics.map((music) => (
+        {playlist?.musics?.map((music) => (
           <MusicItem key={music.id} music={music} />
         ))}
       </div>

@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, {
   type NextFunction,
@@ -12,8 +13,16 @@ import { usersRoutes } from "../../modules/users/infra/http/routes";
 import { AppError } from "../../shared/errors/interface/AppError";
 
 export const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: (_origin, callback) => {
+      callback(null, true);
+    },
+    credentials: true,
+  }),
+);
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/user", usersRoutes);
 app.use("/playlist", playlistRoutes);
