@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/infra/http/server.ts"
+    "dev": "tsx watch src/infra/http/server.ts",
+    "scrapper": "tsx watch src/seeds/getMostPopular.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +13,9 @@
   "dependencies": {
     "@prisma/client": "5.17.0",
     "@types/cors": "^2.8.17",
+    "axios": "^1.7.3",
     "bcrypt": "^5.1.1",
+    "cheerio": "^1.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
