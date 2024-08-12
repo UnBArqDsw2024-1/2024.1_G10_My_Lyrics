@@ -1,13 +1,19 @@
 import { Router } from "express";
+import { VerifyJwt } from "../../../../../shared/middlewares/VerifyJWT";
 import { CreateMusicControllerFactory } from "../../../factories/CreateMusicFactory";
 import { GetMusicControllerFactory } from "../../../factories/GetMusicFactory";
+import { LikeMusicControllerFactory } from "../../../factories/LikeMusicFactory";
 import { ListTopMusicsControllerFactory } from "../../../factories/ListTopMusicsFactory";
+import { UnlikeMusicControllerFactory } from "../../../factories/UnlikeMusicFactory";
 
 const createMusicController =
   new CreateMusicControllerFactory().createController();
 const getMusicController = new GetMusicControllerFactory().createController();
 const listTopMusicsController =
   new ListTopMusicsControllerFactory().createController();
+const likeMusicController = new LikeMusicControllerFactory().createController();
+const unlikeMusicController =
+  new UnlikeMusicControllerFactory().createController();
 
 export const musicsRoutes = Router();
 
@@ -18,3 +24,16 @@ musicsRoutes.get("/hotspot", (req, res) =>
 );
 
 musicsRoutes.get("/:id", (req, res) => getMusicController.handler(req, res));
+
+const authorization = new VerifyJwt();
+
+// Rotas autenticadas
+musicsRoutes.use((req, res, next) => authorization.verify(req, res, next));
+
+musicsRoutes.patch("/like/:music_id", (req, res) =>
+  likeMusicController.handler(req, res),
+);
+
+musicsRoutes.patch("/unlike/:music_id", (req, res) =>
+  unlikeMusicController.handler(req, res),
+);

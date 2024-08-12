@@ -72,4 +72,34 @@ export class MusicRepository implements IMusicRepository {
       ORDER BY COUNT(*) DESC
       LIMIT ${number}`;
   }
+
+  public async likes(user_id: string, music_id: string): Promise<void> {
+    await this.prismaClient.music.update({
+      where: {
+        id: music_id,
+      },
+      data: {
+        likes: {
+          connect: {
+            id: user_id,
+          },
+        },
+      },
+    });
+  }
+
+  public async unlikes(user_id: string, music_id: string): Promise<void> {
+    await this.prismaClient.music.update({
+      where: {
+        id: music_id,
+      },
+      data: {
+        likes: {
+          disconnect: {
+            id: user_id,
+          },
+        },
+      },
+    });
+  }
 }
