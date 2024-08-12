@@ -29,10 +29,11 @@ const authorization = new VerifyJwt();
 
 // Rotas autenticadas
 musicsRoutes.use((req, res, next) => authorization.verify(req, res, next));
-musicsRoutes.patch("/like", (req, res) =>
+
+musicsRoutes.patch("/like/:music_id", (req, res) =>
   likeMusicController.handler(req, res),
 );
 
-musicsRoutes.patch("/unlike", (req, res) =>
+musicsRoutes.patch("/unlike/:music_id", (req, res) =>
   unlikeMusicController.handler(req, res),
 );

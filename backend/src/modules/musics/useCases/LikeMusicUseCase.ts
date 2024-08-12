@@ -1,3 +1,4 @@
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import type { ICommand } from "../../../shared/patterns/Command/ICommand";
 import type { IMusicRepository } from "../repositories/IMusicRepository"; // Import the IMusicRepository type
 
@@ -11,6 +12,9 @@ export class LikeMusicUseCase implements ICommand<ICreateLIkeMusicDTO, void> {
 
   async execute({ user_id, music_id }: ICreateLIkeMusicDTO): Promise<void> {
     const music = await this.musicRepository.getById(music_id);
+    if (!music) {
+      throw new NotFoundError("Music was not found");
+    }
 
     await this.musicRepository.likes(user_id, music_id);
   }

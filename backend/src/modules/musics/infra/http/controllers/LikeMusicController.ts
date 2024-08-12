@@ -8,17 +8,16 @@ export class LikeMusicController implements IController {
 
   async handler(request: Request, response: Response): Promise<Response> {
     const user_id = request.user!;
-
     const likeMusicSchema = z.object({
       music_id: z.string().uuid(),
     });
-    const body = likeMusicSchema.parse(request.body);
+    const params = likeMusicSchema.parse(request.params);
 
-    const like = await this.likeMusicUseCase.execute({
+    await this.likeMusicUseCase.execute({
       user_id,
-      music_id: body.music_id,
+      music_id: params.music_id,
     });
 
-    return response.status(201).json(like);
+    return response.status(200).send();
   }
 }
