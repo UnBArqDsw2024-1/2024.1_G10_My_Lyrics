@@ -18,6 +18,7 @@ model User {
   censoredMusics Boolean @default(false)
 
   playlists      Playlist[]
+  likedArtists   Artist[]   @relation("UsersLikedArtists")
   likedPlaylists Playlist[] @relation("UsersLikedPlaylists")
   likedMusics    Music[]    @relation("UsersLikedMusics")
 }
@@ -38,6 +39,7 @@ model Artist {
   biography String
 
   albums Album[] @relation("AlbumArtists")
+  likes  User[]  @relation("UsersLikedArtists")
 }
 
 model Album {

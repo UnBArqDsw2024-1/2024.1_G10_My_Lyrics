@@ -25,6 +25,9 @@ export class UnlikeMusicUseCase implements ICommand<ICreateLIkeMusicDTO, void> {
 
   async execute({ user_id, music_id }: ICreateLIkeMusicDTO): Promise<void> {
     const music = await this.musicRepository.getById(music_id);
+    if (!music) {
+      throw new NotFoundError("Music was not found");
+    }
 
     await this.musicRepository.unlikes(user_id, music_id);
   }
