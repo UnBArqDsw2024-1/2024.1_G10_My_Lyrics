@@ -3,6 +3,7 @@ import { CreatePlaylistControllerFactory } from "../../../factories/CreatePlayli
 import { DeletePlaylistControllerFactory } from "../../../factories/DeletePlaylistFactory";
 import { GetPlaylistControllerFactory } from "../../../factories/GetPlaylistFactory";
 import { SearchPlaylistControllerFactory } from "../../../factories/SearchPlaylistFactory";
+import { LikePlaylistControllerFactory } from "../../../factories/LikePlaylistFactory";
 
 export const playlistRoutes = Router();
 
@@ -18,6 +19,9 @@ const deletePlaylistController =
 const getPlaylistController =
   new GetPlaylistControllerFactory().createController();
 
+const likePlaylistController =
+  new LikePlaylistControllerFactory().createController();
+
 playlistRoutes.post("/", (req, res) =>
   createPlaylistController.handler(req, res),
 );
@@ -31,4 +35,8 @@ playlistRoutes.get("/:id", (req, res) =>
 
 playlistRoutes.delete("/:id", (req, res) =>
   deletePlaylistController.handler(req, res),
+);
+
+playlistRoutes.post("/:id/like", (req, res) =>
+  likePlaylistController.handler(req, res),
 );

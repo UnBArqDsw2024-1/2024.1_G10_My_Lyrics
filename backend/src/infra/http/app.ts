@@ -10,12 +10,11 @@ import { musicsRoutes } from "../../modules/musics/infra/http/routes";
 import { playlistRoutes } from "../../modules/playlists/infra/http/routes";
 import { usersRoutes } from "../../modules/users/infra/http/routes";
 import { AppError } from "../../shared/errors/interface/AppError";
-import cors from "cors";
+
 
 export const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(cors());
 
 app.use("/user", usersRoutes);
 app.use("/playlist", playlistRoutes);

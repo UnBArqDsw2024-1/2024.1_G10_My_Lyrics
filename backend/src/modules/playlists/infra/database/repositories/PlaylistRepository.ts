@@ -53,4 +53,15 @@ export class PlaylistRepository implements IPlaylistRepository {
 
     return playlist;
   }
+  
+  async likePlaylist(playlistId: string, user_Id: string): Promise<void> {
+    await this.prismaClient.playlist.update({
+      where: { id: playlistId },
+      data: {
+        likes: {
+          connect: { id: user_Id },
+        },
+      },
+    });
+  }
 }
