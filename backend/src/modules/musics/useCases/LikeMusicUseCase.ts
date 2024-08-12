@@ -15,3 +15,13 @@ export class LikeMusicUseCase implements ICommand<ICreateLIkeMusicDTO, void> {
         await this.musicRepository.likes(user_id, music_id);
     }
 }
+
+export class UnlikeMusicUseCase implements ICommand<ICreateLIkeMusicDTO, void> {
+    constructor(private musicRepository: IMusicRepository) {}
+
+    async execute({ user_id, music_id }: ICreateLIkeMusicDTO): Promise<void> {
+        const music = await this.musicRepository.getById(music_id);
+
+        await this.musicRepository.unlikes(user_id, music_id);
+    }
+}

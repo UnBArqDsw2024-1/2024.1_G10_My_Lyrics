@@ -12,4 +12,5 @@ export interface IMusicRepository {
     dataFinished: Date,
   ): Promise<(Music & { count: bigint })[]>;
   likes(user_id: string, music_id: string): Promise<void>;
+  unlikes(user_id: string, music_id: string): Promise<void>;
 }

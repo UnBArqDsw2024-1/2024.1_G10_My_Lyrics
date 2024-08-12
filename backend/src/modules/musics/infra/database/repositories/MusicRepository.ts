@@ -86,4 +86,18 @@ export class MusicRepository implements IMusicRepository {
           }
     }});
   }
+
+  public async unlikes(user_id: string, music_id: string): Promise<void> {
+    await this.prismaClient.music.update({
+      where : {
+        id: music_id
+      },
+        data: {
+          likes : {
+            disconnect: {
+              id: user_id
+            }
+          }
+    }});
+  }
 }
