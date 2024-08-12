@@ -1,24 +1,24 @@
-import type { IController } from "../../../../../shared/patterns/Controller/IController";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { z } from "zod";
+import type { IController } from "../../../../../shared/patterns/Controller/IController";
 
-import { LikeArtistUseCase } from "../../../useCases/LikeArtistUseCase";
+import type { LikeArtistUseCase } from "../../../useCases/LikeArtistUseCase";
 
 export class LikeArtistController implements IController {
   constructor(private likeArtistUseCase: LikeArtistUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
-    
-    const user_id = request.user!;
-    
     const likeArtistSchema = z.object({
       artist_id: z.string().uuid(),
-
     });
-    const body = likeArtistSchema.parse(request.body);
+    const params = likeArtistSchema.parse(request.params);
+    const user_id = request.user!;
 
-    const like = await this.likeArtistUseCase.execute({user_id, artist_id: body.artist_id});
+    await this.likeArtistUseCase.execute({
+      user_id,
+      artist_id: params.artist_id,
+    });
 
-    return response.status(201).json(like);
+    return response.status(200).send();
   }
 }

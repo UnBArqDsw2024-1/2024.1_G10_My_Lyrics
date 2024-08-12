@@ -1,4 +1,4 @@
-import type { Artist, Prisma, PrismaClient } from "@prisma/client";
+import type { Artist, PrismaClient } from "@prisma/client";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IArtistRepository } from "../../../repositories/IArtistRepository";
 

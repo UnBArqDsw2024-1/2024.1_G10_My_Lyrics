@@ -4,8 +4,7 @@ import type { IControllerFactory } from "../../../shared/patterns/Factories/ICon
 import { MusicRepository } from "../infra/database/repositories/MusicRepository";
 
 import { LikeMusicController } from "../infra/http/controllers/LikeMusicController";
-import { LikeMusicUseCase } from "../useCases/LikeMusicUseCase"; 
-
+import { LikeMusicUseCase } from "../useCases/LikeMusicUseCase";
 
 export class LikeMusicUseCaseFactory implements ICommandFactory {
   createCommand() {

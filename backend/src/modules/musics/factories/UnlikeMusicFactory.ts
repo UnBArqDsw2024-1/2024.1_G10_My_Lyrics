@@ -3,8 +3,8 @@ import type { ICommandFactory } from "../../../shared/patterns/Factories/IComman
 import type { IControllerFactory } from "../../../shared/patterns/Factories/IControllerFactory";
 import { MusicRepository } from "../infra/database/repositories/MusicRepository";
 
-import { UnlikeMusicUseCase } from "../useCases/LikeMusicUseCase";
 import { UnlikeMusicController } from "../infra/http/controllers/UnlikeMusicController";
+import { UnlikeMusicUseCase } from "../useCases/LikeMusicUseCase";
 
 export class UnlikeMusicUseCaseFactory implements ICommandFactory {
   createCommand() {

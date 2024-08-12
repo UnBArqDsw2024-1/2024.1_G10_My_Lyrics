@@ -1,7 +1,7 @@
-import { Artist, Prisma } from "@prisma/client";
+import type { Artist } from "@prisma/client";
 
 export interface IArtistRepository {
-    getById(id: string): Promise<Artist | null>;
-    likes(user_id: string, artist_id: string): Promise<void>;
-    unlikes(user_id: string, artist_id: string): Promise<void>;
-    }
+  getById(id: string): Promise<Artist | null>;
+  likes(user_id: string, artist_id: string): Promise<void>;
+  unlikes(user_id: string, artist_id: string): Promise<void>;
+}
