@@ -11,6 +11,7 @@ import { musicsRoutes } from "../../modules/musics/infra/http/routes";
 import { playlistRoutes } from "../../modules/playlists/infra/http/routes";
 import { usersRoutes } from "../../modules/users/infra/http/routes";
 import { AppError } from "../../shared/errors/interface/AppError";
+import { artistRoutes } from "../../modules/artist/infra/http/routes";
 
 export const app = express();
 app.use(
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use("/user", usersRoutes);
 app.use("/playlist", playlistRoutes);
 app.use("/music", musicsRoutes);
+app.use("/artist", artistRoutes);
 
 app.get("/health-checks", (_req, res) => {
   return res.json({
