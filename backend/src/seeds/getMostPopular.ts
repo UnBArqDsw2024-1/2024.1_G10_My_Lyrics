@@ -1,5 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { writeFileSync } from "fs";
+import { DatabaseConnection } from "../infra/database/GetConnection";
 
 interface ISong {
 	title: string;
@@ -7,7 +9,22 @@ interface ISong {
 	url: string;
 }
 
-async function getMostPopular() {
+interface IVerse {
+	startTime: number;
+	endTime: number;
+	text: string;
+	translatedText?: string;
+}
+
+interface IMusic {
+	title: string;
+	author: string;
+	youtubeUrl: string;
+	iconUrl: string;
+	verses: IVerse[];
+}
+
+async function MostAccessFromLetras(): Promise<ISong[]> {
 	const response = await axios.get("https://www.letras.com/mais-acessadas/", {
 		headers: {
 			"User-Agent":
@@ -22,7 +39,7 @@ async function getMostPopular() {
 
 	const songs: ISong[] = [];
 
-	$("ol.top-list_mus > li").each((index, element) => {
+	$("ol.top-list_mus > li").each((_, element) => {
 		const songTitle = $(element).find("b").text().trim();
 		const songAuthor = $(element).find("span").text().trim();
 		const songUrl = $(element).find("a").attr("href") as string;
@@ -34,55 +51,117 @@ async function getMostPopular() {
 		});
 	});
 
-	let i = 0;
-	for (const song of songs) {
-		const songResponse = await axios.get(song.url);
-		const $ = cheerio.load(songResponse.data, {
-			xml: false,
-		});
+	return songs;
+}
 
-		const songData = $("#js-scripts").text();
+async function fetchLyrics(song: ISong): Promise<IMusic | undefined> {
+	const	songResponse = await axios.get(song.url).catch(() => undefined);
+	if(!songResponse) {
+		return undefined;
+	}
 
-		const regex =
-			/"ID":(\d+),"URL":"[^"]+","Name":"[^"]+","DNS":"[^"]+","Artist":"[^"]+","ArtistID":\d+,"Locale":"[^"]+","YoutubeID":"([^"]+)","StartSeconds":\d+,"Duration":"[^"]*","CifraURL":"[^"]*","Adult":(?:true|false),"CopyrightStrike":\{[^}]*\},"AlbumID":\d+,"OGImage":"[^"]*".*?"Thumb":"([^"]+)"/;
-		const match = songData.match(regex);
+	const $ = cheerio.load(songResponse.data, {
+		xml: false,
+	});
 
-		if (match) {
-			const id = match[1];
-			const youtubeId = match[2];
-			const thumbnail = match[3];
+	const songData = $("#js-scripts").text();
 
-			const lyricsResponse = await axios.get(
-				`https://www.letras.com/api/v2/subtitle/${id}/${youtubeId}/?`,
-			);
-			const lyrics = JSON.parse(await lyricsResponse.data.Original.Subtitle);
+	const regex =
+		/"ID":(\d+),"URL":"[^"]+","Name":"[^"]+","DNS":"[^"]+","Artist":"[^"]+","ArtistID":\d+,"Locale":"[^"]+","YoutubeID":"([^"]+)","StartSeconds":\d+,"Duration":"[^"]*","CifraURL":"[^"]*","Adult":(?:true|false),"CopyrightStrike":\{[^}]*\},"AlbumID":\d+,"OGImage":"[^"]*".*?"Thumb":"([^"]+)"/;
+	const match = songData.match(regex);
 
-			const formattedLyrics = lyrics.map(
-				([text, startTime, endTime]: [string, string, string]) => ({
-					startTime: Math.round(Number.parseFloat(startTime) * 1000),
-					endTime: Math.round(Number.parseFloat(endTime) * 1000),
-					text: text,
-					translatedText: null,
-				}),
-			);
+	if (!match) {
+		return undefined;
+	}
 
-			console.log({
-				lyrics: formattedLyrics,
-				id,
-				youtubeId,
-				thumbnail,
-				author: song.author,
-				title: song.title,
-			});
-		} else {
-			console.log("Não foi possível encontrar os valores.");
-		}
+	const [_, id, youtubeId] = match;
 
-		i++;
-		if (i === 5) {
-			break;
-		}
+	const lyricsResponse = await axios.get(
+		`https://www.letras.com/api/v2/subtitle/${id}/${youtubeId}/?`,
+	).catch(() => undefined);
+	if (!lyricsResponse?.data?.Original?.Subtitle) {
+		return undefined;
+	}
+
+	const lyrics: any[] = JSON.parse(lyricsResponse.data.Original.Subtitle);
+	const verses: IVerse[] = lyrics.map(
+		([text, startTime, endTime]: [string, string, string]) => ({
+			startTime: Math.round(Number.parseFloat(startTime) * 1000),
+			endTime: Math.round(Number.parseFloat(endTime) * 1000),
+			text: text,
+		}),
+	);
+
+	return {
+		title: song.title,
+		author: song.author,
+		youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
+		iconUrl: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
+		verses,
 	}
 }
 
-getMostPopular();
+async function sleep(ms: number) {
+	return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
+
+(async () => {
+	const sleepTime = 1000;
+	const musicsFilepath = "musics.json";
+
+	const musics = [];
+
+	const prismaClient = DatabaseConnection.getInstance();
+	await prismaClient.$connect();
+
+	const songs = await MostAccessFromLetras();
+	for (const song of songs) {
+		await sleep(sleepTime);
+
+		const music = await fetchLyrics(song);
+		if (music) {
+			musics.push(music);
+			writeFileSync(musicsFilepath, JSON.stringify(musics, null, 2));
+
+			const alreadyExists = await prismaClient.music.findFirst({
+				where: {
+					title: music.title
+				}
+			});
+			if (alreadyExists) {
+				console.log(alreadyExists.title, "já existe, então estarei pulando...")
+				continue;
+			}
+
+			await prismaClient.music.create({
+				data: {
+					iconUrl: music.iconUrl,
+					youtubeUrl: music.youtubeUrl,
+					title: music.title,
+					verses: {
+						createMany: {
+							data: music.verses
+						}
+					},
+					album: {
+						create: {
+							title: music.title,
+							artists: {
+								connectOrCreate: [{
+									where: {
+										name: music.author
+									},
+									create: {
+										name: music.author,
+										biography: ""
+									}
+								}]
+							}
+						}
+					}
+				}
+			});
+			console.log(music.title, "foi criado com sucesso!!!");
+		}
+	}
+})()
