@@ -63,20 +63,4 @@ export class UserRepository implements IUserRepository {
 
     return updatedUser;
   }
-  
-  
-  
-  public async searchByName(name: string): Promise<User[]> {
-    return this.prismaClient.user.findMany({
-      where: {
-        name: {
-          contains: name,
-          mode: "insensitive",
-        },
-      },
-    });
-  }
-
-
 }
-

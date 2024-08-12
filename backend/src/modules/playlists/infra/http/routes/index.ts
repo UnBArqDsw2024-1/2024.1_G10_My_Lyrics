@@ -1,9 +1,9 @@
 import { Router } from "express";
+import { VerifyJwt } from "../../../../../shared/middlewares/VerifyJWT";
 import { CreatePlaylistControllerFactory } from "../../../factories/CreatePlaylistFactory";
 import { DeletePlaylistControllerFactory } from "../../../factories/DeletePlaylistFactory";
 import { GetPlaylistControllerFactory } from "../../../factories/GetPlaylistFactory";
 import { SearchPlaylistControllerFactory } from "../../../factories/SearchPlaylistFactory";
-import { VerifyJwt } from "../../../../../shared/middlewares/VerifyJWT";
 
 export const playlistRoutes = Router();
 
@@ -19,8 +19,8 @@ const deletePlaylistController =
 const getPlaylistController =
   new GetPlaylistControllerFactory().createController();
 
-  playlistRoutes.get("/search", (req, res) =>
-    searchPlaylistController.handler(req, res),
+playlistRoutes.get("/search", (req, res) =>
+  searchPlaylistController.handler(req, res),
 );
 
 playlistRoutes.get("/:id", (req, res) =>
