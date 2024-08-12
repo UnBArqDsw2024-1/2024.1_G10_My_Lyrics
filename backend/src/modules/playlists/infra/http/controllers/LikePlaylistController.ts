@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import type { ICommand } from "../../../../../shared/patterns/Command/ICommand";
+import type { IController } from "../../../../../shared/patterns/Controller/IController";
 import type { LikePlaylistUseCase } from "../../../useCases/LikePlaylistUseCase";
 
-export class LikePlaylistController implements ICommand<Request, Response> {
+export class LikePlaylistController implements IController {
   constructor(private likePlaylistUseCase: LikePlaylistUseCase) {}
 
   async execute(request: Request, response: Response): Promise<Response> {
