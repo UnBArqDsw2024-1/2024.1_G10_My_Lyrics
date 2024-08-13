@@ -37,6 +37,6 @@ playlistRoutes.delete("/:id", (req, res) =>
   deletePlaylistController.handler(req, res),
 );
 
-playlistRoutes.post("/:id/like", (req, res) =>
+playlistRoutes.post("/like/:id", (req, res) =>
   likePlaylistController.handler(req, res),
 );

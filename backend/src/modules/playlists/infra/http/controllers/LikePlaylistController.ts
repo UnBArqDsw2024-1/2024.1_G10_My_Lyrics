@@ -4,27 +4,19 @@ import type { IController } from "../../../../../shared/patterns/Controller/ICon
 import type { LikePlaylistUseCase } from "../../../useCases/LikePlaylistUseCase";
 
 export class LikePlaylistController implements IController {
-  constructor(private likePlaylistUseCase: LikePlaylistUseCase) {}
+  constructor(private likePlaylistUseCase: LikePlaylistUseCase) { }
 
-  async execute(request: Request, response: Response): Promise<Response> {
+  async handler(request: Request, response: Response): Promise<Response> {
     const likePlaylistSchema = z.object({
       playlistId: z.string().uuid(),
       user_Id: z.string().uuid(),
     });
+    const body = likePlaylistSchema.parse({
+      playlistId: request.params.id,
+      user_Id: request.body.user_id
+    });
 
-    try {
-      const body = likePlaylistSchema.parse(request.body);
-      await this.likePlaylistUseCase.execute(body);
-      return response.status(204).send(); // No Content
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return response.status(400).json({ error: error.errors }); // Bad Request
-      }
-      return response.status(500).json({ error: "Internal Server Error" });
-    }
-  }
-
-  async handler(request: Request, response: Response): Promise<Response> {
-    return this.execute(request, response);
+    await this.likePlaylistUseCase.execute(body);
+    return response.status(204).send();
   }
 }
