@@ -5,13 +5,18 @@ import { GetMusicControllerFactory } from "../../../factories/GetMusicFactory";
 import { LikeMusicControllerFactory } from "../../../factories/LikeMusicFactory";
 import { ListTopMusicsControllerFactory } from "../../../factories/ListTopMusicsFactory";
 import { UnlikeMusicControllerFactory } from "../../../factories/UnlikeMusicFactory";
+import { SearchMusicControllerFactory } from "../../../factories/SearchMusicFactory";
 
 const createMusicController =
   new CreateMusicControllerFactory().createController();
-const getMusicController = new GetMusicControllerFactory().createController();
+const getMusicController = 
+  new GetMusicControllerFactory().createController();
 const listTopMusicsController =
   new ListTopMusicsControllerFactory().createController();
-const likeMusicController = new LikeMusicControllerFactory().createController();
+const likeMusicController = 
+  new LikeMusicControllerFactory().createController();
+const searchMusicController =
+  new SearchMusicControllerFactory().createController();
 const unlikeMusicController =
   new UnlikeMusicControllerFactory().createController();
 
@@ -21,6 +26,10 @@ musicsRoutes.post("/", (req, res) => createMusicController.handler(req, res));
 
 musicsRoutes.get("/hotspot", (req, res) =>
   listTopMusicsController.handler(req, res),
+);
+
+musicsRoutes.get("/search", (req, res) =>
+  searchMusicController.handler(req, res),
 );
 
 musicsRoutes.get("/:id", (req, res) => getMusicController.handler(req, res));
