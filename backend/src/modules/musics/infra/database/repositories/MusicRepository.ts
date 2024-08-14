@@ -160,4 +160,20 @@ export class MusicRepository implements IMusicRepository {
 			},
 		});
 	}
+
+	public async searchByArtist(artistId: string): Promise<Music[]> {
+		const musics = await this.prismaClient.music.findMany({
+			where: {
+				album: {
+					artists: {
+						some: {
+							id: artistId,
+						},
+					},
+				},
+			},
+		});
+
+		return musics;
+	}
 }

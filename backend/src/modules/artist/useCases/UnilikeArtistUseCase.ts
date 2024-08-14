@@ -7,7 +7,9 @@ interface ICreateLikeArtistDTO {
 	artist_id: string;
 }
 
-export class LikeArtistUseCase implements ICommand<ICreateLikeArtistDTO, void> {
+export class UnlikeArtistUseCase
+	implements ICommand<ICreateLikeArtistDTO, void>
+{
 	constructor(private artistRepository: IArtistRepository) {}
 
 	async execute({ user_id, artist_id }: ICreateLikeArtistDTO): Promise<void> {
@@ -16,6 +18,6 @@ export class LikeArtistUseCase implements ICommand<ICreateLikeArtistDTO, void> {
 			throw new NotFoundError("Artist was not found");
 		}
 
-		await this.artistRepository.likes(user_id, artist_id);
+		await this.artistRepository.unlikes(user_id, artist_id);
 	}
 }
