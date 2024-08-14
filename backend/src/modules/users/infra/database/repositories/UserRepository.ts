@@ -1,4 +1,5 @@
 import type { Prisma, PrismaClient, User } from "@prisma/client";
+import { env } from "../../../../../config/env";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IUserRepository } from "../../../repositories/IUserRepository";
 
@@ -8,6 +9,7 @@ export class UserRepository implements IUserRepository {
   private constructor() {
     this.prismaClient = DatabaseConnection.getInstance();
   }
+
   async delete(id: string): Promise<void> {
     await this.prismaClient.user.delete({
       where: {
@@ -30,6 +32,10 @@ export class UserRepository implements IUserRepository {
       data: userDTO,
     });
 
+    if (user.iconUrl) {
+      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+    }
+
     return user;
   }
 
@@ -39,6 +45,10 @@ export class UserRepository implements IUserRepository {
         email,
       },
     });
+
+    if (user?.iconUrl) {
+      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+    }
 
     return user;
   }
@@ -50,6 +60,10 @@ export class UserRepository implements IUserRepository {
       },
     });
 
+    if (user?.iconUrl) {
+      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+    }
+
     return user;
   }
 
@@ -60,6 +74,10 @@ export class UserRepository implements IUserRepository {
       },
       data: user,
     });
+
+    if (user?.iconUrl) {
+      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+    }
 
     return updatedUser;
   }

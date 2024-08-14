@@ -4,17 +4,15 @@ import { CreateMusicControllerFactory } from "../../../factories/CreateMusicFact
 import { GetMusicControllerFactory } from "../../../factories/GetMusicFactory";
 import { LikeMusicControllerFactory } from "../../../factories/LikeMusicFactory";
 import { ListTopMusicsControllerFactory } from "../../../factories/ListTopMusicsFactory";
-import { UnlikeMusicControllerFactory } from "../../../factories/UnlikeMusicFactory";
 import { SearchMusicControllerFactory } from "../../../factories/SearchMusicFactory";
+import { UnlikeMusicControllerFactory } from "../../../factories/UnlikeMusicFactory";
 
 const createMusicController =
   new CreateMusicControllerFactory().createController();
-const getMusicController = 
-  new GetMusicControllerFactory().createController();
+const getMusicController = new GetMusicControllerFactory().createController();
 const listTopMusicsController =
   new ListTopMusicsControllerFactory().createController();
-const likeMusicController = 
-  new LikeMusicControllerFactory().createController();
+const likeMusicController = new LikeMusicControllerFactory().createController();
 const searchMusicController =
   new SearchMusicControllerFactory().createController();
 const unlikeMusicController =

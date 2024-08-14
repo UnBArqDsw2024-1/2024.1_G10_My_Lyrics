@@ -64,13 +64,29 @@ export class MusicRepository implements IMusicRepository {
     dataInit: Date,
     dataFinished: Date,
   ): Promise<(Music & { count: bigint })[]> {
-    return this.prismaClient.$queryRaw`
+    const musics: (Music & { count: bigint })[] = await this.prismaClient
+      .$queryRaw`
       SELECT COUNT(*), M.* FROM "MusicAccess" MA 
       INNER JOIN "Music" M ON M.id = MA."musicId"
       WHERE MA."date" BETWEEN ${dataInit} AND ${dataFinished}
       GROUP BY M.id
       ORDER BY COUNT(*) DESC
       LIMIT ${number}`;
+
+    if (musics.length < number) {
+      const alreadyFetched = musics.map((e) => e.id);
+      const missingNumber = number - musics.length;
+
+      const toAdd = await this.prismaClient.music.findMany({
+        where: {
+          id: { notIn: alreadyFetched },
+        },
+        take: missingNumber,
+      });
+      return musics.concat(toAdd.map((e) => ({ ...e, count: BigInt(0) })));
+    }
+
+    return musics;
   }
 
   public async likes(user_id: string, music_id: string): Promise<void> {

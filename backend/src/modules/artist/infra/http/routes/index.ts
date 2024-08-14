@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { VerifyJwt } from "../../../../../shared/middlewares/VerifyJWT";
 import { LikeArtistControllerFactory } from "../../../factories/LikeArtistFactory";
-import { UnlikeArtistControllerFactory } from "../../../factories/UnlikeArtistFactory";
 import { SearchArtistControllerFactory } from "../../../factories/SearchArtistFactory";
+import { UnlikeArtistControllerFactory } from "../../../factories/UnlikeArtistFactory";
 
 export const artistRoutes = Router();
 const likeArtistController =

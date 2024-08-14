@@ -16,6 +16,7 @@ model User {
   email          String
   password       String
   censoredMusics Boolean @default(false)
+  iconUrl        String?
 
   playlists      Playlist[]
   likedArtists   Artist[]   @relation("UsersLikedArtists")

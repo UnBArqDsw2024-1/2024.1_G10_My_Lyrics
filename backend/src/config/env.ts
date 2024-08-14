@@ -17,6 +17,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["dev", "production"]).default("dev"),
   DATABASE_URL: z.string().url(),
   SECRET: z.string(),
+  BASE_URL: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
