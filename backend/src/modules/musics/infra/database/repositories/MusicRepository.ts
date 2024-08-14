@@ -80,9 +80,9 @@ export class MusicRepository implements IMusicRepository {
       INNER JOIN "Music" M ON M.id = MA."musicId"
       INNER JOIN "Album" ALB ON M."albumId" = ALB.id
       INNER JOIN "Artist" A ON A.id = ANY(
-        SELECT AA."artistId" 
+        SELECT AA."A" 
         FROM "_AlbumArtists" AA 
-        WHERE AA."albumId" = ALB.id
+        WHERE AA."A" = ALB.id
       )
       WHERE MA."date" BETWEEN ${dataInit} AND ${dataFinished}
       GROUP BY M.id, ALB.id
