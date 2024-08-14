@@ -29,7 +29,7 @@ export class UpdateUserController implements IController {
     const { name, email, censoredMusics } = body;
 
     const user = await this.updateUserUseCase.execute({
-      id: request.user,
+      id: request.user!,
       name,
       email,
       censoredMusics,

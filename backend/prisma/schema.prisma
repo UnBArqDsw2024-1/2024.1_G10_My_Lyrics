@@ -16,8 +16,10 @@ model User {
   email          String
   password       String
   censoredMusics Boolean @default(false)
+  iconUrl        String?
 
   playlists      Playlist[]
+  likedArtists   Artist[]   @relation("UsersLikedArtists")
   likedPlaylists Playlist[] @relation("UsersLikedPlaylists")
   likedMusics    Music[]    @relation("UsersLikedMusics")
 }
@@ -34,10 +36,11 @@ model Playlist {
 
 model Artist {
   id        String @id @default(uuid()) @db.Uuid
-  name      String
+  name      String @unique
   biography String
 
   albums Album[] @relation("AlbumArtists")
+  likes  User[]  @relation("UsersLikedArtists")
 }
 
 model Album {

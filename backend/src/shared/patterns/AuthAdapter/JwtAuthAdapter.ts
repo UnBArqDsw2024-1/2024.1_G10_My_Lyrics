@@ -6,7 +6,6 @@ import type { IAuth } from "./IAuth";
 export class JwtAuthAdapter implements IAuth {
   private jwtClient = jwt;
   private secret = env.SECRET;
-  private i = 1;
 
   sign(payload: string | object | Buffer, expiresIn: string): string {
     return this.jwtClient.sign(payload, this.secret, { expiresIn });

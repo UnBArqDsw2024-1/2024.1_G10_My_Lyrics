@@ -15,6 +15,14 @@ export class AuthenticateUserController implements IController {
 
     const userWithAuth = await this.authenticateUserUseCase.execute(body);
 
-    return response.status(200).json(userWithAuth);
+    const thirtyDaysAfter = new Date();
+    thirtyDaysAfter.setDate(thirtyDaysAfter.getDate() + 30);
+    return response
+      .cookie("CU-QUE-FODAO", userWithAuth.auth, {
+        expires: thirtyDaysAfter,
+        httpOnly: true,
+      })
+      .status(200)
+      .json(userWithAuth);
   }
 }

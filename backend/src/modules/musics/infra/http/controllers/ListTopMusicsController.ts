@@ -12,7 +12,6 @@ export class ListTopMusicsController implements IController {
       dataInit: z.coerce.date(),
       dataFinished: z.coerce.date(),
     });
-
     const query = listTopMusicsSchema.parse(request.query);
 
     const musics = await this.listTopMusicsUseCase.execute(query);

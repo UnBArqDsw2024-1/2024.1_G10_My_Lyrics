@@ -6,7 +6,7 @@ export class GetUserController implements IController {
   constructor(private getUserUseCase: GetUserUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
-    const id = request.user;
+    const id = request.user!;
 
     const user = await this.getUserUseCase.execute({
       id,

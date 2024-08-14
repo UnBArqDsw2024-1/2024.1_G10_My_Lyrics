@@ -6,7 +6,7 @@ export class DeleteUserController implements IController {
   constructor(private deleteUserUseCase: DeleteUserUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
-    const id = request.user;
+    const id = request.user!;
 
     await this.deleteUserUseCase.execute({ id });
 

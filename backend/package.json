@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/infra/http/server.ts"
+    "dev": "tsx watch src/infra/http/server.ts",
+    "scrapper": "tsx watch src/seeds/getMostPopular.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,20 +13,26 @@
   "dependencies": {
     "@prisma/client": "5.17.0",
     "@types/cors": "^2.8.17",
+    "axios": "^1.7.3",
     "bcrypt": "^5.1.1",
+    "cheerio": "^1.0.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
+    "multer": "1.4.5-lts.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/multer": "^1.4.11",
     "@types/node": "^22.0.0",
     "prisma": "^5.17.0",
     "tsx": "^4.16.2",

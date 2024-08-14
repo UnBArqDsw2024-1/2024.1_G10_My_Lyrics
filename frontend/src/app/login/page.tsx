@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import { api } from '../api';
 import Logo from '../../assets/LOGO.svg';
 import Image from 'next/image';
+import { api } from '@/lib/api';
 
 export default function Login() {
   async function handleLogin(formData: FormData) {
@@ -12,13 +12,13 @@ export default function Login() {
     }
 
     try {
-      const response = await api.post('/user/login', {
+      await api.post('/user/login', {
         email: formData.get('email'),
         password: formData.get('password'),
       });
-
-      console.log(response);
-    } catch (error) {}
+    } catch (error) {
+      //
+    }
   }
 
   return (

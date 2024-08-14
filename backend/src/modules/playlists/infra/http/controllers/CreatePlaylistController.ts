@@ -9,11 +9,14 @@ export class CreatePlaylistController implements IController {
   async handler(request: Request, response: Response): Promise<Response> {
     const createPlaylistBodySchema = z.object({
       title: z.string().max(200),
-      user_id: z.string().uuid(), // trocar quando tivermos autenticação
     });
     const body = createPlaylistBodySchema.parse(request.body);
+    const user_id = request.user!;
 
-    const playlist = await this.createPlaylistUseCase.execute(body);
+    const playlist = await this.createPlaylistUseCase.execute({
+      title: body.title,
+      user_id,
+    });
 
     return response.status(201).json(playlist);
   }
