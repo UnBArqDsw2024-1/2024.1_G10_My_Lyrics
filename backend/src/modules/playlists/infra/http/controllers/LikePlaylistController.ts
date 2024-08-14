@@ -4,16 +4,18 @@ import type { IController } from "../../../../../shared/patterns/Controller/ICon
 import type { LikePlaylistUseCase } from "../../../useCases/LikePlaylistUseCase";
 
 export class LikePlaylistController implements IController {
-  constructor(private likePlaylistUseCase: LikePlaylistUseCase) { }
+  constructor(private likePlaylistUseCase: LikePlaylistUseCase) {}
 
   async handler(request: Request, response: Response): Promise<Response> {
     const likePlaylistSchema = z.object({
       playlistId: z.string().uuid(),
-      user_Id: z.string().uuid(),
+      user_id: z.string().uuid(),
     });
+
+    const user_id = request.user!;
     const body = likePlaylistSchema.parse({
       playlistId: request.params.id,
-      user_Id: request.body.user_id
+      user_id,
     });
 
     await this.likePlaylistUseCase.execute(body);

@@ -3,8 +3,8 @@ import { VerifyJwt } from "../../../../../shared/middlewares/VerifyJWT";
 import { CreatePlaylistControllerFactory } from "../../../factories/CreatePlaylistFactory";
 import { DeletePlaylistControllerFactory } from "../../../factories/DeletePlaylistFactory";
 import { GetPlaylistControllerFactory } from "../../../factories/GetPlaylistFactory";
-import { SearchPlaylistControllerFactory } from "../../../factories/SearchPlaylistFactory";
 import { LikePlaylistControllerFactory } from "../../../factories/LikePlaylistFactory";
+import { SearchPlaylistControllerFactory } from "../../../factories/SearchPlaylistFactory";
 
 export const playlistRoutes = Router();
 
@@ -23,10 +23,6 @@ const getPlaylistController =
 const likePlaylistController =
   new LikePlaylistControllerFactory().createController();
 
-playlistRoutes.post("/", (req, res) =>
-  createPlaylistController.handler(req, res),
-);
-
 playlistRoutes.get("/search", (req, res) =>
   searchPlaylistController.handler(req, res),
 );
@@ -43,6 +39,7 @@ playlistRoutes.use((req, res, next) => authorization.verify(req, res, next));
 playlistRoutes.post("/", (req, res) =>
   createPlaylistController.handler(req, res),
 );
+
 playlistRoutes.delete("/:id", (req, res) =>
   deletePlaylistController.handler(req, res),
 );
