@@ -23,7 +23,6 @@ export class AuthenticateUserController implements IController {
         httpOnly: true,
         sameSite: "none",
         secure: true,
-        domain: "localhost",
         path: "/",
       })
       .status(200)
