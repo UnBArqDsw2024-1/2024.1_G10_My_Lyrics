@@ -50,6 +50,7 @@ export interface User {
   email: string
   password: string
   iconUrl: string | null
+  playlists: Playlist[]
 }
 export interface MusicAccess {
   ip: string
