@@ -58,6 +58,9 @@ export class UserRepository implements IUserRepository {
       where: {
         id,
       },
+      include: {
+        playlists: true,
+      },
     });
 
     if (user?.iconUrl) {
