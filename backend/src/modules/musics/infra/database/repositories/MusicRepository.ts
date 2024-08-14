@@ -1,4 +1,10 @@
-import type { Music, Prisma, PrismaClient, Verse } from "@prisma/client";
+import type {
+  Artist,
+  Music,
+  Prisma,
+  PrismaClient,
+  Verse,
+} from "@prisma/client";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IMusicRepository } from "../../../repositories/IMusicRepository";
 
@@ -63,13 +69,23 @@ export class MusicRepository implements IMusicRepository {
     number: number,
     dataInit: Date,
     dataFinished: Date,
-  ): Promise<(Music & { count: bigint })[]> {
-    const musics: (Music & { count: bigint })[] = await this.prismaClient
-      .$queryRaw`
-      SELECT COUNT(*), M.* FROM "MusicAccess" MA 
+  ): Promise<(Music & { count: bigint; artists: Artist[] })[]> {
+    const musics: (Music & { count: bigint; artists: Artist[] })[] = await this
+      .prismaClient.$queryRaw`
+      SELECT 
+        COUNT(*) as count, 
+        M.*, 
+        ARRAY_AGG(A.*) as artists 
+      FROM "MusicAccess" MA
       INNER JOIN "Music" M ON M.id = MA."musicId"
+      INNER JOIN "Album" ALB ON M."albumId" = ALB.id
+      INNER JOIN "Artist" A ON A.id = ANY(
+        SELECT AA."artistId" 
+        FROM "_AlbumArtists" AA 
+        WHERE AA."albumId" = ALB.id
+      )
       WHERE MA."date" BETWEEN ${dataInit} AND ${dataFinished}
-      GROUP BY M.id
+      GROUP BY M.id, ALB.id
       ORDER BY COUNT(*) DESC
       LIMIT ${number}`;
 
@@ -81,9 +97,22 @@ export class MusicRepository implements IMusicRepository {
         where: {
           id: { notIn: alreadyFetched },
         },
+        include: {
+          album: {
+            include: {
+              artists: true,
+            },
+          },
+        },
         take: missingNumber,
       });
-      return musics.concat(toAdd.map((e) => ({ ...e, count: BigInt(0) })));
+      return musics.concat(
+        toAdd.map((e) => ({
+          ...e,
+          count: BigInt(0),
+          artists: e.album.artists,
+        })),
+      );
     }
 
     return musics;
