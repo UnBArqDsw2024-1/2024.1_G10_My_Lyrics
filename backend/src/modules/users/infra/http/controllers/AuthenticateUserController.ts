@@ -21,6 +21,7 @@ export class AuthenticateUserController implements IController {
       .cookie("CU-QUE-FODAO", userWithAuth.auth, {
         expires: thirtyDaysAfter,
         httpOnly: true,
+        sameSite: "none",
       })
       .status(200)
       .json(userWithAuth);
