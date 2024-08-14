@@ -1,20 +1,20 @@
-'use client';
-import React from 'react';
-import Logo from '../../assets/LOGO.svg';
-import Image from 'next/image';
-import { api } from '@/lib/api';
+"use client";
+import React from "react";
+import Logo from "../../assets/LOGO.svg";
+import Image from "next/image";
+import { api } from "@/lib/api";
 
 export default function Login() {
   async function handleLogin(formData: FormData) {
-    if (!formData.get('email') || !formData.get('password')) {
-      alert('Por favor, preencha todos os campos!!!!!!!!!!');
+    if (!formData.get("email") || !formData.get("password")) {
+      alert("Por favor, preencha todos os campos!!!!!!!!!!");
       return;
     }
 
     try {
-      await api.post('/user/login', {
-        email: formData.get('email'),
-        password: formData.get('password'),
+      await api.post("/user/login", {
+        email: formData.get("email"),
+        password: formData.get("password"),
       });
     } catch (error) {
       //
@@ -22,8 +22,8 @@ export default function Login() {
   }
 
   return (
-    <div className="bg-gradient-to-b from-black to-[#231b39] flex items-center justify-center w-screen h-screen">
-      <div className="bg-[#32284d] bg-opacity-50 p-16 rounded-lg shadow-md 2xl:w-3/12 xl:w-4/12 lg:w-5/12 md:w-6/12 w-3/4">
+    <div className="flex items-center justify-center w-screen h-screen">
+      <div className="bg-[#32284d] bg-opacity-50 p-16 rounded-lg shadow-md w-4/12">
         <div className="flex flex-col items-center justify-center">
           <Image src={Logo} alt="Logo" className="mb-16 w-3/4" />
         </div>
@@ -59,7 +59,10 @@ export default function Login() {
             </button>
           </div>
           <div className="text-center">
-            <a className="text-sm text-white underline hover:text-gray-200">
+            <a
+              className="text-sm text-white underline hover:text-gray-200"
+              href="/register"
+            >
               Registrar-se
             </a>
           </div>
