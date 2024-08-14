@@ -23,8 +23,8 @@ export class PlaylistRepository implements IPlaylistRepository {
 		return await this.prismaClient.playlist.create({ data: playlist });
 	}
 
-	async searchByTitle(name: string): Promise<Playlist[]> {
-		return await this.prismaClient.playlist.findMany({
+	async searchByTitle(name: string): Promise<Playlist[] | null> {
+		const playlists = await this.prismaClient.playlist.findMany({
 			where: {
 				title: {
 					contains: name,
@@ -39,6 +39,21 @@ export class PlaylistRepository implements IPlaylistRepository {
 				},
 			},
 		});
+
+		if (!playlists) {
+			return null;
+		}
+
+		const formattedPlaylists = playlists.map((playlist) => {
+			const {
+				_count: { likes },
+				...remaining
+			} = playlist;
+
+			return { ...remaining, likes };
+		});
+
+		return formattedPlaylists;
 	}
 
 	async deleteById(id: string): Promise<void> {
