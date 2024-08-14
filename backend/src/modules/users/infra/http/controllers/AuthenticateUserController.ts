@@ -22,6 +22,7 @@ export class AuthenticateUserController implements IController {
         expires: thirtyDaysAfter,
         httpOnly: true,
         sameSite: "none",
+        secure: true,
       })
       .status(200)
       .json(userWithAuth);
