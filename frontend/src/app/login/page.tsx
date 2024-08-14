@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+
+import React, { use } from "react";
 import Logo from "../../assets/LOGO.svg";
 import Image from "next/image";
 import { api } from "@/lib/api";
+import local from "next/font/local";
 
 export default function Login() {
   async function handleLogin(formData: FormData) {
@@ -12,13 +14,13 @@ export default function Login() {
     }
 
     try {
-      await api.post("/user/login", {
+      const res = await api.post("/user/login", {
         email: formData.get("email"),
         password: formData.get("password"),
       });
-    } catch (error) {
-      //
-    }
+      localStorage.setItem("token", res.data.auth);
+      localStorage.setItem("userImg", res.data.user.iconUrl);
+    } catch (error) {}
   }
 
   return (

@@ -30,6 +30,7 @@ export interface Artists {
 
 export interface Album {
   id: string
+  artists: Artists[]
   title: string
   musics: Music[]
 }
@@ -48,6 +49,7 @@ export interface User {
   name: string
   email: string
   password: string
+  iconUrl: string | null
 }
 export interface MusicAccess {
   ip: string
