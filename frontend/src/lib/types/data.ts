@@ -49,7 +49,7 @@ export interface User {
   name: string
   email: string
   password: string
-  iconUrl: string | null
+  iconUrl: string
   playlists: Playlist[]
 }
 export interface MusicAccess {

@@ -4,11 +4,15 @@ import React, { use } from "react";
 import Logo from "../../assets/LOGO.svg";
 import Image from "next/image";
 import { api } from "@/lib/api";
-import local from "next/font/local";
 import { UserContext } from "@/context/UserContext";
+import { redirect } from "next/navigation";
 
 export default function Login() {
   const user = use(UserContext);
+
+  if (user) {
+    redirect("/");
+  }
 
   async function handleLogin(formData: FormData) {
     if (!formData.get("email") || !formData.get("password")) {
@@ -22,6 +26,7 @@ export default function Login() {
         password: formData.get("password"),
       });
       user.setUpdatedUser(res.data.user);
+      redirect("/");
     } catch (error) {}
   }
 

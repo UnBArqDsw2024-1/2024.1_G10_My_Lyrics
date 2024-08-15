@@ -102,7 +102,8 @@ export class MusicRepository implements IMusicRepository {
 
 		const remaining = number - res.length;
 		if (remaining > 0) {
-			const alreadyFetched = res.map((e) => e.id);
+			const alreadyFetched = res.map((e) => e.id)
+			alreadyFetched.push("")
 			const remainingData: (Music & {
 				count: bigint;
 				artists: Artist[];

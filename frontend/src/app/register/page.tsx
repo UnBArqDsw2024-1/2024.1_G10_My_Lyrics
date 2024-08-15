@@ -3,8 +3,17 @@
 import { api } from "@/lib/api";
 import Logo from "../../assets/LOGO.svg";
 import Image from "next/image";
+import { UserContext } from "@/context/UserContext";
+import { use } from "react";
+import { redirect } from "next/navigation";
 
 export default function Register() {
+  const user = use(UserContext);
+
+  if (user) {
+    redirect("/");
+  }
+
   async function handleRegister(formData: FormData) {
     if (
       !formData.get("email") ||
