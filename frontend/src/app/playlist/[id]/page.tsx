@@ -2,7 +2,7 @@
 
 import MusicCard from "@/components/MusicCard";
 import { api } from "@/lib/api";
-import { Music, Playlist } from "@/lib/types/data";
+import { Playlist } from "@/lib/types/data";
 import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 
@@ -30,10 +30,10 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
         </h2>
         <p className="text-sm">{playlist?.description}</p>
         <button
-          className="px-5 py-3 text-white absolute left-0 ml-16 mt-16 bg-[#6BC5D2] rounded-lg"
+          className="px-5 py-3 text-white bg-[#6BC5D2] rounded-lg"
           onClick={() => setIsModalOpen(true)}
         >
-          Adicionar música a playlist
+          Adicionar música a {playlist?.title}
         </button>
         <Modal
           isOpen={isModalOpen}
