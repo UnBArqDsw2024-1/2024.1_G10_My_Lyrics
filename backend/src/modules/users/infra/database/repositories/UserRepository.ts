@@ -4,87 +4,91 @@ import { DatabaseConnection } from "../../../../../infra/database/GetConnection"
 import type { IUserRepository } from "../../../repositories/IUserRepository";
 
 export class UserRepository implements IUserRepository {
-  private prismaClient: PrismaClient;
+	private prismaClient: PrismaClient;
 
-  private constructor() {
-    this.prismaClient = DatabaseConnection.getInstance();
-  }
+	private constructor() {
+		this.prismaClient = DatabaseConnection.getInstance();
+	}
 
-  async delete(id: string): Promise<void> {
-    await this.prismaClient.user.delete({
-      where: {
-        id,
-      },
-    });
-  }
+	async delete(id: string): Promise<void> {
+		await this.prismaClient.user.delete({
+			where: {
+				id,
+			},
+		});
+	}
 
-  private static INSTANCE: UserRepository | null;
-  static getInstance(): UserRepository {
-    if (!UserRepository.INSTANCE) {
-      UserRepository.INSTANCE = new UserRepository();
-    }
+	private static INSTANCE: UserRepository | null;
+	static getInstance(): UserRepository {
+		if (!UserRepository.INSTANCE) {
+			UserRepository.INSTANCE = new UserRepository();
+		}
 
-    return UserRepository.INSTANCE;
-  }
+		return UserRepository.INSTANCE;
+	}
 
-  async create(userDTO: Prisma.UserCreateInput): Promise<User> {
-    const user = await this.prismaClient.user.create({
-      data: userDTO,
-    });
+	async create(userDTO: Prisma.UserCreateInput): Promise<User> {
+		const user = await this.prismaClient.user.create({
+			data: userDTO,
+		});
 
-    if (user.iconUrl) {
-      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
-    }
+		if (user.iconUrl) {
+			user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+		}
 
-    return user;
-  }
+		return user;
+	}
 
-  async findByEmail(email: string): Promise<User | null> {
-    const user = await this.prismaClient.user.findFirst({
-      where: {
-        email,
-      },
-    });
+	async findByEmail(email: string): Promise<User | null> {
+		const user = await this.prismaClient.user.findFirst({
+			where: {
+				email,
+			},
+		});
 
-    if (user?.iconUrl) {
-      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
-    }
+		if (user?.iconUrl) {
+			user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+		}
 
-    return user;
-  }
+		return user;
+	}
 
-  async findOneById(id: string): Promise<User | null> {
-    const user = await this.prismaClient.user.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        playlists: true,
-      },
-    });
+	async findOneById(id: string): Promise<User | null> {
+		const user = await this.prismaClient.user.findUnique({
+			where: {
+				id,
+			},
+			include: {
+				playlists: {
+					include: {
+						musics: true,
+					},
+				},
+			},
+		});
 
-    if (user?.iconUrl) {
-      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
-    }
+		if (user?.iconUrl) {
+			user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+		}
 
-    return user;
-  }
+		return user;
+	}
 
-  async update(user: User): Promise<User> {
-    // @ts-ignore
-    user.playlists = undefined;
+	async update(user: User): Promise<User> {
+		// @ts-ignore
+		user.playlists = undefined;
 
-    const updatedUser = await this.prismaClient.user.update({
-      where: {
-        id: user.id,
-      },
-      data: user,
-    });
+		const updatedUser = await this.prismaClient.user.update({
+			where: {
+				id: user.id,
+			},
+			data: user,
+		});
 
-    if (user?.iconUrl) {
-      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
-    }
+		if (user?.iconUrl) {
+			user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+		}
 
-    return updatedUser;
-  }
+		return updatedUser;
+	}
 }
