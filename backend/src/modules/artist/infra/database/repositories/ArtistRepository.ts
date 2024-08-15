@@ -60,9 +60,22 @@ export class ArtistRepository implements IArtistRepository {
 		const artist = await this.prismaClient.artist.findUnique({
 			where: { id: artist_id },
 			include: {
-				albums: true,
+				albums: {
+					include: {
+						musics: true,
+					},
+				},
 			},
 		});
+
+		if (artist) {
+			// @ts-ignore
+			artist.musics = artist.albums.flatMap((album) => album.musics);
+			for (const album of artist.albums) {
+				// @ts-ignore
+				album.musics = undefined;
+			}
+		}
 
 		return artist;
 	}
