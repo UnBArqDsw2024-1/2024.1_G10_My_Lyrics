@@ -34,7 +34,9 @@ export class MusicRepository implements IMusicRepository {
 		const music = await this.prismaClient.music.findUnique({
 			where: { id },
 			include: {
-				verses: true,
+				verses: {
+					orderBy: { startTime: "asc" },
+				},
 				_count: {
 					select: { likes: true },
 				},
@@ -94,7 +96,7 @@ export class MusicRepository implements IMusicRepository {
     INNER JOIN "Artist" ar ON ar.id = AA."B"
 
     WHERE ma."date" BETWEEN ${dataInit} AND ${dataFinished}
-    
+
     GROUP BY mu."id"
     ORDER BY count DESC
     LIMIT ${number}
@@ -103,6 +105,10 @@ export class MusicRepository implements IMusicRepository {
 		const remaining = number - res.length;
 		if (remaining > 0) {
 			const alreadyFetched = res.map((e) => e.id);
+			if (alreadyFetched.length === 0) {
+				alreadyFetched.push("");
+			}
+
 			const remainingData: (Music & {
 				count: bigint;
 				artists: Artist[];
