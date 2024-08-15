@@ -2,6 +2,9 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import type { Artists, Music, Verse } from '@/lib/types/data';
+import Image from 'next/image';
+import MusicCard from '@/components/MusicCard';
+import { Music as MusicIcon } from 'react-feather';
 
 async function getArtistById(id: string): Promise<Artists> {
   const res = await api.get(`/artist/search-by-id?artist_id=${id}`);
@@ -24,9 +27,55 @@ export default function Artista({ params }: { params: { id: string } }) {
   return (
     <div className="flex flex-row items-start mt-40">
       {artist ? (
-        <div className="flex flex-col bg-[#5A4D6D] bg-opacity-25 p-6 rounded m-10">
-          <h1 className="text-white">{artist.name}</h1>
-        </div>
+        <>
+          <div className="flex flex-col bg-[#5A4D6D] bg-opacity-25 p-6 rounded m-10 items-center">
+            <Image
+              src={artist.profileUrl}
+              alt={artist.name}
+              width={180}
+              height={180}
+              className="rounded-full"
+            />
+            <h1 className="text-white mt-8 font-bold text-2xl">
+              {artist.name}
+            </h1>
+            <span className="bg-gray-400 w-full h-[1px] mt-2" />
+            <div className="mt-4 items-center flex flex-col">
+              <p className="text-white font-medium mb-2">Álbuns</p>
+              {artist.albums.map((album) => (
+                <div
+                  key={album.id}
+                  className="flex flex-col items-center mt-2 mb-8"
+                >
+                  {album.coverUrl ? (
+                    <Image
+                      src={album.coverUrl}
+                      alt={artist.name}
+                      width={150}
+                      height={150}
+                      className="rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-[150px] h-[150px] bg-[#3f3352] rounded-lg flex items-center justify-center">
+                      <MusicIcon size={50} color="#5A4D6D" />
+                    </div>
+                  )}
+                  <p className="text-white font-medium mt-2 max-w-[200px] text-center">
+                    {album.title}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-10">
+            <h1 className="text-white font-bold text-4xl mb-10">Músicas</h1>
+            <div className="grid grid-cols-4 mt-4 gap-10">
+              {artist.musics.map((music) => (
+                <MusicCard key={music.id} music={music} like={music.like} />
+              ))}
+            </div>
+          </div>
+        </>
       ) : (
         <h1>Carregando...</h1>
       )}
