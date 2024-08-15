@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 export default function Register() {
   const user = use(UserContext);
 
-  if (user) {
+  if (user.user) {
     redirect("/");
   }
 
@@ -44,7 +44,7 @@ export default function Register() {
 
   return (
     <div className="flex items-center justify-center w-screen h-screen">
-      <div className="bg-[#32284d] bg-opacity-50 py-8 px-16 rounded-lg shadow-md w-4/12">
+      <div className="bg-[#32284d] bg-opacity-50 py-8 px-16 rounded-lg shadow-md xl:w-1/3 lg:w-2/4 w-3/4">
         <div className="flex flex-col items-center justify-center">
           <Image src={Logo} alt="Logo" className="mb-16 w-3/4" />
         </div>

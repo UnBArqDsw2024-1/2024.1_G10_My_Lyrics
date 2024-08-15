@@ -15,7 +15,7 @@ export default function Home() {
   const musics: Music[] = use(getTenMusics());
 
   return (
-    <div className="flex flex-col h-screen items-center justify-center my-40 gap-12">
+    <div className="flex flex-col items-center justify-center my-40 gap-12">
       <input
         type="text"
         placeholder="Pesquise pelas mais badaladas do momento"

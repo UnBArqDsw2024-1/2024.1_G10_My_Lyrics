@@ -5,13 +5,15 @@ import Logo from "../assets/LOGO.svg";
 import Link from "next/link";
 import UserImg from "./UserImg";
 import { UserContext } from "@/context/UserContext";
-import { useContext } from "react";
+import { use } from "react";
 
 export default function Header() {
-  const user = useContext(UserContext);
+  const user = use(UserContext);
 
   const playListLink =
-    user.user && user.user.playlists.length > 0 ? "/playlist" : "/playlist/new";
+    user.user && user.user.playlists && user.user.playlists.length > 0
+      ? "/playlist"
+      : "/playlist/new";
 
   return (
     <div className="flex justify-between text-white items-center px-12 absolute top-0 left-0 right-0 mt-8">
