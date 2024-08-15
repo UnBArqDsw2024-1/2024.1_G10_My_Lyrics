@@ -20,13 +20,17 @@ export interface Music {
 	playlists: Playlist[];
 	likes: User[];
 	musicAccess: MusicAccess[];
+	like?: boolean;
+	liked?: boolean;
 }
 
 export interface Artists {
 	id: string;
 	name: string;
 	biography: string;
+	profileUrl: string;
 	albums: Album[];
+	musics: Music[];
 }
 
 export interface Album {
@@ -34,6 +38,7 @@ export interface Album {
 	artists: Artists[];
 	title: string;
 	musics: Music[];
+	coverUrl: string;
 }
 
 export interface Verse {
