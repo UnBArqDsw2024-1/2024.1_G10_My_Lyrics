@@ -12,7 +12,10 @@ export class SearchByIdController implements IController {
     });
     const query = searchArtistQuerySchema.parse(request.query);
 
-    const artists = await this.searchByIdUseCase.execute(query);
+    const artists = await this.searchByIdUseCase.execute({
+      ...query,
+      user_id: request.user,
+    });
 
     return response.status(200).json(artists);
   }

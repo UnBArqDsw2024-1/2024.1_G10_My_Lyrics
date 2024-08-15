@@ -1,4 +1,9 @@
-import { Router } from "express";
+import {
+  type NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
 import { VerifyJwt } from "../../../../../shared/middlewares/VerifyJWT";
 import { LikeArtistControllerFactory } from "../../../factories/LikeArtistFactory";
 import { SearchArtistControllerFactory } from "../../../factories/SearchArtistFactory";
@@ -16,9 +21,21 @@ const searchByIdController =
   new SearchByIdControllerFactory().createController();
 
 const authorization = new VerifyJwt();
+const authorizationNotRequired = new VerifyJwt(false);
+function notRequiredMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  authorizationNotRequired.verify(req, res, next);
+}
 
 artistRoutes.get("/search", (req, res) =>
   searchArtistController.handler(req, res),
+);
+
+artistRoutes.get("/search-by-id", notRequiredMiddleware, (req, res) =>
+  searchByIdController.handler(req, res),
 );
 
 // Rotas autenticadas
@@ -30,8 +47,4 @@ artistRoutes.patch("/like/:artist_id", (req, res) =>
 
 artistRoutes.patch("/unlike/:artist_id", (req, res) =>
   unlikeArtistController.handler(req, res),
-);
-
-artistRoutes.get("/search-by-id", (req, res) =>
-  searchByIdController.handler(req, res),
 );
