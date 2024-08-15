@@ -4,6 +4,7 @@ export interface IMusicRepository {
   create(music: Prisma.MusicCreateInput): Promise<Music>;
   getById(
     id: string,
+    ip?: string,
   ): Promise<(Music & { verses: Verse[]; likes: number }) | null>;
   searchByTitle(title: string): Promise<Music[]>;
   countTopMusic(

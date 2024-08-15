@@ -30,6 +30,7 @@ export class MusicRepository implements IMusicRepository {
 
   public async getById(
     id: string,
+    ip?: string,
   ): Promise<(Music & { verses: Verse[]; likes: number }) | null> {
     const music = await this.prismaClient.music.findUnique({
       where: { id },
@@ -47,6 +48,20 @@ export class MusicRepository implements IMusicRepository {
     });
     if (!music) {
       return null;
+    }
+
+    if (ip) {
+      try {
+        await this.prismaClient.musicAccess.create({
+          data: {
+            musicId: id,
+            ip,
+            date: new Date(new Date().toISOString().substring(0, 10)),
+          },
+        });
+      } catch {
+        ///
+      }
     }
 
     const {
@@ -74,22 +89,17 @@ export class MusicRepository implements IMusicRepository {
     number: number,
     dataInit: Date,
     dataFinished: Date,
-  ): Promise<
-    (Music & { count: bigint; artists: Artist[]; verses: Verse[] })[]
-  > {
+  ): Promise<(Music & { count: bigint; artists: Artist[] })[]> {
     const res: (Music & {
       count: bigint;
       artists: Artist[];
-      verses: Verse[];
     })[] = await this.prismaClient.$queryRaw`
     SELECT
       COUNT(*) as count,
       "mu".*,
-      COALESCE(JSON_AGG(DISTINCT v.*) FILTER (WHERE v.id IS NOT NULL), '[]') AS verses,
       JSON_AGG(DISTINCT ar.*) AS artists
     FROM "MusicAccess" ma
     INNER JOIN "Music" mu ON ma."musicId" = mu.id
-    LEFT JOIN "Verse" v ON v."musicId" = mu.id
 
     INNER JOIN "Album" alb ON mu."albumId" = alb.id
     INNER JOIN "_AlbumArtists" AA ON AA."A" = alb.id
@@ -112,15 +122,12 @@ export class MusicRepository implements IMusicRepository {
       const remainingData: (Music & {
         count: bigint;
         artists: Artist[];
-        verses: Verse[];
       })[] = await this.prismaClient.$queryRaw`
       SELECT
         0::bigint as count,
         mu.*,
-        COALESCE(JSON_AGG(DISTINCT v.*) FILTER (WHERE v.id IS NOT NULL), '[]') AS verses,
         JSON_AGG(DISTINCT ar.*) AS artists
       FROM "Music" mu
-      LEFT JOIN "Verse" v ON v."musicId" = mu.id
 
       INNER JOIN "Album" alb ON mu."albumId" = alb.id
       INNER JOIN "_AlbumArtists" AA ON AA."A" = alb.id

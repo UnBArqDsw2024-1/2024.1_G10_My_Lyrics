@@ -11,7 +11,7 @@ export class GetMusicController implements IController {
   ): Promise<Response> {
     const id = request.params.id;
 
-    const music = await this.getMusicUseCase.execute({ id });
+    const music = await this.getMusicUseCase.execute({ id, ip: request.ip! });
 
     return response.status(200).json(music);
   }
