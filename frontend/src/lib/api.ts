@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:3334",
-  withCredentials: true,
+	baseURL: "https://my-lyrics.learnwithpadas.com",
+	withCredentials: true,
 });
-
