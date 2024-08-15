@@ -7,6 +7,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { on } from "events";
 import MusicCard from "./MusicCard";
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   isOpen: boolean;
@@ -39,7 +40,7 @@ export default function Modal({ isOpen, onClose, playlist }: ModalProps) {
       } else {
         setFilteredMusic([]);
       }
-    }, 300); // 300ms de atraso
+    }, 300);
 
     setTimeoutId(newTimeoutId);
   }
@@ -48,10 +49,10 @@ export default function Modal({ isOpen, onClose, playlist }: ModalProps) {
     if (!selectedMusic) return;
 
     try {
+      onClose();
       await api.post(`/playlist/${playlist.id}/music`, {
         music_id: selectedMusic,
       });
-      onClose();
     } catch (error) {
       console.error(error);
     }
