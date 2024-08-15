@@ -35,17 +35,19 @@ model Playlist {
 }
 
 model Artist {
-  id        String @id @default(uuid()) @db.Uuid
-  name      String @unique
-  biography String
+  id         String @id @default(uuid()) @db.Uuid
+  name       String @unique
+  biography  String
+  profileUrl String
 
   albums Album[] @relation("AlbumArtists")
   likes  User[]  @relation("UsersLikedArtists")
 }
 
 model Album {
-  id    String @id @default(uuid()) @db.Uuid
-  title String
+  id       String  @id @default(uuid()) @db.Uuid
+  title    String
+  coverUrl String?
 
   artists Artist[] @relation("AlbumArtists")
   musics  Music[]

@@ -3,7 +3,6 @@ import { z } from "zod";
 import type { IController } from "../../../../../shared/patterns/Controller/IController";
 import type { AddMusicUseCase } from "../../../useCases/AddMusicUseCase";
 
-
 export class AddMusicController implements IController {
   constructor(private addMusicUseCase: AddMusicUseCase) {}
 
@@ -21,13 +20,11 @@ export class AddMusicController implements IController {
     const { playlist_id } = paramsSchema.parse(request.params);
     const { music_id } = bodySchema.parse(request.body);
 
-    const playlist = await this.addMusicUseCase.execute(
-      {
-        playlist_id,
-        music_id,
-        user_id,
-      }
-    );
+    const playlist = await this.addMusicUseCase.execute({
+      playlist_id,
+      music_id,
+      user_id,
+    });
 
     return response.status(200).json(playlist);
   }

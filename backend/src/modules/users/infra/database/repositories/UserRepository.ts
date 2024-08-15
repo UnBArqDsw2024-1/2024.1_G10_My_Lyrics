@@ -59,7 +59,11 @@ export class UserRepository implements IUserRepository {
         id,
       },
       include: {
-        playlists: true,
+        playlists: {
+          include: {
+            musics: true,
+          },
+        },
       },
     });
 
@@ -71,6 +75,9 @@ export class UserRepository implements IUserRepository {
   }
 
   async update(user: User): Promise<User> {
+    // @ts-ignore
+    user.playlists = undefined;
+
     const updatedUser = await this.prismaClient.user.update({
       where: {
         id: user.id,
@@ -83,5 +90,25 @@ export class UserRepository implements IUserRepository {
     }
 
     return updatedUser;
+  }
+
+  public async searchByName(name: string): Promise<User[]> {
+    const users = await this.prismaClient.user.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return users.map((user) => {
+      if (user?.iconUrl) {
+        user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+      }
+
+      // @ts-ignore
+      user.password = undefined;
+      return user;
+    });
   }
 }

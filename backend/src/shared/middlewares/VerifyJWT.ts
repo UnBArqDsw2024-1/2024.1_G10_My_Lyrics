@@ -9,17 +9,26 @@ interface IDecoded {
 
 export class VerifyJwt {
   private auth: IAuth;
+  private required: boolean;
 
-  constructor() {
+  constructor(required = true) {
     this.auth = new AuthFactory().createAuth();
+    this.required = required;
   }
 
   verify(request: Request, _: Response, next: NextFunction) {
     const authorization =
       request.headers.authorization ??
-      `Bearer ${request.cookies["CU-QUE-FODAO"]}`;
+      (request.cookies["CU-QUE-FODAO"] &&
+        `Bearer ${request.cookies["CU-QUE-FODAO"]}`);
+
     if (!authorization) {
-      throw new UnauthorizedError("Unauthorized");
+      if (this.required) {
+        throw new UnauthorizedError("Unauthorized");
+      }
+
+      next();
+      return;
     }
 
     const token = authorization.split(" ")[1]; // Bearer <token>

@@ -5,15 +5,15 @@ import { SearchByIdController } from "../infra/http/controllers/SearchByIdContro
 import { SearchByIdUseCase } from "../useCases/SearchByIdUseCase";
 
 export class SearchByIdUseCaseFactory implements ICommandFactory {
-	createCommand() {
-		return new SearchByIdUseCase(ArtistRepository.getInstance());
-	}
+  createCommand() {
+    return new SearchByIdUseCase(ArtistRepository.getInstance());
+  }
 }
 
 export class SearchByIdControllerFactory implements IControllerFactory {
-	createController() {
-		return new SearchByIdController(
-			new SearchByIdUseCaseFactory().createCommand(),
-		);
-	}
+  createController() {
+    return new SearchByIdController(
+      new SearchByIdUseCaseFactory().createCommand(),
+    );
+  }
 }

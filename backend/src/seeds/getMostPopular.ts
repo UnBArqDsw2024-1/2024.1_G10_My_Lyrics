@@ -1,4 +1,5 @@
-import { writeFileSync } from "node:fs";
+import { appendFileSync, writeFileSync } from "node:fs";
+import type { Album } from "@prisma/client";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { DatabaseConnection } from "../infra/database/GetConnection";
@@ -16,12 +17,18 @@ interface IVerse {
   translatedText?: string;
 }
 
+interface IAlbum {
+  title: string;
+  cover?: string;
+}
+
 interface IMusic {
   title: string;
   author: string;
   youtubeUrl: string;
   iconUrl: string;
   verses: IVerse[];
+  album: IAlbum;
 }
 
 async function MostAccessFromLetras(): Promise<ISong[]> {
@@ -56,6 +63,7 @@ async function MostAccessFromLetras(): Promise<ISong[]> {
 
 async function fetchLyrics(song: ISong): Promise<IMusic | undefined> {
   const songResponse = await axios.get(song.url).catch(() => undefined);
+
   if (!songResponse) {
     return undefined;
   }
@@ -90,9 +98,11 @@ async function fetchLyrics(song: ISong): Promise<IMusic | undefined> {
     ([text, startTime, endTime]: [string, string, string]) => ({
       startTime: Math.round(Number.parseFloat(startTime) * 1000),
       endTime: Math.round(Number.parseFloat(endTime) * 1000),
-      text: text,
+      text: text.trim(),
     }),
   );
+
+  const album = await fetchAlbum(song.title, song.author);
 
   return {
     title: song.title,
@@ -100,7 +110,68 @@ async function fetchLyrics(song: ISong): Promise<IMusic | undefined> {
     youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
     iconUrl: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
     verses,
+    album: album, // Adiciona as informações do álbum aqui
   };
+}
+
+function stringToSlug(str: string) {
+  return str
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+async function fetchAlbum(
+  musicTitle: string,
+  author: string,
+): Promise<IAlbum & { artistProfile?: string }> {
+  const authorSlug = stringToSlug(author);
+
+  const discographyResponse = await axios
+    .get(`https://www.letras.com/${authorSlug}/discografia`, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/127.0.0.0 Safari/537.36",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "Accept-Language": "en-US,en;q=0.9",
+      },
+    })
+    .catch(() => undefined);
+
+  if (!discographyResponse) {
+    return { title: musicTitle };
+  }
+
+  const $ = cheerio.load(discographyResponse.data);
+  const albums = $("div[data-type='album']");
+  let albumWithMusic: IAlbum = {
+    title: "",
+  };
+
+  albums.each((_, element) => {
+    const musics = $(element).find(".songList-table");
+    const albumTitle = $(element).find("h1.songList-header-name > a").text();
+    const albumCover = $(element)
+      .find("div.songList-header-cover > div > img")
+      .attr("data-original");
+
+    if (musics.text().includes(musicTitle)) {
+      albumWithMusic = {
+        title: albumTitle,
+        cover: albumCover,
+      };
+    }
+  });
+
+  const artistProfile = $(
+    "#cnt_top > div.artist.g-mb > div.head.--artist.gridContainer.--smallMargin > div.head-titleContainer > div > div.thumbnail.--skin-image.--shape-circle.--size-medium.--tabletSize-medium > img",
+  ).attr("src");
+
+  return { ...albumWithMusic, artistProfile };
 }
 
 async function sleep(ms: number) {
@@ -111,28 +182,60 @@ async function sleep(ms: number) {
   const sleepTime = 1000;
   const musicsFilepath = "musics.json";
 
-  const musics = [];
-
   const prismaClient = DatabaseConnection.getInstance();
   await prismaClient.$connect();
 
   const songs = await MostAccessFromLetras();
-  for (const song of songs) {
-    await sleep(sleepTime);
 
+  writeFileSync(musicsFilepath, "[", { flag: "w" });
+
+  for (let i = 0; i < songs.length; i++) {
+    const song = songs[i];
     const music = await fetchLyrics(song);
-    if (music) {
-      musics.push(music);
-      writeFileSync(musicsFilepath, JSON.stringify(musics, null, 2));
 
+    if (music) {
       const alreadyExists = await prismaClient.music.findFirst({
         where: {
           title: music.title,
         },
       });
+
       if (alreadyExists) {
         console.log(alreadyExists.title, "já existe, então estarei pulando...");
         continue;
+      }
+
+      let albumEntry: Album | undefined;
+
+      const albumExists = await prismaClient.album.findFirst({
+        where: {
+          title: music.album.title,
+        },
+      });
+
+      if (albumExists) {
+        albumEntry = albumExists;
+      } else {
+        albumEntry = await prismaClient.album.create({
+          data: {
+            title: music.album.title || music.title,
+            coverUrl: music.album.cover,
+            artists: {
+              connectOrCreate: [
+                {
+                  where: {
+                    name: music.author,
+                  },
+                  create: {
+                    name: music.author,
+                    profileUrl: music.album.artistProfile, // Adiciona a URL do perfil do artista
+                    biography: "",
+                  },
+                },
+              ],
+            },
+          },
+        });
       }
 
       await prismaClient.music.create({
@@ -146,26 +249,26 @@ async function sleep(ms: number) {
             },
           },
           album: {
-            create: {
-              title: music.title,
-              artists: {
-                connectOrCreate: [
-                  {
-                    where: {
-                      name: music.author,
-                    },
-                    create: {
-                      name: music.author,
-                      biography: "",
-                    },
-                  },
-                ],
-              },
+            connect: {
+              id: albumEntry.id,
             },
           },
         },
       });
+
+      appendFileSync(musicsFilepath, JSON.stringify(music, null, 2));
+
+      if (i < songs.length - 1) {
+        appendFileSync(musicsFilepath, ",\n");
+      }
+
       console.log(music.title, "foi criado com sucesso!!!");
     }
+
+    if ((i + 1) % 10 === 0) {
+      await sleep(sleepTime);
+    }
   }
+
+  appendFileSync(musicsFilepath, "]", { flag: "a" });
 })();

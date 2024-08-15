@@ -10,27 +10,27 @@ import { SearchPlaylistControllerFactory } from "../../../factories/SearchPlayli
 export const playlistRoutes = Router();
 
 const createPlaylistController =
-	new CreatePlaylistControllerFactory().createController();
+  new CreatePlaylistControllerFactory().createController();
 
 const searchPlaylistController =
-	new SearchPlaylistControllerFactory().createController();
+  new SearchPlaylistControllerFactory().createController();
 
 const deletePlaylistController =
-	new DeletePlaylistControllerFactory().createController();
+  new DeletePlaylistControllerFactory().createController();
 
 const getPlaylistController =
-	new GetPlaylistControllerFactory().createController();
+  new GetPlaylistControllerFactory().createController();
 
 const addMusicController = new AddMusicControllerFactory().createController();
 const likePlaylistController =
-	new LikePlaylistControllerFactory().createController();
+  new LikePlaylistControllerFactory().createController();
 
 playlistRoutes.get("/search", (req, res) =>
-	searchPlaylistController.handler(req, res),
+  searchPlaylistController.handler(req, res),
 );
 
 playlistRoutes.get("/:id", (req, res) =>
-	getPlaylistController.handler(req, res),
+  getPlaylistController.handler(req, res),
 );
 
 const authorization = new VerifyJwt();
@@ -39,17 +39,17 @@ const authorization = new VerifyJwt();
 playlistRoutes.use((req, res, next) => authorization.verify(req, res, next));
 
 playlistRoutes.post("/", (req, res) =>
-	createPlaylistController.handler(req, res),
+  createPlaylistController.handler(req, res),
 );
 
 playlistRoutes.delete("/:id", (req, res) =>
-	deletePlaylistController.handler(req, res),
+  deletePlaylistController.handler(req, res),
 );
 
 playlistRoutes.post("/:playlist_id/music", (req, res) =>
-	addMusicController.handler(req, res),
+  addMusicController.handler(req, res),
 );
 
 playlistRoutes.post("/like/:id", (req, res) =>
-	likePlaylistController.handler(req, res),
+  likePlaylistController.handler(req, res),
 );
