@@ -71,7 +71,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async update(user: User): Promise<User> {
-    // @ts-ignore 
+    // @ts-ignore
     user.playlists = undefined;
 
     const updatedUser = await this.prismaClient.user.update({

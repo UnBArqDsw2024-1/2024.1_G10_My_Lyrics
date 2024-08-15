@@ -1,87 +1,87 @@
 import {
-	type Artist,
-	type Music,
-	Prisma,
-	type PrismaClient,
-	type Verse,
+  type Artist,
+  type Music,
+  Prisma,
+  type PrismaClient,
+  type Verse,
 } from "@prisma/client";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IMusicRepository } from "../../../repositories/IMusicRepository";
 
 export class MusicRepository implements IMusicRepository {
-	private prismaClient: PrismaClient;
+  private prismaClient: PrismaClient;
 
-	private constructor() {
-		this.prismaClient = DatabaseConnection.getInstance();
-	}
+  private constructor() {
+    this.prismaClient = DatabaseConnection.getInstance();
+  }
 
-	private static INSTANCE: MusicRepository | null;
-	public static getInstance() {
-		if (!MusicRepository.INSTANCE) {
-			MusicRepository.INSTANCE = new MusicRepository();
-		}
+  private static INSTANCE: MusicRepository | null;
+  public static getInstance() {
+    if (!MusicRepository.INSTANCE) {
+      MusicRepository.INSTANCE = new MusicRepository();
+    }
 
-		return MusicRepository.INSTANCE;
-	}
+    return MusicRepository.INSTANCE;
+  }
 
-	public async create(music: Prisma.MusicCreateInput): Promise<Music> {
-		return this.prismaClient.music.create({ data: music });
-	}
+  public async create(music: Prisma.MusicCreateInput): Promise<Music> {
+    return this.prismaClient.music.create({ data: music });
+  }
 
-	public async getById(
-		id: string,
-	): Promise<(Music & { verses: Verse[]; likes: number }) | null> {
-		const music = await this.prismaClient.music.findUnique({
-			where: { id },
-			include: {
-				verses: {
-					orderBy: { startTime: "asc" },
-				},
-				_count: {
-					select: { likes: true },
-				},
-				album: {
-					include: { artists: true },
-				},
-			},
-		});
-		if (!music) {
-			return null;
-		}
+  public async getById(
+    id: string,
+  ): Promise<(Music & { verses: Verse[]; likes: number }) | null> {
+    const music = await this.prismaClient.music.findUnique({
+      where: { id },
+      include: {
+        verses: {
+          orderBy: { startTime: "asc" },
+        },
+        _count: {
+          select: { likes: true },
+        },
+        album: {
+          include: { artists: true },
+        },
+      },
+    });
+    if (!music) {
+      return null;
+    }
 
-		const {
-			_count: { likes },
-			...remaining
-		} = music;
-		return {
-			...remaining,
-			likes,
-		};
-	}
+    const {
+      _count: { likes },
+      ...remaining
+    } = music;
+    return {
+      ...remaining,
+      likes,
+    };
+  }
 
-	public async searchByTitle(name: string): Promise<Music[]> {
-		return this.prismaClient.music.findMany({
-			where: {
-				title: {
-					contains: name,
-					mode: "insensitive",
-				},
-			},
-		});
-	}
+  public async searchByTitle(name: string): Promise<Music[]> {
+    return this.prismaClient.music.findMany({
+      where: {
+        title: {
+          contains: name,
+          mode: "insensitive",
+        },
+      },
+    });
+  }
 
-	public async countTopMusic(
-		number: number,
-		dataInit: Date,
-		dataFinished: Date,
-	): Promise<
-		(Music & { count: bigint; artists: Artist[]; verses: Verse[] })[]
-	> {
-		const res: (Music & {
-			count: bigint;
-			artists: Artist[];
-			verses: Verse[];
-		})[] = await this.prismaClient.$queryRaw`
+  public async countTopMusic(
+    number: number,
+    dataInit: Date,
+    dataFinished: Date,
+  ): Promise<
+    (Music & { count: bigint; artists: Artist[]; verses: Verse[] })[]
+  > {
+    const res: (Music & {
+      count: bigint;
+      artists: Artist[];
+      verses: Verse[];
+    })[] = await this.prismaClient.$queryRaw`
     SELECT
       COUNT(*) as count,
       "mu".*,
@@ -102,18 +102,18 @@ export class MusicRepository implements IMusicRepository {
     LIMIT ${number}
   `;
 
-		const remaining = number - res.length;
-		if (remaining > 0) {
-			const alreadyFetched = res.map((e) => e.id);
-			if (alreadyFetched.length === 0) {
-				alreadyFetched.push("");
-			}
+    const remaining = number - res.length;
+    if (remaining > 0) {
+      const alreadyFetched = res.map((e) => e.id);
+      if (alreadyFetched.length === 0) {
+        alreadyFetched.push("");
+      }
 
-			const remainingData: (Music & {
-				count: bigint;
-				artists: Artist[];
-				verses: Verse[];
-			})[] = await this.prismaClient.$queryRaw`
+      const remainingData: (Music & {
+        count: bigint;
+        artists: Artist[];
+        verses: Verse[];
+      })[] = await this.prismaClient.$queryRaw`
       SELECT
         0::bigint as count,
         mu.*,
@@ -131,55 +131,55 @@ export class MusicRepository implements IMusicRepository {
       LIMIT ${remaining}
     `;
 
-			return res.concat(remainingData);
-		}
+      return res.concat(remainingData);
+    }
 
-		return res;
-	}
+    return res;
+  }
 
-	public async likes(user_id: string, music_id: string): Promise<void> {
-		await this.prismaClient.music.update({
-			where: {
-				id: music_id,
-			},
-			data: {
-				likes: {
-					connect: {
-						id: user_id,
-					},
-				},
-			},
-		});
-	}
+  public async likes(user_id: string, music_id: string): Promise<void> {
+    await this.prismaClient.music.update({
+      where: {
+        id: music_id,
+      },
+      data: {
+        likes: {
+          connect: {
+            id: user_id,
+          },
+        },
+      },
+    });
+  }
 
-	public async unlikes(user_id: string, music_id: string): Promise<void> {
-		await this.prismaClient.music.update({
-			where: {
-				id: music_id,
-			},
-			data: {
-				likes: {
-					disconnect: {
-						id: user_id,
-					},
-				},
-			},
-		});
-	}
+  public async unlikes(user_id: string, music_id: string): Promise<void> {
+    await this.prismaClient.music.update({
+      where: {
+        id: music_id,
+      },
+      data: {
+        likes: {
+          disconnect: {
+            id: user_id,
+          },
+        },
+      },
+    });
+  }
 
-	public async searchByArtist(artistId: string): Promise<Music[]> {
-		const musics = await this.prismaClient.music.findMany({
-			where: {
-				album: {
-					artists: {
-						some: {
-							id: artistId,
-						},
-					},
-				},
-			},
-		});
+  public async searchByArtist(artistId: string): Promise<Music[]> {
+    const musics = await this.prismaClient.music.findMany({
+      where: {
+        album: {
+          artists: {
+            some: {
+              id: artistId,
+            },
+          },
+        },
+      },
+    });
 
-		return musics;
-	}
+    return musics;
+  }
 }
