@@ -34,7 +34,11 @@ export class MusicRepository implements IMusicRepository {
 		const music = await this.prismaClient.music.findUnique({
 			where: { id },
 			include: {
-				verses: true,
+				verses: {
+					orderBy: {
+						startTime: "asc",
+					},
+				},
 				_count: {
 					select: { likes: true },
 				},
