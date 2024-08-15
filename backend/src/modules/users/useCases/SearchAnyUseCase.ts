@@ -5,31 +5,31 @@ import type { IMusicRepository } from "../../musics/repositories/IMusicRepositor
 import type { IUserRepository } from "../repositories/IUserRepository";
 
 interface IRequest {
-	text: string;
+  text: string;
 }
 
 interface IResponse {
-	artists: Artist[];
-	musics: Music[];
-	users: User[];
+  artists: Artist[];
+  musics: Music[];
+  users: User[];
 }
 
 export class SearchAnyUseCase implements ICommand<IRequest, IResponse> {
-	constructor(
-		private artistRepository: IArtistRepository,
-		private musicRepository: IMusicRepository,
-		private userRepository: IUserRepository,
-	) {}
+  constructor(
+    private artistRepository: IArtistRepository,
+    private musicRepository: IMusicRepository,
+    private userRepository: IUserRepository,
+  ) {}
 
-	public async execute({ text }: IRequest): Promise<IResponse> {
-		const artists = await this.artistRepository.searchByName(text);
-		const musics = await this.musicRepository.searchByTitle(text);
-		const users = await this.userRepository.searchByName(text);
+  public async execute({ text }: IRequest): Promise<IResponse> {
+    const artists = await this.artistRepository.searchByName(text);
+    const musics = await this.musicRepository.searchByTitle(text);
+    const users = await this.userRepository.searchByName(text);
 
-		return {
-			artists,
-			musics,
-			users,
-		};
-	}
+    return {
+      artists,
+      musics,
+      users,
+    };
+  }
 }
