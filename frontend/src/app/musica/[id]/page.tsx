@@ -68,7 +68,7 @@ export default function Musica({ params }: { params: { id: string } }) {
     <div className="flex justify-center items-start mt-40">
       {music ? (
         <>
-          <div className="fixed left-20 top-40 flex flex-col gap-10">
+          <div className="relative lg:fixed left-20 top-40 flex flex-col gap-10">
             <div className="flex flex-col mt-10 gap-4 bg-[#5A4D6D] bg-opacity-25 p-6 rounded">
               {music.album.artists.map((artist) => (
                 <div key={artist.name} className="flex flex-row items-center">
@@ -109,11 +109,11 @@ export default function Musica({ params }: { params: { id: string } }) {
               )}
             </div>
           </div>
-          <div className="relative w-2/3 ml-64 max-h-[calc(100vh-10rem)] overflow-y-auto no-scrollbar">
+          <div className="relative w-1/2 2xl:w-2/3 2xl:ml-64 max-h-[calc(100vh-10rem)] overflow-y-auto no-scrollbar">
             <div className="flex flex-row items-center justify-between text-3xl text-white font-bold mb-4 mt-12 border-b border-gray-400 pb-4 w-1/2">
               <h1>{music.title}</h1>
               <div
-                onClick={handleClickLike}
+                onMouseDown={handleClickLike}
                 className="flex items-center gap-3 cursor-pointer flex-row"
               >
                 <p className="text-white font-medium text-2xl">{music.likes}</p>
@@ -142,7 +142,7 @@ export default function Musica({ params }: { params: { id: string } }) {
                     ${isLastVerse ? 'mb-20' : ''}
                   `}
                   ref={isVerseActive ? currentVerseRef : null}
-                  onClick={() => handleClickVerse(verse)}
+                  onMouseDown={() => handleClickVerse(verse)}
                 >
                   <p className="text-2xl text-white m-0 font-medium">
                     {verse.text}
@@ -157,7 +157,7 @@ export default function Musica({ params }: { params: { id: string } }) {
             })}
           </div>
           {youtubeVideoId ? (
-            <div className="fixed right-10 top-56">
+            <div className="absolute top-32 2xl:fixed 2xl:right-10 2xl:top-56">
               <YouTubePlayer
                 videoId={youtubeVideoId}
                 setCurrentTime={setCurrentTime}
