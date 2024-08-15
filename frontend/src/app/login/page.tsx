@@ -5,8 +5,11 @@ import Logo from "../../assets/LOGO.svg";
 import Image from "next/image";
 import { api } from "@/lib/api";
 import local from "next/font/local";
+import { UserContext } from "@/context/UserContext";
 
 export default function Login() {
+  const user = use(UserContext);
+
   async function handleLogin(formData: FormData) {
     if (!formData.get("email") || !formData.get("password")) {
       alert("Por favor, preencha todos os campos!!!!!!!!!!");
@@ -18,8 +21,7 @@ export default function Login() {
         email: formData.get("email"),
         password: formData.get("password"),
       });
-      localStorage.setItem("token", res.data.auth);
-      localStorage.setItem("userImg", res.data.user.iconUrl);
+      user.setUpdatedUser(res.data.user);
     } catch (error) {}
   }
 

@@ -1,8 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Logo from "../assets/LOGO.svg";
 import Link from "next/link";
-import { Suspense, use } from "react";
 import UserImg from "./UserImg";
+import { Suspense } from "react";
 
 export default function Header() {
   return (
@@ -24,9 +26,7 @@ export default function Header() {
           Músicas & Artistas
         </a>
       </div>
-      <Suspense fallback={<div>Carregando...</div>}>
-        <UserImg />
-      </Suspense>
+      <UserImg />
     </div>
   );
 }
