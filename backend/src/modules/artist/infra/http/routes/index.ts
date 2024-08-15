@@ -32,6 +32,6 @@ artistRoutes.patch("/unlike/:artist_id", (req, res) =>
 	unlikeArtistController.handler(req, res),
 );
 
-artistRoutes.get("/:artist_id", (req, res) =>
+artistRoutes.get("/search", (req, res) =>
 	searchByIdController.handler(req, res),
 );
