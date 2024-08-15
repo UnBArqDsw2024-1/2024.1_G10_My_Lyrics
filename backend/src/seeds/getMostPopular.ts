@@ -123,14 +123,17 @@ function stringToSlug(str: string) {
 		.replace(/-+/g, "-");
 }
 
-async function fetchAlbum(musicTitle: string, author: string): Promise<IAlbum> {
+async function fetchAlbum(
+	musicTitle: string,
+	author: string,
+): Promise<IAlbum & { artistProfile?: string }> {
 	const authorSlug = stringToSlug(author);
 
 	const discographyResponse = await axios
 		.get(`https://www.letras.com/${authorSlug}/discografia`, {
 			headers: {
 				"User-Agent":
-					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/127.0.0.0 Safari/537.36",
 				Accept:
 					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
 				"Accept-Language": "en-US,en;q=0.9",
@@ -163,7 +166,11 @@ async function fetchAlbum(musicTitle: string, author: string): Promise<IAlbum> {
 		}
 	});
 
-	return albumWithMusic;
+	const artistProfile = $(
+		"#cnt_top > div.artist.g-mb > div.head.--artist.gridContainer.--smallMargin > div.head-titleContainer > div > div.thumbnail.--skin-image.--shape-circle.--size-medium.--tabletSize-medium > img",
+	).attr("src");
+
+	return { ...albumWithMusic, artistProfile };
 }
 
 async function sleep(ms: number) {
@@ -220,6 +227,7 @@ async function sleep(ms: number) {
 									},
 									create: {
 										name: music.author,
+										profileUrl: music.album.artistProfile, // Adiciona a URL do perfil do artista
 										biography: "",
 									},
 								},
