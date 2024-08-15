@@ -44,8 +44,9 @@ model Artist {
 }
 
 model Album {
-  id    String @id @default(uuid()) @db.Uuid
-  title String
+  id       String  @id @default(uuid()) @db.Uuid
+  title    String
+  coverUrl String?
 
   artists Artist[] @relation("AlbumArtists")
   musics  Music[]
