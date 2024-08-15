@@ -1,4 +1,5 @@
 import { appendFileSync, writeFileSync } from "node:fs";
+import type { Album } from "@prisma/client";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { DatabaseConnection } from "../infra/database/GetConnection";
@@ -204,7 +205,7 @@ async function sleep(ms: number) {
 				continue;
 			}
 
-			let albumEntry;
+			let albumEntry: Album | undefined;
 
 			const albumExists = await prismaClient.album.findFirst({
 				where: {

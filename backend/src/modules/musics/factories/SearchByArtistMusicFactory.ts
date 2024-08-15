@@ -6,17 +6,17 @@ import { SearchByArtistMusicController } from "../infra/http/controllers/SearchB
 import { SearchByArtistMusicUseCase } from "../useCases/SearchByArtistMusicUseCase";
 
 export class SearchByArtistMusicUseCaseFactory implements ICommandFactory {
-	public createCommand() {
-		return new SearchByArtistMusicUseCase(MusicRepository.getInstance());
-	}
+  public createCommand() {
+    return new SearchByArtistMusicUseCase(MusicRepository.getInstance());
+  }
 }
 
 export class SearchByArtistMusicControllerFactory
-	implements IControllerFactory
+  implements IControllerFactory
 {
-	public createController(): IController {
-		return new SearchByArtistMusicController(
-			new SearchByArtistMusicUseCaseFactory().createCommand(),
-		);
-	}
+  public createController(): IController {
+    return new SearchByArtistMusicController(
+      new SearchByArtistMusicUseCaseFactory().createCommand(),
+    );
+  }
 }

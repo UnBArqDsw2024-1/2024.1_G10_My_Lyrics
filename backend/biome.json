@@ -16,7 +16,17 @@
     "rules": {
       "recommended": true,
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useNodejsImportProtocol": { "fix": "safe", "level": "error" },
+        "useTemplate": { "fix": "safe", "level": "error" },
+        "noUnusedTemplateLiteral": { "fix": "safe", "level": "error" },
+        "noParameterAssign": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
+      "complexity": {
+        "noForEach": "off"
       },
       "correctness": {
         "noUnusedVariables": "warn",

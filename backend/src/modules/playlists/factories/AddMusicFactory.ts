@@ -12,8 +12,6 @@ export class AddMusicUseCaseFactory implements ICommandFactory {
 
 export class AddMusicControllerFactory implements IControllerFactory {
   createController() {
-    return new AddMusicController(
-      new AddMusicUseCaseFactory().createCommand(),
-    );
+    return new AddMusicController(new AddMusicUseCaseFactory().createCommand());
   }
 }

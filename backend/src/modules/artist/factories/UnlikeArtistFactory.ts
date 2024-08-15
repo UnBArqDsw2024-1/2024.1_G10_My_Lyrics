@@ -6,15 +6,15 @@ import { UnlikeArtistController } from "../infra/http/controllers/UnlikeArtistCo
 import { UnlikeArtistUseCase } from "../useCases/UnilikeArtistUseCase";
 
 export class UnlikeArtistUseCaseFactory implements ICommandFactory {
-	createCommand() {
-		return new UnlikeArtistUseCase(ArtistRepository.getInstance());
-	}
+  createCommand() {
+    return new UnlikeArtistUseCase(ArtistRepository.getInstance());
+  }
 }
 
 export class UnlikeArtistControllerFactory implements IControllerFactory {
-	createController(): IController {
-		return new UnlikeArtistController(
-			new UnlikeArtistUseCaseFactory().createCommand(),
-		);
-	}
+  createController(): IController {
+    return new UnlikeArtistController(
+      new UnlikeArtistUseCaseFactory().createCommand(),
+    );
+  }
 }
