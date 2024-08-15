@@ -1,11 +1,11 @@
 "use client";
 
-import { createContext, use, useState } from "react";
+import { createContext, use, useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { User } from "@/lib/types/data";
 
 interface UserContextType {
-  user: User | null;
+  user: User | null | false;
   setUpdatedUser: (user: User) => void;
 }
 
@@ -19,19 +19,19 @@ async function getUser() {
     const res = await api.get("/user");
     return res.data;
   } catch {
-    return null;
+    return false;
   }
 }
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
-  const setUpdatedUser = () => {
-    setUser(use(getUser()));
-  };
+  useEffect(() => {
+    getUser().then((user) => setUser(user));
+  }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUpdatedUser }}>
+    <UserContext.Provider value={{ user, setUpdatedUser: setUser }}>
       {children}
     </UserContext.Provider>
   );

@@ -6,14 +6,10 @@ import { api } from "@/lib/api";
 import { redirect } from "next/navigation";
 
 export default function NewPlaylist() {
-  const { user } = use(UserContext);
+  const user = use(UserContext);
 
-  try {
-    if (window && user === null) {
-      redirect("/login");
-    }
-  } catch (error) {
-    console.error("Erro ao carregar user:", error);
+  if (user.user === false) {
+    redirect("/login");
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -26,9 +22,10 @@ export default function NewPlaylist() {
     }
 
     try {
-      await api.post("/playlist", {
-        title: formData.get("newPlaylistName"),
+      const res = await api.post("/playlist", {
+        title: formData.get("newPlaylistName")!,
       });
+      user.setUpdatedUser(res.data.user);
     } catch (error) {
       console.error("Erro ao criar playlist:", error);
     }
@@ -38,14 +35,19 @@ export default function NewPlaylist() {
     <div className="flex items-center justify-center w-screen h-screen">
       <div className="bg-[#32284d] bg-opacity-50 p-12 rounded-lg shadow-md w-4/12 text-white items-center flex flex-col gap-8">
         <h1 className="text-3xl font-bold m-0">Criar uma nova playlist</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           <input
             type="text"
             name="newPlaylistName"
             placeholder="Nome da nova playlist"
-            className="w-full px-3 py-2 bg-[#b8b2ca] bg-opacity-20 rounded-xl focus:outline-none focus:ring-0 backdrop-blur-md font-roboto"
+            className="w-full px-4 py-3 bg-[#b8b2ca] bg-opacity-20 rounded-xl focus:outline-none focus:ring-0 backdrop-blur-md font-roboto"
           />
-          <button type="submit">Criar Playlist</button>
+          <button
+            type="submit"
+            className="p-4 text-white rounded-2xl transition-all bg-[#3f3352] bg-opacity-20 hover:bg-opacity-30 hover:bg-[#3f3352]"
+          >
+            Nova Playlist
+          </button>
         </form>
       </div>
     </div>

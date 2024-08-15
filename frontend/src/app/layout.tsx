@@ -31,13 +31,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${roboto.className}`}>
-      <UserProvider>
+    <UserProvider>
+      <html lang="en" className={`${roboto.className}`}>
         <body className="bg-[#09001B]">
           <Header />
           {children}
         </body>
-      </UserProvider>
-    </html>
+      </html>
+    </UserProvider>
   );
 }
