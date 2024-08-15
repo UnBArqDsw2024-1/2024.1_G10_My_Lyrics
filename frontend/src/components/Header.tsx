@@ -4,9 +4,15 @@ import Image from "next/image";
 import Logo from "../assets/LOGO.svg";
 import Link from "next/link";
 import UserImg from "./UserImg";
-import { Suspense } from "react";
+import { UserContext } from "@/context/UserContext";
+import { useContext } from "react";
 
 export default function Header() {
+  const user = useContext(UserContext);
+
+  const playListLink =
+    user.user && user.user.playlists.length > 0 ? "/playlist" : "/playlist/new";
+
   return (
     <div className="flex justify-between text-white items-center px-12 absolute top-0 left-0 right-0 mt-8">
       <Link href="/" className="w-1/12 cursor-pointer">
@@ -14,17 +20,20 @@ export default function Header() {
       </Link>
 
       <div className="flex gap-4 items-center">
-        <a href="/login" className="text-xl">
+        <Link href="/login" className="text-xl">
           Categorias
-        </a>
+        </Link>
         <div className="border h-5 border-[#332b41]"></div>
-        <a href="/playlist/new" className="text-xl">
+        <Link href={playListLink} className="text-xl">
           Playlist
-        </a>
+        </Link>
         <div className="border h-5 border-[#332b41]"></div>
-        <a href="https://github.com/lyrics-app/my-lyrics" className="text-xl">
+        <Link
+          href="https://github.com/lyrics-app/my-lyrics"
+          className="text-xl"
+        >
           Músicas & Artistas
-        </a>
+        </Link>
       </div>
       <UserImg />
     </div>

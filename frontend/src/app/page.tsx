@@ -1,4 +1,3 @@
-"use client";
 import MusicCard from "@/components/MusicCard";
 import { api } from "@/lib/api";
 import { Music } from "@/lib/types/data";

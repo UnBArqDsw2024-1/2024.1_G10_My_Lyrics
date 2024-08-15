@@ -1,21 +1,23 @@
 "use client";
 import Image from "next/image";
 import Logo from "../assets/LOGO.svg";
-import { use } from "react";
+import { useContext } from "react";
 import { UserContext } from "@/context/UserContext";
 
 export default function UserImg() {
-  const { user } = use(UserContext);
+  const { user } = useContext(UserContext);
 
-  try {
-    if (user) {
-      return (
-        <div className="border h-5 border-[#332b41]">
-          <Image src={user.iconUrl!} alt="User Icon" width={100} height={100} />
-        </div>
-      );
+  function getUserIcon() {
+    if (user?.iconUrl != null) {
+      return user.iconUrl;
     }
-  } catch (error) {
-    console.error("Erro ao carregar user:", error);
+
+    return Logo;
   }
+
+  return (
+    <div className="flex items-center justify-center">
+      <Image src={getUserIcon()} alt="Logo" width={100} height={100} />
+    </div>
+  );
 }

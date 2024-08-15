@@ -26,13 +26,7 @@ export default function NewPlaylist() {
       const res = await api.post("/playlist", {
         title: formData.get("newPlaylistName")!,
       });
-
-      user.setUpdatedUser({
-        ...user.user,
-        playlists: [...user.user.playlists, res.data],
-      });
-
-      router.push("/playlist");
+      user.setUpdatedUser(res.data.user);
     } catch (error) {
       console.error("Erro ao criar playlist:", error);
     }

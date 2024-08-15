@@ -124,17 +124,15 @@ export class MusicRepository implements IMusicRepository {
     LIMIT ${number}
   `;
 
-    const remaining = number - res.length;
-    if (remaining > 0) {
-      const alreadyFetched = res.map((e) => e.id);
-      if (alreadyFetched.length === 0) {
-        alreadyFetched.push("");
-      }
-
-      const remainingData: (Music & {
-        count: bigint;
-        artists: Artist[];
-      })[] = await this.prismaClient.$queryRaw`
+		const remaining = number - res.length;
+		if (remaining > 0) {
+			const alreadyFetched = res.map((e) => e.id)
+			alreadyFetched.push("")
+			const remainingData: (Music & {
+				count: bigint;
+				artists: Artist[];
+				verses: Verse[];
+			})[] = await this.prismaClient.$queryRaw`
       SELECT
         0::bigint as count,
         mu.*,
