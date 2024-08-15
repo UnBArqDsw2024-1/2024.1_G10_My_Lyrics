@@ -41,6 +41,7 @@ export interface User {
   name: string
   email: string
   password: string
+  censoredMusics: boolean
 }
  export interface MusicAccess {
   ip: string
