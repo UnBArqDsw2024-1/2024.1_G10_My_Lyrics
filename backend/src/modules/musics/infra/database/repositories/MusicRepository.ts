@@ -30,7 +30,7 @@ export class MusicRepository implements IMusicRepository {
 
   public async getById(
     id: string,
-    ip?: string,
+    user_id?: string,
   ): Promise<(Music & { verses: Verse[]; likes: number }) | null> {
     const music = await this.prismaClient.music.findUnique({
       where: { id },
@@ -50,12 +50,24 @@ export class MusicRepository implements IMusicRepository {
       return null;
     }
 
-    if (ip) {
+    if (user_id) {
+      // @ts-ignore
+      music.liked = !!(await this.prismaClient.music.findUnique({
+        where: {
+          id,
+          likes: {
+            some: {
+              id: user_id,
+            },
+          },
+        },
+      }));
+
       try {
         await this.prismaClient.musicAccess.create({
           data: {
             musicId: id,
-            ip,
+            ip: user_id,
             date: new Date(new Date().toISOString().substring(0, 10)),
           },
         });

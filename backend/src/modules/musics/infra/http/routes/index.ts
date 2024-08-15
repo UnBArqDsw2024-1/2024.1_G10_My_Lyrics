@@ -1,4 +1,9 @@
-import { Router } from "express";
+import {
+  type NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
 import { VerifyJwt } from "../../../../../shared/middlewares/VerifyJWT";
 import { CreateMusicControllerFactory } from "../../../factories/CreateMusicFactory";
 import { GetMusicControllerFactory } from "../../../factories/GetMusicFactory";
@@ -37,7 +42,18 @@ musicsRoutes.get("/artist", (req, res) =>
   searchByArtistMusicController.handler(req, res),
 );
 
-musicsRoutes.get("/:id", (req, res) => getMusicController.handler(req, res));
+const authorizationNotRequired = new VerifyJwt(false);
+function notRequiredMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  authorizationNotRequired.verify(req, res, next);
+}
+
+musicsRoutes.get("/:id", notRequiredMiddleware, (req, res) =>
+  getMusicController.handler(req, res),
+);
 
 const authorization = new VerifyJwt();
 

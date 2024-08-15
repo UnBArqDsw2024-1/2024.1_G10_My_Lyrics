@@ -74,7 +74,6 @@ export class ArtistRepository implements IArtistRepository {
     if (artist) {
       const musics = artist.albums.flatMap((album) => album.musics);
       if (user_id) {
-        console.log({ user_id });
         for (const music of musics) {
           // @ts-ignore
           music.like = !!(await this.prismaClient.music.findUnique({
