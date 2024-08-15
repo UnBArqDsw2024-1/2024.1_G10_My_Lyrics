@@ -3,7 +3,7 @@ import type { ICommandFactory } from "../../../shared/patterns/Factories/IComman
 import type { IControllerFactory } from "../../../shared/patterns/Factories/IControllerFactory";
 import { ArtistRepository } from "../infra/database/repositories/ArtistRepository";
 import { UnlikeArtistController } from "../infra/http/controllers/UnlikeArtistController";
-import { UnlikeArtistUseCase } from "../useCases/LikeArtistUseCase";
+import { UnlikeArtistUseCase } from "../useCases/UnilikeArtistUseCase";
 
 export class UnlikeArtistUseCaseFactory implements ICommandFactory {
   createCommand() {

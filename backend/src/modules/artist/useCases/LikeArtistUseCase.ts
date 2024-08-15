@@ -19,18 +19,3 @@ export class LikeArtistUseCase implements ICommand<ICreateLikeArtistDTO, void> {
     await this.artistRepository.likes(user_id, artist_id);
   }
 }
-
-export class UnlikeArtistUseCase
-  implements ICommand<ICreateLikeArtistDTO, void>
-{
-  constructor(private artistRepository: IArtistRepository) {}
-
-  async execute({ user_id, artist_id }: ICreateLikeArtistDTO): Promise<void> {
-    const artist = await this.artistRepository.getById(artist_id);
-    if (!artist) {
-      throw new NotFoundError("Artist was not found");
-    }
-
-    await this.artistRepository.unlikes(user_id, artist_id);
-  }
-}

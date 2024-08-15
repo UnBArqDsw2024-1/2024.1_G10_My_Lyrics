@@ -1,4 +1,5 @@
 import type { Prisma, PrismaClient, User } from "@prisma/client";
+import { env } from "../../../../../config/env";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IUserRepository } from "../../../repositories/IUserRepository";
 
@@ -8,6 +9,7 @@ export class UserRepository implements IUserRepository {
   private constructor() {
     this.prismaClient = DatabaseConnection.getInstance();
   }
+
   async delete(id: string): Promise<void> {
     await this.prismaClient.user.delete({
       where: {
@@ -30,6 +32,10 @@ export class UserRepository implements IUserRepository {
       data: userDTO,
     });
 
+    if (user.iconUrl) {
+      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+    }
+
     return user;
   }
 
@@ -40,6 +46,10 @@ export class UserRepository implements IUserRepository {
       },
     });
 
+    if (user?.iconUrl) {
+      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+    }
+
     return user;
   }
 
@@ -48,18 +58,32 @@ export class UserRepository implements IUserRepository {
       where: {
         id,
       },
+      include: {
+        playlists: true,
+      },
     });
+
+    if (user?.iconUrl) {
+      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+    }
 
     return user;
   }
 
   async update(user: User): Promise<User> {
+    // @ts-ignore
+    user.playlists = undefined;
+
     const updatedUser = await this.prismaClient.user.update({
       where: {
         id: user.id,
       },
       data: user,
     });
+
+    if (user?.iconUrl) {
+      user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+    }
 
     return updatedUser;
   }

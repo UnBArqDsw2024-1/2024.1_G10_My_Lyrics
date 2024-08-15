@@ -1,4 +1,10 @@
-import type { Music, Prisma, PrismaClient, Verse } from "@prisma/client";
+import {
+  type Artist,
+  type Music,
+  Prisma,
+  type PrismaClient,
+  type Verse,
+} from "@prisma/client";
 import { DatabaseConnection } from "../../../../../infra/database/GetConnection";
 import type { IMusicRepository } from "../../../repositories/IMusicRepository";
 
@@ -24,18 +30,50 @@ export class MusicRepository implements IMusicRepository {
 
   public async getById(
     id: string,
+    user_id?: string,
   ): Promise<(Music & { verses: Verse[]; likes: number }) | null> {
     const music = await this.prismaClient.music.findUnique({
       where: { id },
       include: {
-        verses: true,
+        verses: {
+          orderBy: { startTime: "asc" },
+        },
         _count: {
           select: { likes: true },
+        },
+        album: {
+          include: { artists: true },
         },
       },
     });
     if (!music) {
       return null;
+    }
+
+    if (user_id) {
+      // @ts-ignore
+      music.liked = !!(await this.prismaClient.music.findUnique({
+        where: {
+          id,
+          likes: {
+            some: {
+              id: user_id,
+            },
+          },
+        },
+      }));
+
+      try {
+        await this.prismaClient.musicAccess.create({
+          data: {
+            musicId: id,
+            ip: user_id,
+            date: new Date(new Date().toISOString().substring(0, 10)),
+          },
+        });
+      } catch {
+        ///
+      }
     }
 
     const {
@@ -63,14 +101,59 @@ export class MusicRepository implements IMusicRepository {
     number: number,
     dataInit: Date,
     dataFinished: Date,
-  ): Promise<(Music & { count: bigint })[]> {
-    return this.prismaClient.$queryRaw`
-      SELECT COUNT(*), M.* FROM "MusicAccess" MA 
-      INNER JOIN "Music" M ON M.id = MA."musicId"
-      WHERE MA."date" BETWEEN ${dataInit} AND ${dataFinished}
-      GROUP BY M.id
-      ORDER BY COUNT(*) DESC
-      LIMIT ${number}`;
+  ): Promise<(Music & { count: bigint; artists: Artist[] })[]> {
+    const res: (Music & {
+      count: bigint;
+      artists: Artist[];
+    })[] = await this.prismaClient.$queryRaw`
+    SELECT
+      COUNT(*) as count,
+      "mu".*,
+      JSON_AGG(DISTINCT ar.*) AS artists
+    FROM "MusicAccess" ma
+    INNER JOIN "Music" mu ON ma."musicId" = mu.id
+
+    INNER JOIN "Album" alb ON mu."albumId" = alb.id
+    INNER JOIN "_AlbumArtists" AA ON AA."A" = alb.id
+    INNER JOIN "Artist" ar ON ar.id = AA."B"
+
+    WHERE ma."date" BETWEEN ${dataInit} AND ${dataFinished}
+
+    GROUP BY mu."id"
+    ORDER BY count DESC
+    LIMIT ${number}
+  `;
+
+    const remaining = number - res.length;
+    if (remaining > 0) {
+      const alreadyFetched = res.map((e) => e.id);
+      if (alreadyFetched.length === 0) {
+        alreadyFetched.push("");
+      }
+
+      const remainingData: (Music & {
+        count: bigint;
+        artists: Artist[];
+      })[] = await this.prismaClient.$queryRaw`
+      SELECT
+        0::bigint as count,
+        mu.*,
+        JSON_AGG(DISTINCT ar.*) AS artists
+      FROM "Music" mu
+
+      INNER JOIN "Album" alb ON mu."albumId" = alb.id
+      INNER JOIN "_AlbumArtists" AA ON AA."A" = alb.id
+      INNER JOIN "Artist" ar ON ar.id = AA."B"
+
+      WHERE mu."id"::text NOT IN (${Prisma.join(alreadyFetched)})
+      GROUP BY mu."id"
+      LIMIT ${remaining}
+    `;
+
+      return res.concat(remainingData);
+    }
+
+    return res;
   }
 
   public async likes(user_id: string, music_id: string): Promise<void> {
@@ -101,5 +184,21 @@ export class MusicRepository implements IMusicRepository {
         },
       },
     });
+  }
+
+  public async searchByArtist(artistId: string): Promise<Music[]> {
+    const musics = await this.prismaClient.music.findMany({
+      where: {
+        album: {
+          artists: {
+            some: {
+              id: artistId,
+            },
+          },
+        },
+      },
+    });
+
+    return musics;
   }
 }

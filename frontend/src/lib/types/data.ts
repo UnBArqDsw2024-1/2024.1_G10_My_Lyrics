@@ -11,6 +11,7 @@ export interface Playlist {
 export interface Music {
   id: string
   albumId: string
+  artists: Artists[]
   title: string
   youtubeUrl: string
   iconUrl: string
@@ -21,8 +22,15 @@ export interface Music {
   musicAccess: MusicAccess[]
 }
 
+export interface Artists {
+  id: string
+  name: string
+  biography: string
+}
+
 export interface Album {
   id: string
+  artists: Artists[]
   title: string
   musics: Music[]
 }
@@ -42,8 +50,10 @@ export interface User {
   email: string
   password: string
   censoredMusics: boolean
+  iconUrl: string | null
+  playlists: Playlist[]
 }
- export interface MusicAccess {
+export interface MusicAccess {
   ip: string
   musicId: string
   date: Date

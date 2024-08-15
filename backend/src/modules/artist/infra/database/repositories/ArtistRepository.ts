@@ -10,6 +10,7 @@ export class ArtistRepository implements IArtistRepository {
   }
 
   private static INSTANCE: ArtistRepository | null;
+
   public static getInstance() {
     if (!ArtistRepository.INSTANCE) {
       ArtistRepository.INSTANCE = new ArtistRepository();
@@ -53,5 +54,49 @@ export class ArtistRepository implements IArtistRepository {
         },
       },
     });
+  }
+
+  public async searchById(
+    artist_id: string,
+    user_id?: string,
+  ): Promise<Artist | null> {
+    const artist = await this.prismaClient.artist.findUnique({
+      where: { id: artist_id },
+      include: {
+        albums: {
+          include: {
+            musics: true,
+          },
+        },
+      },
+    });
+
+    if (artist) {
+      const musics = artist.albums.flatMap((album) => album.musics);
+      if (user_id) {
+        for (const music of musics) {
+          // @ts-ignore
+          music.like = !!(await this.prismaClient.music.findUnique({
+            where: {
+              id: music.id,
+              likes: {
+                some: {
+                  id: user_id,
+                },
+              },
+            },
+          }));
+        }
+      }
+      // @ts-ignore
+      artist.musics = musics;
+
+      for (const album of artist.albums) {
+        // @ts-ignore
+        album.musics = undefined;
+      }
+    }
+
+    return artist;
   }
 }
