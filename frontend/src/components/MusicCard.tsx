@@ -42,8 +42,6 @@ export default function MusicCard({
     }
   };
 
-  console.log(isSelected);
-
   return (
     <div>
       <div
