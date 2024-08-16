@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 interface YouTubePlayerProps {
   videoId: string;
@@ -13,16 +13,18 @@ const YouTubePlayer = ({
 }: YouTubePlayerProps) => {
   useEffect(() => {
     const loadYouTubeAPI = () => {
-      if (typeof window !== "undefined" && !window.YT) {
-        const script = document.createElement("script");
-        script.src = "https://www.youtube.com/iframe_api";
+      if (typeof window !== 'undefined' && !window.YT) {
+        const script = document.createElement('script');
+        script.src = 'https://www.youtube.com/iframe_api';
         document.body.appendChild(script);
       }
 
       window.onYouTubeIframeAPIReady = () => {
-        const player = new YT.Player("player", {
-          height: "315",
-          width: "560",
+        const windowWidth = window.innerWidth;
+
+        const player = new YT.Player('player', {
+          height: windowWidth > 1500 ? '315' : '200',
+          width: windowWidth > 1500 ? '560' : '380',
           videoId: videoId,
           events: {
             onReady: onPlayerReady,
@@ -42,7 +44,7 @@ const YouTubePlayer = ({
 
   const onPlayerReady = (event: YT.PlayerEvent) => {
     setPlayerRef(event.target);
-    console.log("onPlayerReady");
+    console.log('onPlayerReady');
 
     setInterval(() => {
       setCurrentTime(event.target.getCurrentTime() * 1000);
