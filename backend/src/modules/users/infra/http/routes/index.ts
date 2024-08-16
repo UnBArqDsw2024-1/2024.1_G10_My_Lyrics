@@ -7,6 +7,7 @@ import { CreateUserControllerFactory } from "../../../factories/CreateUserFactor
 import { DeleteUserControllerFactory } from "../../../factories/DeleteUserFactory";
 import { GetUserByIdControllerFactory } from "../../../factories/GetUserByIdFactory";
 import { GetUserControllerFactory } from "../../../factories/GetUserFactory";
+import { SearchAnyControllerFactory } from "../../../factories/SearchAnyFactory";
 import { UpdateUserControllerFactory } from "../../../factories/UpdateUserFactory";
 import { UpdateUserIconControllerFactory } from "../../../factories/UpdateUserIconFactory";
 import { FollowingUserControllerFactory } from "../../../factories/FollowingUserFactory";
@@ -30,6 +31,7 @@ const updateUserIconController =
 const followingUserController =
   new FollowingUserControllerFactory().createController();
 
+const searchAnyController = new SearchAnyControllerFactory().createController();
 export const usersRoutes = Router();
 
 usersRoutes.post("/", (req, res) => createUserController.handler(req, res));
@@ -39,6 +41,10 @@ usersRoutes.post("/login", (req, res) =>
 
 usersRoutes.get("/byId/:user_id", (req, res) =>
   getUserByIdController.handler(req, res),
+);
+
+usersRoutes.get("/searchAny", (req, res) =>
+  searchAnyController.handler(req, res),
 );
 
 usersRoutes.use("/avatar", express.static(multerConfig.storagePath));

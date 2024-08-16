@@ -59,7 +59,11 @@ export class UserRepository implements IUserRepository {
         id,
       },
       include: {
-        playlists: true,
+        playlists: {
+          include: {
+            musics: true,
+          },
+        },
       },
     });
 
@@ -100,6 +104,26 @@ export class UserRepository implements IUserRepository {
           },
         },
       },
+    });
+  }
+
+  public async searchByName(name: string): Promise<User[]> {
+    const users = await this.prismaClient.user.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return users.map((user) => {
+      if (user?.iconUrl) {
+        user.iconUrl = `${env.BASE_URL}/user/avatar/${encodeURI(user.iconUrl)}`;
+      }
+
+      // @ts-ignore
+      user.password = undefined;
+      return user;
     });
   }
 }
