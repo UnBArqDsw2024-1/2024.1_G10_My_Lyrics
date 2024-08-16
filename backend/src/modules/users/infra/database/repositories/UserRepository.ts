@@ -87,4 +87,19 @@ export class UserRepository implements IUserRepository {
 
     return updatedUser;
   }
+
+  async followingUser(user_id: string, following_id: string): Promise<void> {
+    await this.prismaClient.user.update({
+      where: {
+        id: user_id,
+      },
+      data: {
+        following: {
+          connect: {
+            id: following_id,
+          },
+        },
+      },
+    });
+  }
 }

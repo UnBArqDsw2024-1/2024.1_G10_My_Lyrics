@@ -18,10 +18,13 @@ model User {
   censoredMusics Boolean @default(false)
   iconUrl        String?
 
+  following      User[]     @relation("UserFollowing")
+  followers      User[]     @relation("UserFollowing")
   playlists      Playlist[]
   likedArtists   Artist[]   @relation("UsersLikedArtists")
   likedPlaylists Playlist[] @relation("UsersLikedPlaylists")
   likedMusics    Music[]    @relation("UsersLikedMusics")
+  userId         String?    @db.Uuid
 }
 
 model Playlist {

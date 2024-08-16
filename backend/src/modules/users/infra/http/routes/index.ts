@@ -9,6 +9,7 @@ import { GetUserByIdControllerFactory } from "../../../factories/GetUserByIdFact
 import { GetUserControllerFactory } from "../../../factories/GetUserFactory";
 import { UpdateUserControllerFactory } from "../../../factories/UpdateUserFactory";
 import { UpdateUserIconControllerFactory } from "../../../factories/UpdateUserIconFactory";
+import { FollowingUserControllerFactory } from "../../../factories/FollowingUserFactory";
 
 const authorization = new VerifyJwt();
 
@@ -25,6 +26,9 @@ const updateUserController =
   new UpdateUserControllerFactory().createController();
 const updateUserIconController =
   new UpdateUserIconControllerFactory().createController();
+
+const followingUserController =
+  new FollowingUserControllerFactory().createController();
 
 export const usersRoutes = Router();
 
@@ -50,3 +54,5 @@ usersRoutes.patch("/", (req, res) => updateUserController.handler(req, res));
 usersRoutes.patch("/avatar", multerClient.single("image"), (req, res) =>
   updateUserIconController.handler(req, res),
 );
+usersRoutes.patch("/like/:user_id", (req, res) => followingUserController.handler(req, res));
+
