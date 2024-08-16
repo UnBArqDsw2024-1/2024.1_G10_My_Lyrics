@@ -29,7 +29,7 @@ export default function PlaylistCard({ playlist }: { playlist: Playlist }) {
               alt={music.title}
               width={50}
               height={50}
-              className="object-none w-full h-full"
+              className="w-full h-full"
             />
           ))}
           {Array(missing)

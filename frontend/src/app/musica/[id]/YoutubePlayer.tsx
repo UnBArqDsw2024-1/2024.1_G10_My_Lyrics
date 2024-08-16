@@ -30,7 +30,7 @@ const YouTubePlayer = ({
 
         const player = new YT.Player("player", {
           height: windowWidth > 1500 ? "315" : "200",
-          width: windowWidth > 1500 ? "560" : "380",
+          width: windowWidth > 1500 ? "560" : "370",
           videoId: videoId,
           events: {
             onReady: onPlayerReady,

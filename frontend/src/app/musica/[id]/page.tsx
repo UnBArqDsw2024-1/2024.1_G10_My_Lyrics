@@ -70,9 +70,9 @@ export default function Musica({ params }: { params: { id: string } }) {
     <div className="flex justify-center items-start mt-40">
       {music ? (
         <>
-          <div className="fixed top-24 2xl:left-20 2xl:top-40 flex flex-col gap-10 z-10">
+          <div className="fixed top-8 2xl:left-20 2xl:top-40 flex flex-col gap-10 z-10 xl:w-2/12">
             <div className="w-screen 2xl:w-full flex items-center justify-center bg-[#09001B] 2xl:bg-transparent">
-              <div className="flex flex-col 2xl:mt-10 gap-4 bg-[#20162f] p-4 2xl:p-6 rounded">
+              <div className="flex flex-col 2xl:mt-10 gap-4 bg-[#20162f] p-4 2xl:p-6 rounded px-2 2xl:px-10">
                 {youtubeVideoId ? (
                   <div className="relative 2xl:fixed 2xl:right-10 2xl:top-56">
                     <YouTubePlayer
@@ -114,8 +114,8 @@ export default function Musica({ params }: { params: { id: string } }) {
                         <Image
                           src={music.album.coverUrl}
                           alt={music.album.title}
-                          width={windowWidth > 1500 ? 150 : 80}
-                          height={windowWidth > 1500 ? 150 : 80}
+                          width={windowWidth > 1500 ? 150 : 50}
+                          height={windowWidth > 1500 ? 150 : 50}
                           className="2xl:mt-2 rounded"
                         />
                       )}
@@ -123,7 +123,7 @@ export default function Musica({ params }: { params: { id: string } }) {
                         <p className="text-white text-lg 2xl:mt-4">
                           {music.title}
                         </p>
-                        <p className="text-white text-lg opacity-50">
+                        <p className="text-white text-lg opacity-50 hidden 2xl:block">
                           {music.album.title}
                         </p>
                       </div>
@@ -133,7 +133,7 @@ export default function Musica({ params }: { params: { id: string } }) {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-start mt-80 2xl:mt-0 p-12 2xl:p-0 ml-0 2xl:w-2/3 2xl:ml-64 max-h-[calc(80vh-10rem)] 2xl:max-h-[calc(100vh-10rem)] overflow-y-auto no-scrollbar">
+          <div className="flex flex-col items-start mt-40 2xl:mt-0 p-12 2xl:p-0 ml-0 2xl:w-2/3 2xl:ml-64 max-h-[calc(80vh-10rem)] 2xl:max-h-[calc(100vh-10rem)] overflow-y-auto no-scrollbar">
             <div className="flex flex-row items-center justify-between text-3xl text-white font-bold mb-4 2xl:mt-12 border-b border-gray-400 pb-4 w-full 2xl:w-1/2">
               <h1>{music.title}</h1>
               <div
