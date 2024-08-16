@@ -1,11 +1,11 @@
-'use client';
-import MusicCard from '@/components/MusicCard';
-import { api } from '@/lib/api';
-import type { Artists, Music, User } from '@/lib/types/data';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { Feather, User as UserIcon } from 'react-feather';
+"use client";
+import MusicCard from "@/components/MusicCard";
+import { api } from "@/lib/api";
+import type { Artists, Music, User } from "@/lib/types/data";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Feather, User as UserIcon } from "react-feather";
 
 interface SearchResult {
   artists: Artists[];
@@ -15,13 +15,13 @@ interface SearchResult {
 
 export default function Home() {
   const [musics, setMusics] = useState<Music[]>([]);
-  const [searchText, setSearchText] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>("");
   const [searchResults, setSearchResults] = useState<SearchResult>();
   const [loading, setLoading] = useState<boolean>(false);
 
   async function getTenMusics() {
     const today = new Date();
-    const dataFinished = today.toISOString().split('T')[0];
+    const dataFinished = today.toISOString().split("T")[0];
 
     const res = await api.get(
       `/music/hotspot?number=20&dataInit=1000-01-01&dataFinished=${dataFinished}`

@@ -4,6 +4,7 @@ import { api } from "@/lib/api";
 import Image from "next/image";
 import UserTeste from "../../../assets/userteste.png";
 import { User } from "@/lib/types/data";
+import PlaylistsSection from "@/components/PlaylistsSection";
 
 export default function UserPage({ params }: { params: { id: string } }) {
   async function fetchUser() {
@@ -30,13 +31,22 @@ export default function UserPage({ params }: { params: { id: string } }) {
 
   const [isFollowing, setIsFollowing] = useState(false);
 
+  async function checkIfFollowing() {
+    const result = await api.get(`/user/isFollowing/${params.id}`);
+    return result.data;
+  }
+
+  useEffect(() => {
+    checkIfFollowing().then((result) => setIsFollowing(result));
+  }, [user, visitedUser]);
+
   async function handleFollowUser() {
-    const result = await api.post(`/user/follow/${params.id}`);
-    setIsFollowing(result.data);
+    await api.patch(`/user/like/${params.id}`);
+    setIsFollowing((prev) => !prev);
   }
 
   return (
-    <div className="bg-gradient-to-b from-black to-[#231b39] flex  justify-center w-screen h-screen">
+    <div className="bg-gradient-to-b flex  justify-center w-screen min-h-screen pb-8">
       <div className="flex flex-col items-center mt-40">
         <div className="flex flex-col items-center background space-y-4">
           <div className="rounded-full overflow-hidden w-28 h-28 relative">
@@ -62,6 +72,7 @@ export default function UserPage({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
+        <PlaylistsSection playlists={visitedUser?.playlists} />
       </div>
     </div>
   );

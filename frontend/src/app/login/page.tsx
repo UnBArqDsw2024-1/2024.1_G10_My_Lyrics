@@ -4,6 +4,8 @@ import React, { use } from "react";
 import Logo from "../../assets/LOGO.svg";
 import Image from "next/image";
 import { api } from "@/lib/api";
+import local from "next/font/local";
+import Button from "@/components/Button";
 import { UserContext } from "@/context/UserContext";
 import { redirect } from "next/navigation";
 import Button from "@/components/Button";

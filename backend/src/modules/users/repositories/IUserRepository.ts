@@ -7,5 +7,7 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
   update(user: User): Promise<User>;
   followingUser(user_id: string, following_id: string): Promise<void>;
+  unfollowingUser(user_id: string, following_id: string): Promise<void>;
+  isFollowing(user_id: string, following_id: string): Promise<boolean>;
   searchByName(name: string): Promise<User[]>;
 }
