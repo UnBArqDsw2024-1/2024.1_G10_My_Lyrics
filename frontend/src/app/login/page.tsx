@@ -6,6 +6,7 @@ import Image from "next/image";
 import { api } from "@/lib/api";
 import { UserContext } from "@/context/UserContext";
 import { redirect } from "next/navigation";
+import Button from "@/components/Button";
 
 export default function Login() {
   const user = use(UserContext);

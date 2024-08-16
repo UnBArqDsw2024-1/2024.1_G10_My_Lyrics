@@ -6,6 +6,7 @@ import Image from "next/image";
 import { UserContext } from "@/context/UserContext";
 import { use } from "react";
 import { redirect } from "next/navigation";
+import Button from "@/components/Button";
 
 export default function Register() {
   const user = use(UserContext);
