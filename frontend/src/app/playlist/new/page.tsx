@@ -3,6 +3,7 @@
 import { use } from "react";
 import { api } from "@/lib/api";
 import { redirect } from "next/navigation";
+import Button from "@/components/Button";
 
 async function handleNewPlaylist(formData: FormData) {
   if (!formData.get("newPlaylistName")) {
@@ -37,12 +38,7 @@ export default function NewPlaylist() {
             />
           </div>
           <div className="my-8 flex items-center justify-center">
-            <button
-              className="w-2/4 py-3 text-xl font-bold bg-black rounded-2xl transition-all duration-300 hover:bg-white hover:text-black"
-              type="submit"
-            >
-              Criar
-            </button>
+            <Button type="submit">Criar</Button>
           </div>
         </form>
       </div>
