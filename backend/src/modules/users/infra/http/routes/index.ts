@@ -11,6 +11,7 @@ import { SearchAnyControllerFactory } from "../../../factories/SearchAnyFactory"
 import { UpdateUserControllerFactory } from "../../../factories/UpdateUserFactory";
 import { UpdateUserIconControllerFactory } from "../../../factories/UpdateUserIconFactory";
 import { FollowingUserControllerFactory } from "../../../factories/FollowingUserFactory";
+import { IsFollowingUserControllerFactory } from "../../../factories/IsFollowingUserFactory";
 
 const authorization = new VerifyJwt();
 
@@ -33,6 +34,8 @@ const followingUserController =
 
 const searchAnyController = new SearchAnyControllerFactory().createController();
 export const usersRoutes = Router();
+
+const isFollowingUserController = new IsFollowingUserControllerFactory().createController();
 
 usersRoutes.post("/", (req, res) => createUserController.handler(req, res));
 usersRoutes.post("/login", (req, res) =>
@@ -61,4 +64,6 @@ usersRoutes.patch("/avatar", multerClient.single("image"), (req, res) =>
   updateUserIconController.handler(req, res),
 );
 usersRoutes.patch("/like/:user_id", (req, res) => followingUserController.handler(req, res));
+
+usersRoutes.get("/isFollowing/:user_id", (req, res) => isFollowingUserController.handler(req, res));
 

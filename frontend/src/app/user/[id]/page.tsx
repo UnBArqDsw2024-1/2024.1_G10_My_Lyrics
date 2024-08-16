@@ -31,9 +31,18 @@ export default function UserPage({ params }: { params: { id: string } }) {
 
   const [isFollowing, setIsFollowing] = useState(false);
 
+  async function checkIfFollowing() {
+    const result = await api.get(`/user/isFollowing/${params.id}`);
+    return result.data;
+  }
+
+  useEffect(() => {
+    checkIfFollowing().then((result) => setIsFollowing(result));
+  }, [user, visitedUser]);
+
   async function handleFollowUser() {
-    const result = await api.post(`/user/follow/${params.id}`);
-    setIsFollowing(result.data);
+    await api.patch(`/user/like/${params.id}`);
+    setIsFollowing((prev) => !prev);
   }
 
   return (

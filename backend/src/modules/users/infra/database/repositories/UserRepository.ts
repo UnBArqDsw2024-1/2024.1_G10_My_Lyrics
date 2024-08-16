@@ -107,6 +107,38 @@ export class UserRepository implements IUserRepository {
     });
   }
 
+  public async unfollowingUser(user_id: string, following_id: string): Promise<void> {
+    await this.prismaClient.user.update({
+      where: {
+        id: user_id,
+      },
+      data: {
+        following: {
+          disconnect: {
+            id: following_id,
+          },
+        },
+      },
+    });
+  }
+
+  public async isFollowing(user_id: string, following_id: string): Promise<boolean> {
+    const user = await this.prismaClient.user.findUnique({
+      where: {
+        id: user_id,
+      },
+      include: {
+        following: true,
+      },
+    });
+
+    if (!user) {
+      return false;
+    }
+
+    return user.following.some((following) => following.id === following_id);
+  }
+
   public async searchByName(name: string): Promise<User[]> {
     const users = await this.prismaClient.user.findMany({
       where: {
