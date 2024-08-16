@@ -60,12 +60,7 @@ export default function Login() {
             />
           </div>
           <div className="mb-4 pt-4 flex items-center justify-center">
-            <button
-              className="w-3/4 py-3 text-xl font-bold bg-black text-white rounded-2xl transition-all duration-300 hover:bg-white hover:text-black"
-              type="submit"
-            >
-              Entrar
-            </button>
+            <Button type="submit">Entrar</Button>
           </div>
           <div className="text-center">
             <a

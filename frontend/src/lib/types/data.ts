@@ -51,12 +51,13 @@ export interface Verse {
 }
 
 export interface User {
-	id: string;
-	name: string;
-	email: string;
-	password: string;
-	iconUrl: string | null;
-	playlists: Playlist[];
+	id: string
+	name: string
+	email: string
+	password: string
+	censoredMusics: boolean
+	iconUrl: string | null
+	playlists: Playlist[]
 }
 export interface MusicAccess {
 	ip: string;
