@@ -1,10 +1,11 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { api } from '@/lib/api';
-import type { Artists, Music, Verse } from '@/lib/types/data';
-import Image from 'next/image';
-import MusicCard from '@/components/MusicCard';
-import { Music as MusicIcon } from 'react-feather';
+"use client";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import type { Artists, Music, Verse } from "@/lib/types/data";
+import Image from "next/image";
+import MusicCard from "@/components/MusicCard";
+import { Music as MusicIcon } from "react-feather";
+import ArtitsComponent from "@/components/ArtitsComponent";
 
 async function getArtistById(id: string): Promise<Artists> {
   const res = await api.get(`/artist/search-by-id?artist_id=${id}`);
@@ -29,16 +30,7 @@ export default function Artista({ params }: { params: { id: string } }) {
       {artist ? (
         <>
           <div className="flex flex-col bg-[#5A4D6D] bg-opacity-25 p-6 rounded m-10 items-center">
-            <Image
-              src={artist.profileUrl}
-              alt={artist.name}
-              width={180}
-              height={180}
-              className="rounded-full"
-            />
-            <h1 className="text-white mt-8 font-bold text-2xl">
-              {artist.name}
-            </h1>
+            <ArtitsComponent artist={artist} />
             <span className="bg-gray-400 w-full h-[1px] mt-2" />
             <div className="mt-4 items-center flex flex-col">
               <p className="text-white font-medium mb-2">Álbuns</p>
