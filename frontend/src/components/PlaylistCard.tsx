@@ -5,7 +5,11 @@ import { Music as MusicIcon, Trash2 } from "react-feather";
 import { api } from "@/lib/api";
 
 export default function PlaylistCard({ playlist }: { playlist: Playlist }) {
-  const missing = playlist.musics?.length >= 4 ? 0 : 4 - playlist.musics.length;
+  const missing = playlist.musics
+    ? playlist.musics?.length >= 4
+      ? 0
+      : 4 - playlist.musics.length
+    : 4;
 
   return (
     <Link

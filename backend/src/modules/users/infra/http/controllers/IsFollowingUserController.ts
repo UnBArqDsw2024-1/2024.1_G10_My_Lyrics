@@ -15,7 +15,7 @@ export class IsFollowingUserController implements IController {
     const user_id = request.user!;
     const body = IsFollowingUserSchema.parse({
       user_id,
-      IsFollowing_id: request.params.user_id,
+      IsFollowing_id: request.params.following_id,
     });
 
     await this.isFollowingUserUseCase.execute(body);

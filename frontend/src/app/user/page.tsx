@@ -108,7 +108,7 @@ export default function UserPage() {
             </label>
           </div>
 
-          <div className="grid grid-cols-2 gap-10 w-[720px]">
+          {/* <div className="grid grid-cols-2 gap-10 w-[720px]">
             <div className="space-y-2">
               <label className="text-white" htmlFor="">
                 Nome
@@ -197,7 +197,7 @@ export default function UserPage() {
             <button className="bg-transparent rounded-lg px-4 py-2 border border-inherit mt-4 text-xs text-white">
               Salvar
             </button>
-          </div>
+          </div> */}
         </div>
         <PlaylistsSection playlists={user?.playlists} />
       </div>

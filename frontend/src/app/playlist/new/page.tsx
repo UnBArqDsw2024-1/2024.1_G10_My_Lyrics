@@ -1,40 +1,43 @@
-"use client";
+'use client';
 
-import { use, useContext } from "react";
-import { UserContext } from "@/context/UserContext";
-import { api } from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { use, useContext } from 'react';
+import { UserContext } from '@/context/UserContext';
+import { api } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 export default function NewPlaylist() {
   const user = useContext(UserContext);
   const router = useRouter();
 
   if (user.user === false) {
-    router.push("/login");
+    router.push('/login');
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    if (!formData.get("newPlaylistName")) {
-      alert("Por favor, preencha todos os campos!");
+    if (!formData.get('newPlaylistName')) {
+      alert('Por favor, preencha todos os campos!');
       return;
     }
 
     try {
-      const res = await api.post("/playlist", {
-        title: formData.get("newPlaylistName")!,
+      const res = await api.post('/playlist', {
+        title: formData.get('newPlaylistName')!,
       });
 
-      user.setUpdatedUser({
-        ...user.user,
-        playlists: [...user.user.playlists, res.data],
-      });
+      if (!res.data || !user.user) {
+        throw new Error('Erro ao criar playlist');
+      }
 
-      router.push("/playlist");
+      const updatedPlaylists = [...user.user.playlists, res.data];
+
+      user.setUpdatedUser({ ...user.user, playlists: updatedPlaylists });
+
+      router.push('/playlist');
     } catch (error) {
-      console.error("Erro ao criar playlist:", error);
+      console.error('Erro ao criar playlist:', error);
     }
   };
 
