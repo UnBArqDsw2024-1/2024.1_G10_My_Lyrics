@@ -28,6 +28,13 @@ export default function UserPage({ params }: { params: { id: string } }) {
     fetchUserById(params.id).then((user) => setVisitedUser(user));
   }, [params.id]);
 
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  async function handleFollowUser() {
+    const result = await api.post(`/user/follow/${params.id}`);
+    setIsFollowing(result.data);
+  }
+
   return (
     <div className="bg-gradient-to-b from-black to-[#231b39] flex  justify-center w-screen h-screen">
       <div className="flex flex-col items-center mt-40">
@@ -46,8 +53,11 @@ export default function UserPage({ params }: { params: { id: string } }) {
           </h2>
           <div className="flex flex-row space-x-4">
             <div className="inline-flex items-center mb-16">
-              <button className="bg-transparent rounded-lg px-16 py-2 border-2 border-[#3F3352] mt-4 text-xs text-white hover:bg-[#3F3352] hover:text-white">
-                Seguir
+              <button
+                onClick={handleFollowUser}
+                className="bg-transparent rounded-lg px-16 py-2 border-2 border-[#3F3352] mt-4 text-xs text-white hover:bg-[#3F3352] hover:text-white"
+              >
+                {isFollowing ? "seguindo" : "seguir"}
               </button>
             </div>
           </div>
