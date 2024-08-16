@@ -3,9 +3,17 @@
 import { api } from "@/lib/api";
 import Logo from "../../assets/LOGO.svg";
 import Image from "next/image";
-import Button from "@/components/Button";
+import { UserContext } from "@/context/UserContext";
+import { use } from "react";
+import { redirect } from "next/navigation";
 
 export default function Register() {
+  const user = use(UserContext);
+
+  if (user.user) {
+    redirect("/");
+  }
+
   async function handleRegister(formData: FormData) {
     if (
       !formData.get("email") ||
@@ -35,7 +43,7 @@ export default function Register() {
 
   return (
     <div className="flex items-center justify-center w-screen h-screen">
-      <div className="bg-[#32284d] bg-opacity-50 py-8 px-16 rounded-lg shadow-md w-4/12">
+      <div className="bg-[#32284d] bg-opacity-50 py-8 px-16 rounded-lg shadow-md xl:w-1/3 lg:w-2/4 w-3/4">
         <div className="flex flex-col items-center justify-center">
           <Image src={Logo} alt="Logo" className="mb-16 w-3/4" />
         </div>

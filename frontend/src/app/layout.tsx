@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import { UserProvider } from "@/context/UserContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,11 +31,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${roboto.className}`}>
-      <body className="bg-[#09001B]">
-        <Header />
-        {children}
-      </body>
-    </html>
+    <UserProvider>
+      <html lang="en" className={`${roboto.className}`}>
+        <body className="bg-[#09001B]">
+          <Header />
+          {children}
+        </body>
+      </html>
+    </UserProvider>
   );
 }

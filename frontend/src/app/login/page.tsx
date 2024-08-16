@@ -4,10 +4,16 @@ import React, { use } from "react";
 import Logo from "../../assets/LOGO.svg";
 import Image from "next/image";
 import { api } from "@/lib/api";
-import local from "next/font/local";
-import Button from "@/components/Button";
+import { UserContext } from "@/context/UserContext";
+import { redirect } from "next/navigation";
 
 export default function Login() {
+  const user = use(UserContext);
+
+  if (user.user) {
+    redirect("/");
+  }
+
   async function handleLogin(formData: FormData) {
     if (!formData.get("email") || !formData.get("password")) {
       alert("Por favor, preencha todos os campos!!!!!!!!!!");
@@ -19,14 +25,14 @@ export default function Login() {
         email: formData.get("email"),
         password: formData.get("password"),
       });
-      localStorage.setItem("token", res.data.auth);
-      localStorage.setItem("userImg", res.data.user.iconUrl);
+      user.setUpdatedUser(res.data.user);
+      redirect("/");
     } catch (error) {}
   }
 
   return (
     <div className="flex items-center justify-center w-screen h-screen">
-      <div className="bg-[#32284d] bg-opacity-50 p-16 rounded-lg shadow-md w-4/12">
+      <div className="bg-[#32284d] bg-opacity-50 p-16 rounded-lg shadow-md xl:w-1/3 lg:w-2/4 w-3/4">
         <div className="flex flex-col items-center justify-center">
           <Image src={Logo} alt="Logo" className="mb-16 w-3/4" />
         </div>
