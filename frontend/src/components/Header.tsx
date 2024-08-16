@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <div className="flex justify-between text-white items-center px-12 absolute top-0 left-0 right-0 mt-8">
       <Link href="/" className="w-1/12 cursor-pointer">
-        <Image src={Logo} alt="Logo" />
+        <Image src={Logo} alt="Logo" width={100} height={100} />
       </Link>
 
       <div className="flex gap-4 items-center">

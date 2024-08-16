@@ -15,5 +15,13 @@ export default function UserImg() {
     }
   }, []);
 
-  return <Image src={userImg || Logo} alt="User Image" className="w-1/12" />;
+  return (
+    <Image
+      src={userImg || Logo}
+      alt="User Image"
+      className="w-1/12 rounded-full object-none"
+      width={100}
+      height={100}
+    />
+  );
 }
