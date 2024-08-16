@@ -69,14 +69,16 @@ export default function UserPage() {
     <div className="bg-gradient-to-b from-black to-[#231b39] flex  justify-center w-screen h-screen">
       <div className="flex flex-col items-center mt-40">
         <div className="flex flex-col items-center background space-y-4">
-          <div className="rounded-full overflow-hidden w-28 h-28">
+          <div className="rounded-full overflow-hidden w-28 h-28 relative">
             <Image
-              src={UserTeste}
+              src={user?.iconUrl || UserTeste}
+              width={112}
+              height={112}
               alt="user"
               className="object-cover w-full h-full"
             />
           </div>
-          <h2 className="text-3xl font-bold text-center text-white mb-16">
+          <h2 className="text-3xl text-center text-white mb-16">
             {user?.name}
           </h2>
           <div className="flex flex-row space-x-4">
