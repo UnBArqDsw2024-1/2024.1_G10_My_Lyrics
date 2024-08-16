@@ -27,8 +27,7 @@ for (const file of files) {
 }
 docs+="<!-- tabs:end -->\n"
 
-
-const docsPath = path.join("docs","PadroesDeProjeto","3.1.GoFsCriacionais.md")
+const docsPath = path.join("docs","PadroesDeProjeto","3.3.GoFsComportamentais.md")
 const docsContent = readFileSync(docsPath).toString()
 
 const commandCheckpoint = "<!-- Command Factories Checkpoint -->";
