@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Logo from "../assets/LOGO.svg";
-import Link from "next/link";
-import UserImg from "./UserImg";
-import { UserContext } from "@/context/UserContext";
-import { use, useEffect, useState } from "react";
+import Image from 'next/image';
+import Logo from '../assets/LOGO.svg';
+import Link from 'next/link';
+import UserImg from './UserImg';
+import { UserContext } from '@/context/UserContext';
+import { use, useEffect, useState } from 'react';
 
 export default function Header() {
   const user = use(UserContext);
-  const [playlistsLink, setPlaylistsLink] = useState("");
+  const [playlistsLink, setPlaylistsLink] = useState('');
 
   useEffect(() => {
     if (user.user && user.user.playlists && user.user.playlists.length > 0) {
-      setPlaylistsLink("/playlist");
+      setPlaylistsLink('/playlist');
     } else {
-      setPlaylistsLink("/playlist/new");
+      setPlaylistsLink('/playlist/new');
     }
   }, [user.user]);
 
