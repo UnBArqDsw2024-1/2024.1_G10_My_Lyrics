@@ -49,6 +49,7 @@ export interface User {
   name: string
   email: string
   password: string
+  censoredMusics: boolean
   iconUrl: string | null
   playlists: Playlist[]
 }
