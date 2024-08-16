@@ -34,3 +34,4 @@
     - [4.2. Módulo Reutilização de Software](/ArquiteturaReutilizacao/4.2.ReutilizacaoDeSoftware.md)
     - [4.3. Participações - Arquitetura & Reutilização de Software](/ArquiteturaReutilizacao/4.3.ParticipacoesArqReutilizacao.md)
     - [4.4. Atas de Reunião - Arquitetura & Reutilização de Software](/ArquiteturaReutilizacao/4.5.Ata.md)
+    - [4.5. Extras](/ArquiteturaReutilizacao/4.6.Extras.md)
