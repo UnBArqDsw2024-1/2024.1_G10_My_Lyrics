@@ -1,42 +1,47 @@
-"use client";
+'use client';
 
-import { api } from "@/lib/api";
-import Logo from "../../assets/LOGO.svg";
-import Image from "next/image";
-import { UserContext } from "@/context/UserContext";
-import { use } from "react";
-import { redirect } from "next/navigation";
-import Button from "@/components/Button";
+import { api } from '@/lib/api';
+import Logo from '../../assets/LOGO.svg';
+import Image from 'next/image';
+import { UserContext } from '@/context/UserContext';
+import { use, useContext } from 'react';
+import { redirect, useRouter } from 'next/navigation';
+import Button from '@/components/Button';
 
 export default function Register() {
-  const user = use(UserContext);
+  const user = useContext(UserContext);
+  const router = useRouter();
 
   if (user.user) {
-    redirect("/");
+    router.push('/');
   }
 
   async function handleRegister(formData: FormData) {
     if (
-      !formData.get("email") ||
-      !formData.get("password") ||
-      !formData.get("name") ||
-      !formData.get("password2")
+      !formData.get('email') ||
+      !formData.get('password') ||
+      !formData.get('name') ||
+      !formData.get('password2')
     ) {
-      alert("Por favor, preencha todos os campos!!!!");
+      alert('Por favor, preencha todos os campos!!!!');
       return;
     }
 
-    if (formData.get("password") !== formData.get("password2")) {
-      alert("As senhas não conferem");
+    if (formData.get('password') !== formData.get('password2')) {
+      alert('As senhas não conferem');
       return;
     }
 
     try {
-      await api.post("/user", {
-        name: formData.get("name"),
-        email: formData.get("email"),
-        password: formData.get("password"),
+      const response = await api.post('/user', {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        password: formData.get('password'),
       });
+
+      user.setUpdatedUser(response.data);
+
+      router.push('/');
     } catch (error: any) {
       alert(error.response.data.message);
     }
