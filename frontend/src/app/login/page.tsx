@@ -1,19 +1,19 @@
 "use client";
 
-import React, { use } from "react";
+import React, { useContext } from "react";
 import Logo from "../../assets/LOGO.svg";
 import Image from "next/image";
 import { api } from "@/lib/api";
-import local from "next/font/local";
 import { UserContext } from "@/context/UserContext";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 
 export default function Login() {
-  const user = use(UserContext);
+  const user = useContext(UserContext);
+  const router = useRouter();
 
   if (user.user) {
-    redirect("/");
+    router.push("/");
   }
 
   async function handleLogin(formData: FormData) {
@@ -28,7 +28,7 @@ export default function Login() {
         password: formData.get("password"),
       });
       user.setUpdatedUser(res.data.user);
-      redirect("/");
+      router.push("/");
     } catch (error) {}
   }
 
