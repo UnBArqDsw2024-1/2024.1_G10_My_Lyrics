@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 interface YouTubePlayerProps {
   videoId: string;
   setCurrentTime: (currentTime: number) => void;
-  setPlayerRef: (playerRef: HTMLVideoElement) => void;
+  setPlayerRef: (playerRef: YT.Player) => void;
 }
 
 const YouTubePlayer = ({
@@ -13,16 +13,16 @@ const YouTubePlayer = ({
 }: YouTubePlayerProps) => {
   useEffect(() => {
     const loadYouTubeAPI = () => {
-      if (typeof window !== 'undefined' && !window.YT) {
-        const script = document.createElement('script');
-        script.src = 'https://www.youtube.com/iframe_api';
+      if (typeof window !== "undefined" && !window.YT) {
+        const script = document.createElement("script");
+        script.src = "https://www.youtube.com/iframe_api";
         document.body.appendChild(script);
       }
 
       window.onYouTubeIframeAPIReady = () => {
-        const player = new YT.Player('player', {
-          height: '315',
-          width: '560',
+        const player = new YT.Player("player", {
+          height: "315",
+          width: "560",
           videoId: videoId,
           events: {
             onReady: onPlayerReady,
@@ -31,14 +31,18 @@ const YouTubePlayer = ({
 
         setPlayerRef(player);
       };
+
+      if (window.YT && window.YT.Player) {
+        window.onYouTubeIframeAPIReady();
+      }
     };
 
     loadYouTubeAPI();
   }, [videoId]);
 
-  const onPlayerReady = (event: any) => {
+  const onPlayerReady = (event: YT.PlayerEvent) => {
     setPlayerRef(event.target);
-    console.log('onPlayerReady');
+    console.log("onPlayerReady");
 
     setInterval(() => {
       setCurrentTime(event.target.getCurrentTime() * 1000);

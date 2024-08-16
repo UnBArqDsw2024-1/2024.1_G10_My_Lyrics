@@ -30,10 +30,7 @@ export default function Header() {
           Playlist
         </Link>
         <div className="border h-5 border-[#332b41]"></div>
-        <Link
-          href="https://github.com/lyrics-app/my-lyrics"
-          className="text-xl"
-        >
+        <Link href="/top" className="text-xl">
           Músicas & Artistas
         </Link>
       </div>
