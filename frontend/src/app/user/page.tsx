@@ -199,7 +199,7 @@ export default function UserPage() {
             </button>
           </div> */}
         </div>
-        <PlaylistsSection playlists={user?.playlists} />
+        <PlaylistsSection playlists={user?.playlists ?? []} />
       </div>
     </div>
   );
