@@ -38,6 +38,7 @@ const YouTubePlayer = ({
 
   const onPlayerReady = (event: any) => {
     setPlayerRef(event.target);
+    console.log('onPlayerReady');
 
     setInterval(() => {
       setCurrentTime(event.target.getCurrentTime() * 1000);

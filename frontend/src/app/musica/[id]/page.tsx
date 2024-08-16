@@ -43,6 +43,12 @@ export default function Musica({ params }: { params: { id: string } }) {
     window.location.reload();
   }
 
+  setTimeout(() => {
+    if (!playerRef.current) {
+      window.location.reload();
+    }
+  }, 500);
+
   useEffect(() => {
     const fetchMusic = async () => {
       const fetchedMusic = await getMusicById(params.id);

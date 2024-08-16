@@ -1,15 +1,36 @@
-"use client";
+'use client';
 
-import MusicCard from "@/components/MusicCard";
-import { api } from "@/lib/api";
-import { Playlist } from "@/lib/types/data";
-import { useEffect, useState } from "react";
-import Modal from "@/components/Modal";
+import MusicCard from '@/components/MusicCard';
+import { api } from '@/lib/api';
+import type { Playlist } from '@/lib/types/data';
+import { useContext, useEffect, useState } from 'react';
+import Modal from '@/components/Modal';
+import { useRouter } from 'next/navigation';
+import { UserContext } from '@/context/UserContext';
 
 export default function PlaylistPage({ params }: { params: { id: string } }) {
   const [playlist, setPlaylist] = useState<Playlist | undefined>(undefined);
+  const user = useContext(UserContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const router = useRouter();
+
+  const handleDelete = async (playlist: Playlist) => {
+    try {
+      await api.delete(`/playlist/${playlist.id}`);
+
+      const updatedPlaylists = user.user?.playlists?.filter(
+        (p) => p.id !== playlist.id
+      );
+
+      user.setUpdatedUser({ ...user.user, playlists: updatedPlaylists });
+
+      router.push('/playlist');
+    } catch (error) {
+      console.error('Erro ao deletar playlist:', error);
+    }
+  };
 
   useEffect(() => {
     api
@@ -34,6 +55,12 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
           onClick={() => setIsModalOpen(true)}
         >
           Adicionar música a {playlist?.title}
+        </button>
+        <button
+          className="px-5 py-3 text-white bg-[#cc4047] rounded-lg"
+          onClick={() => handleDelete(playlist!)}
+        >
+          Deletar playlist
         </button>
         <Modal
           isOpen={isModalOpen}
