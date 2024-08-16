@@ -1,3 +1,10 @@
+<h3 align="center"> 2024.1 </h3>
+
+<div align="center">
+  
+  ![LOGO](https://github.com/user-attachments/assets/81ddd2c0-8ba2-41a4-b3e2-59d2f0b43205)
+</div>
+
 # Introdução
 
 Este repositório faz parte da entrega da disciplina de **Arquitetura e Desenho de Software** do semestre **2024.1**.
