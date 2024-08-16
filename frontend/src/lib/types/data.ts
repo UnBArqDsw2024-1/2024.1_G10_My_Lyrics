@@ -18,7 +18,7 @@ export interface Music {
 	album: Album;
 	verses: Verse[];
 	playlists: Playlist[];
-	likes: User[];
+	likes: number;
 	musicAccess: MusicAccess[];
 	like?: boolean;
 	liked?: boolean;
