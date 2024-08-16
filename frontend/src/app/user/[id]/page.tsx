@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import Image from "next/image";
-import UserTeste from "../../../assets/userteste.png";
+import Logo from "@/assets/LOGO.svg";
 import { User } from "@/lib/types/data";
 import PlaylistsSection from "@/components/PlaylistsSection";
 
@@ -51,7 +51,7 @@ export default function UserPage({ params }: { params: { id: string } }) {
         <div className="flex flex-col items-center background space-y-4">
           <div className="rounded-full overflow-hidden w-28 h-28 relative">
             <Image
-              src={visitedUser?.iconUrl || UserTeste}
+              src={visitedUser?.iconUrl || Logo}
               width={112}
               height={112}
               alt="user"
