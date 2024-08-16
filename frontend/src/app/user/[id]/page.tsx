@@ -37,7 +37,7 @@ export default function UserPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="bg-gradient-to-b flex  justify-center w-screen min-h-screen pb-8">
+    <div className="bg-gradient-to-b flex  justify-center min-h-screen pb-8">
       <div className="flex flex-col items-center mt-40">
         <div className="flex flex-col items-center background space-y-4">
           <div className="rounded-full overflow-hidden w-28 h-28 relative">
@@ -63,7 +63,7 @@ export default function UserPage({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
-        <PlaylistsSection playlists={visitedUser?.playlists} />
+        <PlaylistsSection playlists={visitedUser?.playlists ?? []} />
       </div>
     </div>
   );
