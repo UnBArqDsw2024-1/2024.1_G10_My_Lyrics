@@ -17,6 +17,8 @@ export default function Musica({ params }: { params: { id: string } }) {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [youtubeVideoId, setYoutubeVideoId] = useState<string | null>(null);
 
+  const windowWidth = window.innerWidth;
+
   const playerRef = useRef<YT.Player | null>(null);
   const currentVerseRef = useRef<HTMLDivElement | null>(null);
 
@@ -68,49 +70,71 @@ export default function Musica({ params }: { params: { id: string } }) {
     <div className="flex justify-center items-start mt-40">
       {music ? (
         <>
-          <div className="relative lg:fixed left-20 top-40 flex flex-col gap-10">
-            <div className="flex flex-col mt-10 gap-4 bg-[#5A4D6D] bg-opacity-25 p-6 rounded">
-              {music.album.artists.map((artist) => (
-                <div key={artist.name} className="flex flex-row items-center">
-                  <Image
-                    src={artist.profileUrl}
-                    alt={artist.name}
-                    width={64}
-                    height={64}
-                    className="rounded-full"
-                  />
-                  <div className="ml-3 flex flex-col items-start">
-                    <h1 className="text-white font-bold">{artist.name}</h1>
-                    <a
-                      href={`/artista/${artist.id}`}
-                      className="text-md text-gray-400 underline underline-offset-2 mt-1"
-                    >
-                      Sobre
-                    </a>
-                  </div>
-                </div>
-              ))}
-              {music.album && (
-                <div className="mt-2 bg-[#5A4D6D] bg-opacity-25 p-6 rounded text-center">
-                  {music.album.coverUrl && (
-                    <Image
-                      src={music.album.coverUrl}
-                      alt={music.album.title}
-                      width={150}
-                      height={150}
-                      className="mt-2 rounded"
+          <div className="fixed top-24 2xl:left-20 2xl:top-40 flex flex-col gap-10">
+            <div className="w-screen flex items-center justify-center bg-red-500">
+              <div className="flex flex-col 2xl:mt-10 gap-4 bg-[#20162f] p-4 2xl:p-6 rounded">
+                {youtubeVideoId ? (
+                  <div className="relative 2xl:fixed 2xl:right-10 2xl:top-56">
+                    <YouTubePlayer
+                      videoId={youtubeVideoId}
+                      setCurrentTime={setCurrentTime}
+                      setPlayerRef={setPlayerRef}
                     />
+                  </div>
+                ) : (
+                  <p>Video não encontrado</p>
+                )}
+                <div className="flex 2xl:flex-col items-center">
+                  {music.album.artists.map((artist) => (
+                    <div
+                      key={artist.name}
+                      className="flex flex-row items-center"
+                    >
+                      <Image
+                        src={artist.profileUrl}
+                        alt={artist.name}
+                        width={64}
+                        height={64}
+                        className="rounded-full"
+                      />
+                      <div className="ml-3 flex flex-col items-start">
+                        <h1 className="text-white font-bold">{artist.name}</h1>
+                        <a
+                          href={`/artista/${artist.id}`}
+                          className="text-md text-gray-400 underline underline-offset-2 mt-1"
+                        >
+                          Sobre
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                  {music.album && (
+                    <div className="2xl:mt-4 bg-[#5A4D6D] bg-opacity-25 p-2 2xl:p-4 rounded text-center flex 2xl:flex-col 2xl:items-center flex-row items-center 2xl:ml-0 ml-4">
+                      {music.album.coverUrl && (
+                        <Image
+                          src={music.album.coverUrl}
+                          alt={music.album.title}
+                          width={windowWidth > 1500 ? 150 : 80}
+                          height={windowWidth > 1500 ? 150 : 80}
+                          className="2xl:mt-2 rounded"
+                        />
+                      )}
+                      <div className="2xl:ml-0 ml-4">
+                        <p className="text-white text-lg 2xl:mt-4">
+                          {music.title}
+                        </p>
+                        <p className="text-white text-lg opacity-50">
+                          {music.album.title}
+                        </p>
+                      </div>
+                    </div>
                   )}
-                  <p className="text-white text-lg mt-4">{music.title}</p>
-                  <p className="text-white text-lg opacity-50">
-                    {music.album.title}
-                  </p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
-          <div className="relative w-1/2 2xl:w-2/3 2xl:ml-64 max-h-[calc(100vh-10rem)] overflow-y-auto no-scrollbar">
-            <div className="flex flex-row items-center justify-between text-3xl text-white font-bold mb-4 mt-12 border-b border-gray-400 pb-4 w-1/2">
+          <div className="flex flex-col items-start mt-72 2xl:mt-0 p-12 2xl:p-0 ml-0 2xl:w-2/3 2xl:ml-64 max-h-[calc(100vh-10rem)] overflow-y-auto no-scrollbar">
+            <div className="flex flex-row items-center justify-between text-3xl text-white font-bold mb-4 2xl:mt-12 border-b border-gray-400 pb-4 w-full 2xl:w-1/2">
               <h1>{music.title}</h1>
               <div
                 onMouseDown={handleClickLike}
@@ -156,18 +180,7 @@ export default function Musica({ params }: { params: { id: string } }) {
               );
             })}
           </div>
-          {youtubeVideoId ? (
-            <div className="absolute top-32 2xl:fixed 2xl:right-10 2xl:top-56">
-              <YouTubePlayer
-                videoId={youtubeVideoId}
-                setCurrentTime={setCurrentTime}
-                setPlayerRef={setPlayerRef}
-              />
-            </div>
-          ) : (
-            <p>Video não encontrado</p>
-          )}
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#09001B] to-transparent pointer-events-none" />
+          <div className="fixed 2xl:absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#09001B] to-transparent pointer-events-none" />
         </>
       ) : (
         <div className="flex flex-col gap-4">
