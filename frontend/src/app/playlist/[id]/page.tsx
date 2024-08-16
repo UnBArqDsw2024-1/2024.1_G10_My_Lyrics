@@ -1,92 +1,87 @@
-"use client";
+'use client';
 
-import MusicItem from "@/components/MusicItem";
-import { api } from "@/lib/api";
-import { Music, Playlist } from "@/lib/types/data";
-import { useEffect, useState } from "react";
+import MusicCard from '@/components/MusicCard';
+import { api } from '@/lib/api';
+import type { Playlist } from '@/lib/types/data';
+import { useContext, useEffect, useState } from 'react';
+import Modal from '@/components/Modal';
+import { useRouter } from 'next/navigation';
+import { UserContext } from '@/context/UserContext';
 
 export default function PlaylistPage({ params }: { params: { id: string } }) {
   const [playlist, setPlaylist] = useState<Playlist | undefined>(undefined);
+  const user = useContext(UserContext);
 
-  const [selectedMusic, setSelectedMusic] = useState<Music | undefined>(undefined);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const router = useRouter();
+
+  const handleDelete = async (playlist: Playlist) => {
+    try {
+      await api.delete(`/playlist/${playlist.id}`);
+
+      const updatedPlaylists = user.user?.playlists?.filter(
+        (p) => p.id !== playlist.id
+      );
+
+      user.setUpdatedUser({ ...user.user, playlists: updatedPlaylists });
+
+      router.push('/playlist');
+    } catch (error) {
+      console.error('Erro ao deletar playlist:', error);
+    }
+  };
 
   useEffect(() => {
     api
       .get(`/playlist/${params.id}`)
       .then((res) => {
         setPlaylist(res.data);
-        handleSelectMusic(res.data.musics[0]);
       })
       .catch((err) => {
         console.error(err);
       });
   }, [params.id]);
 
-  async function handleSelectMusic(music: Music | undefined) {
-    if(!music) {
-      return
-    }
-
-    const musicId = music.id;
-    try {
-      const res = await api.get(`/music/${musicId}`);
-      console.log(res.data);
-      setSelectedMusic(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   return (
-    <div className="grid grid-cols-3 items-center justify-items-center p-8 gap-16 sm:p-20">
-      <div className="flex flex-col gap-4 items-start ">
-        <div className="flex flex-row gap-4 items-center">
-          <p>icon</p>
-          <h1 className="text-3xl font-bold">{playlist?.title}</h1>
-        </div>
-        <p>{playlist?.description}</p>
-
-        {playlist?.musics?.map((music) => (
-          <MusicItem key={music.id} music={music} />
-        ))}
-      </div>
-
-      <div className="flex flex-col gap-4 items-start">
-        <h2 className="text-2xl font-bold">{selectedMusic?.title}</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-4 items-start">
-            {selectedMusic?.verses.map((verse) => (
-              <div key={verse.id}>
-                <p>{verse.text}</p>
+    <div className="flex items-center justify-center mt-40 mb-20 gap-12">
+      <div className="flex flex-col gap-4">
+        <h2 className="text-3xl font-bold text-white text-center">
+          {playlist?.title}
+        </h2>
+        <p className="text-sm">{playlist?.description}</p>
+        <button
+          className="px-5 py-3 text-white bg-[#6BC5D2] rounded-lg"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Adicionar música a {playlist?.title}
+        </button>
+        <button
+          className="px-5 py-3 text-white bg-[#cc4047] rounded-lg"
+          onClick={() => handleDelete(playlist!)}
+        >
+          Deletar playlist
+        </button>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          playlist={playlist!}
+        />
+        <div className="mt-24 text-white flex flex-col gap-4 items-center">
+          {playlist && playlist.musics?.length > 0 ? (
+            <div className="flex flex-col gap-4">
+              <h2 className="text-xl font-bold">Musics</h2>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {playlist.musics.map((music) => (
+                  <MusicCard key={music.id} music={music} />
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="flex flex-col gap-4 items-start">
-            {selectedMusic?.verses.map((verse) => (
-              <div key={verse.id}>
-                <p>{verse.translatedText}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col gap-4 items-start">
-        <h2 className="text-2xl font-bold">{selectedMusic?.title}</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-4 items-start">
-            {selectedMusic?.verses.map((verse) => (
-              <div key={verse.id}>
-                <p>{verse.text}</p>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-col gap-4 items-start">
-            {selectedMusic?.verses.map((verse) => (
-              <div key={verse.id}>
-                <p>{verse.translatedText}</p>
-              </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <p className="text-xl font-bold">
+              Sua playlist não contem músicas :(
+            </p>
+          )}
         </div>
       </div>
     </div>

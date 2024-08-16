@@ -1,27 +1,23 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
 import Logo from "../assets/LOGO.svg";
+import { useContext } from "react";
+import { UserContext } from "@/context/UserContext";
 
 export default function UserImg() {
-  const [userImg, setUserImg] = useState<string | null>(null);
+  const { user } = useContext(UserContext);
 
-  useEffect(() => {
-    try {
-      const storedUserImg = localStorage.getItem("userImg");
-      setUserImg(storedUserImg || Logo);
-    } catch (error) {
-      setUserImg(Logo);
+  function getUserIcon() {
+    if (user?.iconUrl != null) {
+      return user.iconUrl;
     }
-  }, []);
+
+    return Logo;
+  }
 
   return (
-    <Image
-      src={userImg || Logo}
-      alt="User Image"
-      className="w-1/12 rounded-full object-none"
-      width={100}
-      height={100}
-    />
+    <div className="flex items-center justify-center">
+      <Image src={getUserIcon()} alt="Logo" width={100} height={100} />
+    </div>
   );
 }
