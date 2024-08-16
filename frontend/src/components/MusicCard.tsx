@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import type { Music } from "@/lib/types/data";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { api } from "@/lib/api";
-import { useRouter } from "next/navigation";
+import Image from 'next/image';
+import type { Music } from '@/lib/types/data';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { api } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 interface MusicCardProps {
   music: Music;
@@ -46,7 +46,7 @@ export default function MusicCard({
     <div>
       <div
         className={`text-white flex rounded-xl shadow-md gap-4 items-center cursor-pointer transition-colors duration-300 justify-between ${
-          isSelected ? "bg-[#29174b]" : "bg-[#5A4D6D] bg-opacity-25"
+          isSelected ? 'bg-[#29174b]' : 'bg-[#5A4D6D] bg-opacity-25'
         }`}
       >
         <button
@@ -59,11 +59,11 @@ export default function MusicCard({
             </p>
           )}
           <Image src={music.iconUrl} alt={music.title} width={60} height={50} />
-          <div>
+          <div className="text-start">
             <p className="text-white font-bold">{music.title}</p>
             {music.artists && (
               <p className="opacity-50">
-                {music.artists.map((artist) => artist.name).join(", ")}
+                {music.artists.map((artist) => artist.name).join(', ')}
               </p>
             )}
           </div>
@@ -76,7 +76,7 @@ export default function MusicCard({
             <FontAwesomeIcon
               icon={faHeart}
               className={`
-                 ${like ? "text-[#7338d3]" : "text-gray-500"}
+                 ${like ? 'text-[#7338d3]' : 'text-gray-500'}
               `}
             />
           )}

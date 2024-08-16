@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
-import { api } from "@/lib/api";
-import { Playlist, Music } from "@/lib/types/data";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { on } from "events";
-import MusicCard from "./MusicCard";
-import { useRouter } from "next/navigation";
+import { api } from '@/lib/api';
+import type { Playlist, Music } from '@/lib/types/data';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import MusicCard from './MusicCard';
+import { useRouter } from 'next/navigation';
 
 interface ModalProps {
   isOpen: boolean;
@@ -16,9 +15,9 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, playlist }: ModalProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [filteredMusic, setFilteredMusic] = useState<Music[]>([]);
-  const [selectedMusic, setSelectedMusic] = useState<string>("");
+  const [selectedMusic, setSelectedMusic] = useState<string>('');
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   async function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
@@ -53,6 +52,7 @@ export default function Modal({ isOpen, onClose, playlist }: ModalProps) {
       await api.post(`/playlist/${playlist.id}/music`, {
         music_id: selectedMusic,
       });
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -113,14 +113,14 @@ export default function Modal({ isOpen, onClose, playlist }: ModalProps) {
                       type="button"
                       className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-[#d06161] text-base font-medium hover:bg-[#a34949] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm text-white"
                     >
-                      Cancel
+                      Cancelar
                     </button>
                     <button
                       onClick={handleAddMusic}
                       type="button"
                       className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-[#6BC5D2] text-base font-medium text-white hover:bg-[#417a83] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                     >
-                      Save
+                      Adicionar
                     </button>
                   </div>
                 </form>
