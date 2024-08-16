@@ -65,5 +65,5 @@ usersRoutes.patch("/avatar", multerClient.single("image"), (req, res) =>
 );
 usersRoutes.patch("/like/:user_id", (req, res) => followingUserController.handler(req, res));
 
-usersRoutes.get("/isFollowing/:user_id", (req, res) => isFollowingUserController.handler(req, res));
+usersRoutes.get("/isFollowing/:following_id", (req, res) => isFollowingUserController.handler(req, res));
 
