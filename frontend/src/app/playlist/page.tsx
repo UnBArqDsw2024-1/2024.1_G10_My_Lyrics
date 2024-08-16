@@ -23,9 +23,10 @@ export default function Playlist() {
         Criar nova playlist
       </button>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 mx-auto">
-        {user.user?.playlists?.map((playlist) => (
-          <PlaylistCard key={playlist.id} playlist={playlist} />
-        ))}
+        {user.user &&
+          user.user?.playlists?.map((playlist) => (
+            <PlaylistCard key={playlist.id} playlist={playlist} />
+          ))}
       </div>
     </div>
   );
