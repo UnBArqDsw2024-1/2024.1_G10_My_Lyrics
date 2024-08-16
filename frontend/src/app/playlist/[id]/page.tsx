@@ -20,6 +20,10 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
     try {
       await api.delete(`/playlist/${playlist.id}`);
 
+      if (!user.user) {
+        throw new Error("Usuário não encontrado");
+      }
+
       const updatedPlaylists = user.user?.playlists?.filter(
         (p) => p.id !== playlist.id
       );
