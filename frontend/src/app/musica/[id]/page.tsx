@@ -1,11 +1,11 @@
-'use client';
-import { useEffect, useRef, useState } from 'react';
-import { api } from '@/lib/api';
-import type { Music, Verse } from '@/lib/types/data';
-import Image from 'next/image';
-import YouTubePlayer from './YoutubePlayer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { api } from "@/lib/api";
+import type { Music, Verse } from "@/lib/types/data";
+import Image from "next/image";
+import YouTubePlayer from "./YoutubePlayer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 async function getMusicById(id: string): Promise<Music> {
   const res = await api.get(`/music/${id}`);
@@ -50,7 +50,7 @@ export default function Musica({ params }: { params: { id: string } }) {
       const fetchedMusic = await getMusicById(params.id);
       setMusic(fetchedMusic);
 
-      const videoId = fetchedMusic.youtubeUrl.split('v=')[1]?.split('&')[0];
+      const videoId = fetchedMusic.youtubeUrl.split("v=")[1]?.split("&")[0];
       setYoutubeVideoId(videoId);
     };
 
@@ -60,8 +60,8 @@ export default function Musica({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (currentVerseRef.current) {
       currentVerseRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
+        behavior: "smooth",
+        block: "center",
       });
     }
   }, [currentTime]);
@@ -145,7 +145,7 @@ export default function Musica({ params }: { params: { id: string } }) {
                   <FontAwesomeIcon
                     icon={faHeart}
                     className={`
-                 ${music.liked ? 'text-[#7338d3]' : 'text-gray-500'} w-6 h-6
+                 ${music.liked ? "text-[#7338d3]" : "text-gray-500"} w-6 h-6
               `}
                   />
                 )}
@@ -161,9 +161,9 @@ export default function Musica({ params }: { params: { id: string } }) {
                 <div
                   key={verse.id}
                   className={`flex flex-col ${
-                    isVerseActive ? 'opacity-100' : 'opacity-25'
+                    isVerseActive ? "opacity-100" : "opacity-25"
                   } cursor-pointer mt-4  w-fit pr-10 hover:opacity-100 transition-opacity duration-300
-                    ${isLastVerse ? 'mb-20' : ''}
+                    ${isLastVerse ? "mb-20" : ""}
                   `}
                   ref={isVerseActive ? currentVerseRef : null}
                   onMouseDown={() => handleClickVerse(verse)}

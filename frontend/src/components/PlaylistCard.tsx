@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import type { Playlist } from '@/lib/types/data';
-import Image from 'next/image';
-import { Music as MusicIcon, Trash2 } from 'react-feather';
-import { api } from '@/lib/api';
+import Link from "next/link";
+import type { Playlist } from "@/lib/types/data";
+import Image from "next/image";
+import { Music as MusicIcon, Trash2 } from "react-feather";
+import { api } from "@/lib/api";
 
 export default function PlaylistCard({ playlist }: { playlist: Playlist }) {
   const missing = playlist.musics?.length >= 4 ? 0 : 4 - playlist.musics.length;
@@ -32,7 +32,10 @@ export default function PlaylistCard({ playlist }: { playlist: Playlist }) {
             .fill(0)
             .map((_, index) => {
               return (
-                <div className="flex items-center justify-center bg-[#262033]">
+                <div
+                  className="flex items-center justify-center bg-[#262033]"
+                  key={index}
+                >
                   <MusicIcon size={50} color="#4d3d64" />
                 </div>
               );

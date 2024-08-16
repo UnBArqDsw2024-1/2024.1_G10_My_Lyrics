@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import MusicCard from '@/components/MusicCard';
-import { api } from '@/lib/api';
-import type { Playlist } from '@/lib/types/data';
-import { useContext, useEffect, useState } from 'react';
-import Modal from '@/components/Modal';
-import { useRouter } from 'next/navigation';
-import { UserContext } from '@/context/UserContext';
+import MusicCard from "@/components/MusicCard";
+import { api } from "@/lib/api";
+import type { Playlist } from "@/lib/types/data";
+import { useContext, useEffect, useState } from "react";
+import Modal from "@/components/Modal";
+import { useRouter } from "next/navigation";
+import { UserContext } from "@/context/UserContext";
 
 export default function PlaylistPage({ params }: { params: { id: string } }) {
   const [playlist, setPlaylist] = useState<Playlist | undefined>(undefined);
@@ -26,9 +26,9 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
 
       user.setUpdatedUser({ ...user.user, playlists: updatedPlaylists });
 
-      router.push('/playlist');
+      router.push("/playlist");
     } catch (error) {
-      console.error('Erro ao deletar playlist:', error);
+      console.error("Erro ao deletar playlist:", error);
     }
   };
 

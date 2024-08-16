@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { createContext, use, useEffect, useState } from 'react';
-import { api } from '@/lib/api';
-import type { User } from '@/lib/types/data';
+import { createContext, use, useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import type { User } from "@/lib/types/data";
 
 interface UserContextType {
-  user: User | null | false;
+  user: User | false | null;
   setUpdatedUser: (user: User) => void;
 }
 
@@ -16,7 +16,7 @@ export const UserContext = createContext<UserContextType>({
 
 async function getUser() {
   try {
-    const res = await api.get('/user');
+    const res = await api.get("/user");
     return res.data;
   } catch {
     return false;
