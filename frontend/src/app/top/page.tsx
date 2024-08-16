@@ -49,10 +49,10 @@ export default function Top() {
   }, []);
 
   return (
-    <div className="flex  justify-center mt-60 mb-40 gap-12 text-white">
+    <div className="flex justify-center mt-60 mb-40 gap-4 md:gap-12 text-white px-8">
       <div className="flex flex-col gap-4">
         <h1 className="font-bold text-3xl">Top Músicas</h1>
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid gap-8 grid-cols-1 md:grid-cols-2">
           {musics.map((music, index) => (
             <MusicCard key={index} music={music} position={index + 1} />
           ))}

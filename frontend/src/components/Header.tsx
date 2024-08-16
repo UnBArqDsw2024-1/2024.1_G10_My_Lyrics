@@ -19,9 +19,32 @@ export default function Header() {
     }
   }, [user.user]);
 
+  const isLoggedHeader = () => {
+    if (user.user) {
+      return <UserImg />;
+    } else {
+      return (
+        <div className="flex items-center gap-4">
+          <a
+            className="rounded-lg px-4 py-2 font-bold text-white"
+            href="/register"
+          >
+            Registrar
+          </a>
+          <a
+            className="bg-[#6BC5D2] rounded-lg px-4 py-2 font-bold text-black"
+            href="/login"
+          >
+            Entrar
+          </a>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="flex justify-between text-white items-center px-12 absolute top-0 left-0 right-0 mt-8">
-      <Link href="/" className="w-1/12 cursor-pointer">
+      <Link href="/" className="w-1/12 cursor-pointer none hidden md:block">
         <Image src={Logo} alt="Logo" width={100} height={100} />
       </Link>
 
@@ -34,7 +57,7 @@ export default function Header() {
           Músicas & Artistas
         </Link>
       </div>
-      <UserImg />
+      {isLoggedHeader()}
     </div>
   );
 }
