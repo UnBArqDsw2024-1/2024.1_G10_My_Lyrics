@@ -57,8 +57,6 @@ Para o frontend, foi utilizado uma release candidate do React "19.0.0-rc-f994737
 
 Os participantes, cansados do mesmo de sempre, decidiram se aventurar em uma versão do react cheia de bugs e novas funcionalidades.
 
-**Uma release candidate não é uma versão beta ou alpha; é, na verdade, uma versão que ainda está sendo alterada constantemente. É apenas uma prova de conceito ou uma ideia para que, no futuro, possa ser uma versão alpha ou beta. Com isso, muitos bugs foram enfrentados pelos participantes**
-
 ### Backend
 
 Para o backend, foi utilizado principalmente Express e Prisma.
